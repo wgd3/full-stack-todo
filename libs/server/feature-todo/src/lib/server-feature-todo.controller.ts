@@ -12,7 +12,7 @@ import {
 import { CreateTodoDto, UpdateTodoDto, UpsertTodoDto } from './dtos/todo.dto';
 import { ServerFeatureTodoService } from './server-feature-todo.service';
 
-@Controller('server-feature-todo')
+@Controller({ path: 'todos' })
 export class ServerFeatureTodoController {
   constructor(private serverFeatureTodoService: ServerFeatureTodoService) {}
 

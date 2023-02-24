@@ -15,6 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@fst/client/data-access": ["libs/client/data-access/src/index.ts"],
+      "@fst/client/feature-dashboard": [
+        "libs/client/feature-dashboard/src/index.ts"
+      ],
       "@fst/server/feature-todo": ["libs/server/feature-todo/src/index.ts"],
       "@fst/shared/domain": ["libs/shared/domain/src/index.ts"]
     }

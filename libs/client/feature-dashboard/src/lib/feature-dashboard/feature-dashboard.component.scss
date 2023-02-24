@@ -1,0 +1,32 @@
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  > * + * {
+    margin-block-start: 1em;
+  }
+}
+
+.todo {
+  width: 30rem;
+  padding: 8px;
+  box-shadow: 4px 4px 8px 0px;
+  border: 1px solid #000000;
+  font-family: Arial, Helvetica, sans-serif;
+
+  &__title {
+    margin-block-start: 0;
+  }
+
+  &__id {
+    color: #a5a5a5;
+  }
+
+  &__completed-value {
+    &--false {
+      color: red;
+    }
+    &--true {
+      color: green;
+    }
+  }
+}

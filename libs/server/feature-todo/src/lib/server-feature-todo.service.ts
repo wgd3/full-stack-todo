@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ITodo } from '@fst/shared/domain';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class ServerFeatureTodoService {
@@ -10,6 +10,12 @@ export class ServerFeatureTodoService {
       title: 'Add a route to create todo items!',
       description: 'Yes, this is foreshadowing a POST route introduction',
       completed: false,
+    },
+    {
+      id: 'foo',
+      title: 'Foo',
+      description: 'Bar!',
+      completed: true,
     },
   ]);
 

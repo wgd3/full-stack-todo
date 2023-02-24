@@ -1,0 +1,16 @@
+<p>feature-dashboard works!</p>
+
+<div class="todo-list">
+  <div class="todo" *ngFor="let todo of todoItems$ | async; let i = index">
+    <h2 class="todo__title">#{{ i + 1 }} {{ todo.title }}</h2>
+    <p class="todo__description">{{ todo.description }}</p>
+    <small class="todo__id">ID: {{ todo.id }}</small>
+    <br />
+    <small class="todo__completed-label"
+      >Completed:
+      <span class="todo__completed-value--{{ todo.completed }}">{{
+        todo.completed
+      }}</span></small
+    >
+  </div>
+</div>

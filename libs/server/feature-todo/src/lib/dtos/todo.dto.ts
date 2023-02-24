@@ -1,11 +1,16 @@
 import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { ITodo } from '@fst/shared/domain';
+import {
+  ICreateTodo,
+  ITodo,
+  IUpdateTodo,
+  IUpsertTodo,
+} from '@fst/shared/domain';
 
 /**
  * Use the `Pick` utility type to extract only the properties we want for
  * new to-do items
  */
-export class CreateTodoDto implements Pick<ITodo, 'title' | 'description'> {
+export class CreateTodoDto implements ICreateTodo {
   @IsString()
   @IsNotEmpty()
   title!: string;
@@ -15,7 +20,7 @@ export class CreateTodoDto implements Pick<ITodo, 'title' | 'description'> {
   description!: string;
 }
 
-export class UpsertTodoDto implements ITodo {
+export class UpsertTodoDto implements IUpsertTodo {
   @IsString()
   @IsNotEmpty()
   title!: string;
@@ -33,7 +38,7 @@ export class UpsertTodoDto implements ITodo {
   completed!: boolean;
 }
 
-export class UpdateTodoDto implements Partial<Omit<ITodo, 'id'>> {
+export class UpdateTodoDto implements IUpdateTodo {
   @IsString()
   @IsOptional()
   title!: string;
