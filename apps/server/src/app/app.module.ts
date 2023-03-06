@@ -1,4 +1,3 @@
-import { ServerDataAccessTodoModule } from '@fst/server/data-access-todo';
 import { ServerFeatureTodoModule } from '@fst/server/feature-todo';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -28,7 +27,6 @@ import { AppService } from './app.service';
       inject: [ConfigService],
     }),
     ServerFeatureTodoModule,
-    ServerDataAccessTodoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
