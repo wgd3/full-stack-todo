@@ -1,0 +1,24 @@
+html {
+  color: $color-text-default;
+  line-height: $line-height-base;
+  font-size: 14px;
+  background-color: $color-ui-light;
+
+  @media only screen and (min-width: 1280px) {
+    font-size: $font-size-base;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 $space-default;
+  line-height: $line-height-heading;
+}
+
+p {
+  margin-block-end: $space-default;
+}
