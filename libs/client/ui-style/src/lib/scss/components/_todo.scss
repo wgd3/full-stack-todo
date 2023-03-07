@@ -16,10 +16,11 @@ $todo-border-radius: 8px;
 .todo__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
 
   .todo__title {
     text-decoration: underline;
+    margin-block-end: 0;
   }
 }
 
@@ -32,33 +33,39 @@ $todo-border-radius: 8px;
 .todo__footer {
   display: flex;
   align-items: flex-end;
-  justify-content: space-between;
-
-  .todo__id {
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
-    color: $color-text-label;
-  }
+  justify-content: flex-end;
 }
 
 .todo__completed {
-  width: calc($space-default * 4);
-  height: calc($space-default * 4);
-  margin-top: calc($space-default * -1);
-  margin-right: calc($space-default * -1);
-  background-color: $color-status-danger;
-  border-end-start-radius: $todo-border-radius;
-  border-start-end-radius: $todo-border-radius;
+  padding: $space-x-sm 0;
+  margin-inline-end: $space-sm;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: $color-text-inverse;
+
+  .fa-circle {
+    color: $color-status-danger;
+  }
 
   // use a modifier of the class to change the state of the element
   &--true {
-    background-color: $color-status-success;
-    color: $color-text-default;
+    .fa-circle,
+    .fa-check {
+      color: $color-status-success;
+    }
   }
+}
+
+.todo__actions {
+  > * + * {
+    margin-inline-start: $space-default;
+  }
+}
+
+.todo__id {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  color: $color-text-label;
 }

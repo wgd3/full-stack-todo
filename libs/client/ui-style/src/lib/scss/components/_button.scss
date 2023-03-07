@@ -1,0 +1,30 @@
+.btn {
+  padding: $space-sm $space-md;
+  border-radius: $border-radius-sm;
+
+  @include generate-btn($color-ui-light);
+
+  &--sm {
+    padding: $space-x-sm $space-sm;
+  }
+
+  &--lg {
+    padding: $space-md $space-lg;
+  }
+
+  &--primary {
+    @include generate-btn($color-ui-primary);
+
+    svg {
+      color: $color-text-default;
+    }
+  }
+
+  &--danger {
+    @include generate-btn($color-status-danger);
+
+    svg {
+      color: $color-text-default;
+    }
+  }
+}
