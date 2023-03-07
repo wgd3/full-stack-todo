@@ -4,7 +4,7 @@ $line-height-base: 1.5;
 $line-height-heading: 1.2;
 
 // Spacing
-$space-default: 1em;
+$space-default: 1rem;
 
 // Colors
 $color-ui-light: $nord6;
@@ -13,4 +13,9 @@ $color-ui-dark: $nord4;
 $color-ui-pop: $nord7;
 $color-ui-border: $nord4;
 $color-text-default: $nord0;
+$color-text-inverse: $nord6;
 $color-text-label: $nord3;
+
+// status
+$color-status-success: $nord14;
+$color-status-danger: $nord11;

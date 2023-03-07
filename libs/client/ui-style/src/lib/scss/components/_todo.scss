@@ -1,0 +1,64 @@
+// custom, local SCSS variable
+$todo-border-radius: 8px;
+
+.todo {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  width: 100%;
+  height: 100%;
+  border: 1px solid $color-ui-border;
+  border-radius: $todo-border-radius;
+  padding: $space-default;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  row-gap: calc($space-default / 2);
+}
+
+.todo__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .todo__title {
+    text-decoration: underline;
+  }
+}
+
+.todo__body {
+  p {
+    margin: 0;
+  }
+}
+
+.todo__footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  .todo__id {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    color: $color-text-label;
+  }
+}
+
+.todo__completed {
+  width: calc($space-default * 4);
+  height: calc($space-default * 4);
+  margin-top: calc($space-default * -1);
+  margin-right: calc($space-default * -1);
+  background-color: $color-status-danger;
+  border-end-start-radius: $todo-border-radius;
+  border-start-end-radius: $todo-border-radius;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-inverse;
+
+  // use a modifier of the class to change the state of the element
+  &--true {
+    background-color: $color-status-success;
+    color: $color-text-default;
+  }
+}
