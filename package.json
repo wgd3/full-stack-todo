@@ -26,7 +26,6 @@
     "@nestjs/typeorm": "^9.0.1",
     "@nrwl/angular": "15.8.5",
     "axios": "^1.0.0",
-    "bourbon": "^7.3.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "joi": "^17.8.3",
