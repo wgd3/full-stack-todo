@@ -12,11 +12,8 @@ import {
 import {
   ApiCreatedResponse,
   ApiNoContentResponse,
-  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiResponse,
-  ApiTags,
 } from '@nestjs/swagger';
 import {
   CreateTodoDto,
@@ -26,7 +23,7 @@ import {
 } from './dtos/todo.dto';
 import { ServerFeatureTodoService } from './server-feature-todo.service';
 
-@Controller({ path: 'todos' })
+@Controller({ path: 'todos', version: '1' })
 export class ServerFeatureTodoController {
   constructor(private serverFeatureTodoService: ServerFeatureTodoService) {}
 

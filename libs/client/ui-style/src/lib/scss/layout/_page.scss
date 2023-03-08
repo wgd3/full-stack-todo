@@ -1,0 +1,19 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-top: 0;
+  background-color: $color-ui-light;
+
+  .content-container {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0.05rem;
+
+    .content-area {
+      flex: 1 1 auto;
+      padding: $space-default;
+      overflow-y: scroll;
+    }
+  }
+}

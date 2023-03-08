@@ -1,14 +1,18 @@
 {
-  "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "npmScope": "full-stack-todo",
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "@nrwl/nx-cloud",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
-        "accessToken": "MTllZjMwYTQtYjkyMy00MDI0LWE0YzgtMTRjYjJkYjc2Zjg2fHJlYWQtd3JpdGU="
-      }
-    }
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "production": [
+      "default",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/jest.config.[jt]s",
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/.stylelintrc(.(json|yml|yaml|js))?",
+      "!{projectRoot}/.storybook/**/*",
+      "!{projectRoot}/**/*.stories.@(js|jsx|ts|tsx|mdx)"
+    ],
+    "sharedGlobals": []
   },
   "targetDefaults": {
     "build": {
@@ -23,18 +27,32 @@
     },
     "e2e": {
       "inputs": ["default", "^production"]
+    },
+    "stylelint": {
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.stylelintrc(.(json|yml|yaml|js))?"
+      ]
+    },
+    "build-storybook": {
+      "inputs": ["default", "^production", "!{projectRoot}/.storybook/**/*"]
     }
   },
-  "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
-    "production": [
-      "default",
-      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
-      "!{projectRoot}/tsconfig.spec.json",
-      "!{projectRoot}/jest.config.[jt]s",
-      "!{projectRoot}/.eslintrc.json"
-    ],
-    "sharedGlobals": []
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/nx-cloud",
+      "options": {
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e",
+          "stylelint",
+          "build-storybook"
+        ],
+        "accessToken": "MTllZjMwYTQtYjkyMy00MDI0LWE0YzgtMTRjYjJkYjc2Zjg2fHJlYWQtd3JpdGU="
+      }
+    }
   },
   "generators": {
     "@nrwl/angular:application": {

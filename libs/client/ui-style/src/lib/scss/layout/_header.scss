@@ -1,0 +1,38 @@
+$header-height: 3rem;
+
+header,
+.header {
+  display: flex;
+  background-color: $nord0;
+  color: $color-text-inverse;
+  height: $header-height;
+
+  &__application {
+    display: flex;
+    flex: 0 0 auto;
+    min-width: 10rem;
+    padding: 0 $space-default;
+    height: $header-height;
+
+    > * {
+      display: inline-flex;
+      align-items: center;
+      height: $header-height;
+      text-decoration: none;
+    }
+  }
+
+  &__navigation {
+    display: flex;
+    flex: 0 0 auto;
+    height: $header-height;
+
+    .nav-link {
+      display: inline-block;
+      text-align: center;
+      padding: 0.9rem 1.2rem;
+      text-decoration: none;
+      opacity: 0.65;
+    }
+  }
+}

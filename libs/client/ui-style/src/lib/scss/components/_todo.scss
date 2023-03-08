@@ -1,0 +1,69 @@
+// custom, local SCSS variable
+$todo-border-radius: 8px;
+
+.todo {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  width: 100%;
+  height: 100%;
+  border: 1px solid $color-ui-border;
+  border-radius: $todo-border-radius;
+  padding: $space-sm;
+  display: grid;
+  grid-template-rows: repeat(3, auto);
+  row-gap: 0.5rem;
+}
+
+.todo__header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .todo__title {
+    margin-block-end: 0;
+  }
+}
+
+.todo__body {
+  p {
+    margin: 0;
+  }
+}
+
+.todo__footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.todo__completed {
+  padding: $space-x-sm 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .fa-circle {
+    color: $color-status-danger;
+  }
+
+  // use a modifier of the class to change the state of the element
+  &--true {
+    .fa-circle,
+    .fa-check {
+      color: $color-status-success;
+    }
+  }
+}
+
+.todo__actions {
+  > * + * {
+    margin-inline-start: $space-sm;
+  }
+}
+
+.todo__id {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  color: $color-text-label;
+}

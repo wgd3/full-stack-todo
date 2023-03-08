@@ -1,0 +1,16 @@
+a {
+  color: $nord7;
+  text-decoration: underline;
+
+  &:hover {
+    color: darken($color: $nord7, $amount: 10%);
+  }
+
+  &:active {
+    color: $nord9;
+  }
+
+  &:visited {
+    color: $nord10;
+  }
+}

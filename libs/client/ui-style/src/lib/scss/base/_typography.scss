@@ -1,0 +1,88 @@
+html {
+  color: $color-text-default;
+  line-height: $line-height-base;
+  font-size: $font-size-base;
+  background-color: $color-ui-light;
+  letter-spacing: $letter-spacing;
+  font-family: $font-family-sans-serif;
+
+  @media only screen and (min-width: 1280px) {
+    font-size: $font-size-base;
+  }
+}
+
+/**
+ Typography heavily inspired by Clarity Design System: https://clarity.design/documentation/typography
+*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  // font-size: 0.7rem;
+  margin: 0 0 $space-default;
+  line-height: $line-height-heading;
+  color: $color-text-default;
+}
+
+// Displays
+h1,
+.h1 {
+  font-size: 1.6rem;
+  font-weight: 300;
+}
+
+// Main content header
+// Headlines
+h2,
+.h2 {
+  font-size: 1.4rem;
+  font-weight: 300;
+}
+
+// Secondary content header
+// Subheader
+h3,
+.h3 {
+  font-size: 1.1rem;
+  font-weight: 300;
+}
+
+// Tertiary content header
+// Card header
+// Section Heading level 1
+h4,
+.h4 {
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+// Section header
+// intro paragraphs
+// category / group label
+h5,
+.h5 {
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: $color-text-label;
+}
+
+// section header level 2
+h6,
+.h6 {
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+p {
+  margin-block-end: $space-default;
+  font-size: 0.7rem;
+}
+
+label,
+.label {
+  font-size: 0.6rem;
+  color: $color-text-label;
+}

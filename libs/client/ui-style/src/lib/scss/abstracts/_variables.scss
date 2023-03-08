@@ -1,0 +1,36 @@
+// Font and Text
+$font-size-base: 20px;
+$line-height-base: 1.2rem;
+$line-height-heading: 1rem;
+$letter-spacing: normal;
+$font-family-sans-serif: 'Helvetica Neue', helvetica, arial, sans-serif;
+
+// Spacing
+$space-default: 24px;
+$space-x-sm: calc($space-default * 0.25);
+$space-sm: calc($space-default * 0.5);
+$space-md: $space-default;
+$space-lg: calc($space-default * 1.5);
+$space-x-lg: calc($space-default * 2);
+
+// Colors
+$color-ui-light: $nord6;
+$color-ui-medium: $nord5;
+$color-ui-dark: $nord4;
+$color-ui-pop: $nord7;
+$color-ui-border: $nord4;
+$color-ui-primary: $nord8;
+$color-ui-secondary: $nord7;
+$color-text-default: $nord0;
+$color-text-inverse: $nord6;
+$color-text-label: $nord3;
+
+// status
+$color-status-success: $nord14;
+$color-status-danger: $nord11;
+
+// borders
+$border-radius-default: 0.5rem;
+$border-radius-sm: 0.25rem;
+$border-radius-md: $border-radius-default;
+$border-radius-lg: 1rem;

@@ -1,16 +1,29 @@
-<p>feature-dashboard works!</p>
+<div class="content-container">
+  <div class="content-area">
+    <div class="page" *ngIf="todos$ | async as todos">
+      <div class="incomplete-column">
+        <h1>Incomplete</h1>
+        <ng-container *ngFor="let todo of todos; trackBy: trackTodo">
+          <fst-todo
+            [todo]="todo"
+            *ngIf="!todo.completed"
+            (toggleComplete)="toggleComplete($event)"
+            (deleteTodo)="deleteTodo($event)"
+          ></fst-todo>
+        </ng-container>
+      </div>
 
-<div class="todo-list">
-  <div class="todo" *ngFor="let todo of todoItems$ | async; let i = index">
-    <h2 class="todo__title">#{{ i + 1 }} {{ todo.title }}</h2>
-    <p class="todo__description">{{ todo.description }}</p>
-    <small class="todo__id">ID: {{ todo.id }}</small>
-    <br />
-    <small class="todo__completed-label"
-      >Completed:
-      <span class="todo__completed-value--{{ todo.completed }}">{{
-        todo.completed
-      }}</span></small
-    >
+      <div class="complete-column">
+        <h1>Completed</h1>
+        <ng-container *ngFor="let todo of todos; trackBy: trackTodo">
+          <fst-todo
+            [todo]="todo"
+            *ngIf="todo.completed"
+            (toggleComplete)="toggleComplete($event)"
+            (deleteTodo)="deleteTodo($event)"
+          ></fst-todo>
+        </ng-container>
+      </div>
+    </div>
   </div>
 </div>

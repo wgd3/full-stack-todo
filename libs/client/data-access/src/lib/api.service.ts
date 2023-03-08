@@ -1,40 +1,41 @@
-import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
 import {
   ICreateTodo,
   ITodo,
   IUpdateTodo,
   IUpsertTodo,
 } from '@fst/shared/domain';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
   private readonly http = inject(HttpClient);
+  private readonly baseUrl = `/api/v1`;
 
   getAllToDoItems(): Observable<ITodo[]> {
-    return this.http.get<ITodo[]>(`/api/todos`);
+    return this.http.get<ITodo[]>(`${this.baseUrl}/todos`);
   }
 
   getToDoById(todoId: string): Observable<ITodo> {
-    return this.http.get<ITodo>(`/api/todos/${todoId}`);
+    return this.http.get<ITodo>(`${this.baseUrl}/todos/${todoId}`);
   }
 
   createToDo(todoData: ICreateTodo): Observable<ITodo> {
-    return this.http.post<ITodo>(`/api/todos`, todoData);
+    return this.http.post<ITodo>(`${this.baseUrl}/todos`, todoData);
   }
 
   updateToDo(todoId: string, todoData: IUpdateTodo): Observable<ITodo> {
-    return this.http.patch<ITodo>(`/api/todos/${todoId}`, todoData);
+    return this.http.patch<ITodo>(`${this.baseUrl}/todos/${todoId}`, todoData);
   }
 
   createOrUpdateToDo(todoId: string, todoData: IUpsertTodo): Observable<ITodo> {
-    return this.http.put<ITodo>(`/api/todos/${todoId}`, todoData);
+    return this.http.put<ITodo>(`${this.baseUrl}/todos/${todoId}`, todoData);
   }
 
   deleteToDo(todoId: string): Observable<never> {
-    return this.http.delete<never>(`/api/todos/${todoId}`);
+    return this.http.delete<never>(`${this.baseUrl}/todos/${todoId}`);
   }
 }

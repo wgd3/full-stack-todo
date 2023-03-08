@@ -1,0 +1,36 @@
+<div class="todo" *ngIf="todo">
+  <div class="todo__header">
+    <button
+      class="btn btn--sm todo__completed"
+      [class.todo__completed--true]="todo.completed"
+      (click)="triggerToggleComplete()"
+    >
+      <fa-stack>
+        <fa-icon [icon]="faCircleOutline" stackItemSize="2x"></fa-icon>
+        <fa-icon
+          [icon]="faCheck"
+          stackItemSize="1x"
+          *ngIf="todo.completed"
+        ></fa-icon>
+      </fa-stack>
+    </button>
+
+    <h4 class="todo__title">{{ todo.title }}</h4>
+  </div>
+
+  <div class="todo__body">
+    <p class="todo__description">{{ todo.description }}</p>
+  </div>
+
+  <div class="todo__footer">
+    <div class="todo__actions">
+      <button class="btn btn--danger btn--sm" (click)="triggerDelete()">
+        <fa-icon [icon]="faTrashCan"></fa-icon>
+      </button>
+
+      <button class="btn btn--primary btn--sm" (click)="triggerEdit()">
+        <fa-icon [icon]="faPencil"></fa-icon>
+      </button>
+    </div>
+  </div>
+</div>

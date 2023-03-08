@@ -1,0 +1,9 @@
+@mixin generate-btn($base-color) {
+  background-color: $base-color;
+  border: 1px solid $base-color;
+
+  &:hover {
+    background-color: darken($color: $base-color, $amount: 10%);
+    cursor: pointer;
+  }
+}

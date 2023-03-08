@@ -1,3 +1,16 @@
 {
-    "editor.formatOnSave": true
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true,
+        "source.organizeImports": true
+    },
+    "editor.formatOnSave": true,
+    "stylelint.enable": true,
+    "stylelint.validate": [
+        "css",
+        "less",
+        "postcss",
+        "scss"
+    ],
+    "css.validate": false,
+    "scss.validate": false
 }
