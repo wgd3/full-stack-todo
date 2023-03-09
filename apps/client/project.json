@@ -107,6 +107,12 @@
           "codeCoverage": true
         }
       }
+    },
+    "docker-build": {
+      "dependsOn": [
+        "build"
+      ],
+      "command": "docker build -f apps/client/Dockerfile . -t client"
     }
   },
   "tags": [
