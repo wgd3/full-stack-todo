@@ -26,7 +26,7 @@ services:
       - DATABASE_HOST=mariadb  # this has to match the name of the database service being used!
     healthcheck:
       # TODO change this to the health module from nest
-      test: wget localhost:3333/api/v1/todos -q -O - > /dev/null 2>&1
+      test: wget localhost:3333/api/health -q -O - > /dev/null 2>&1
       interval: 10s
       timeout: 5s
       retries: 3
