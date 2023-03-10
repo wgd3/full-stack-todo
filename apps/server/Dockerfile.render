@@ -8,7 +8,7 @@ RUN npm install --ci
 
 COPY ./ /app/
 
-RUN npx nx run client:build:render
+RUN npx nx run server:build:render 
 
 FROM docker.io/node:lts-alpine
 
