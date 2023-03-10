@@ -2,4 +2,6 @@ node_modules/
 tmp/
 .github/
 .vscode/
-converage/
+coverage/
+dist/
+apps/*-e2e
