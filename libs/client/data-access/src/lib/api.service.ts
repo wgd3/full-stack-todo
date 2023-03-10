@@ -6,6 +6,7 @@ import {
   IUpdateTodo,
   IUpsertTodo,
 } from '@fst/shared/domain';
+import { environment } from '@fst/shared/util-env';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -13,7 +14,7 @@ import { Observable } from 'rxjs';
 })
 export class ApiService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = `/api/v1`;
+  private readonly baseUrl = environment.apiUrl;
 
   getAllToDoItems(): Observable<ITodo[]> {
     return this.http.get<ITodo[]>(`${this.baseUrl}/todos`);
