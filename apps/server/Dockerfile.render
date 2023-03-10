@@ -1,0 +1,34 @@
+FROM node:latest as build-stage
+
+WORKDIR /app
+
+COPY package*.json /app/
+
+RUN npm install --ci
+
+COPY ./ /app/
+
+RUN npx nx run client:build:render
+
+FROM docker.io/node:lts-alpine
+
+ENV HOST=0.0.0.0
+ENV PORT=3333
+
+EXPOSE ${PORT}
+
+WORKDIR /app
+
+RUN addgroup --system server && \
+    adduser --system -G server server
+
+COPY --from=build-stage /app/dist/apps/server server
+RUN chown -R server:server .
+
+# RUN npm install reflect-metadata tslib rxjs sqlite3 mysql2 pg
+
+# You can remove this install step if you build with `--bundle` option.
+# The bundled output will include external dependencies.
+# RUN npm --prefix server --omit=dev -f install
+
+CMD [ "node", "server" ]

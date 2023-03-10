@@ -27,6 +27,11 @@ async function bootstrap() {
     prefix: 'v',
   });
 
+  // TODO - revisit and secure this!
+  app.enableCors({
+    origin: '*',
+  });
+
   // handle swagger
   const config = new DocumentBuilder()
     .setTitle(`Full Stack To-Do REST API`)

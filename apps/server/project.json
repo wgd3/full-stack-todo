@@ -20,24 +20,47 @@
         ],
         "webpackConfig": "apps/server/webpack.config.js",
         "babelUpwardRootMode": true,
-        "generatePackageJson": true,
+        "generatePackageJson": true
       },
       "configurations": {
         "production": {
           "optimization": true,
           "extractLicenses": true,
           "inspect": false
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "inspect": true
+        },
+        "render": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "libs/shared/util-env/src/lib/environment.ts",
+              "with": "libs/shared/util-env/src/lib/environment.render.ts"
+            }
+          ]
         }
       }
     },
     "serve": {
       "executor": "@nrwl/js:node",
+      "defaultConfiguration": "development",
       "options": {
         "buildTarget": "server:build"
       },
       "configurations": {
         "production": {
           "buildTarget": "server:build:production"
+        },
+        "development": {
+          "buildTarget": "server:build:development"
+        },
+        "render": {
+          "buildTarget": "server:build:render"
         }
       }
     },
