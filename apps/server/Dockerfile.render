@@ -17,8 +17,6 @@ ENV PORT=3333
 
 EXPOSE ${PORT}
 
-WORKDIR /app
-
 RUN addgroup --system server && \
     adduser --system -G server server
 
