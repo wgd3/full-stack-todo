@@ -1,0 +1,25 @@
+.form-control {
+  display: block;
+  width: 100%;
+  padding: $space-x-sm $space-sm;
+  color: $color-text-default;
+  border: 1px solid $color-ui-border;
+  border-radius: $border-radius-sm;
+  transition: border-color 150ms ease-in-out, background-color 150ms ease-in-out;
+  background-clip: padding-box;
+
+  &:focus {
+    outline: none;
+    border-color: $color-ui-pop;
+  }
+
+  &--read-only {
+    border-color: transparent;
+    background-color: transparent;
+    color: $color-text-default;
+  }
+
+  &--disabled {
+    background-color: transparent;
+  }
+}

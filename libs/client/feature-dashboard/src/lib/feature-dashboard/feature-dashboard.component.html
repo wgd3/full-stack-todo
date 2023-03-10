@@ -9,6 +9,7 @@
             *ngIf="!todo.completed"
             (toggleComplete)="toggleComplete($event)"
             (deleteTodo)="deleteTodo($event)"
+            (updateTodo)="editTodo($event)"
           ></fst-todo>
         </ng-container>
       </div>
@@ -21,6 +22,7 @@
             *ngIf="todo.completed"
             (toggleComplete)="toggleComplete($event)"
             (deleteTodo)="deleteTodo($event)"
+            (updateTodo)="editTodo($event)"
           ></fst-todo>
         </ng-container>
       </div>

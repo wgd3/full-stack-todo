@@ -1,4 +1,4 @@
-<div class="todo" *ngIf="todo">
+<div class="todo" *ngIf="todo" [formGroup]="todoForm">
   <div class="todo__header">
     <button
       class="btn btn--sm todo__completed"
@@ -15,21 +15,50 @@
       </fa-stack>
     </button>
 
-    <h4 class="todo__title">{{ todo.title }}</h4>
+    <editable
+      (save)="saveEdit()"
+      (cancel)="cancelEdit()"
+      openBindingEvent="dblclick"
+    >
+      <ng-template viewMode
+        ><h4 class="todo__title">{{ todo.title }}</h4></ng-template
+      >
+      <ng-template editMode>
+        <input
+          class="form-control h4"
+          formControlName="title"
+          editableOnEnter
+          editableOnEscape
+        />
+      </ng-template>
+    </editable>
   </div>
 
   <div class="todo__body">
-    <p class="todo__description">{{ todo.description }}</p>
+    <editable
+      (save)="saveEdit()"
+      (cancel)="cancelEdit()"
+      openBindingEvent="dblclick"
+    >
+      <ng-template viewMode>
+        <p class="todo__description">{{ todo.description }}</p>
+      </ng-template>
+
+      <ng-template editMode>
+        <textarea
+          editableOnEnter
+          editableOnEscape
+          class="form-control"
+          formControlName="description"
+        ></textarea>
+      </ng-template>
+    </editable>
   </div>
 
   <div class="todo__footer">
     <div class="todo__actions">
       <button class="btn btn--danger btn--sm" (click)="triggerDelete()">
         <fa-icon [icon]="faTrashCan"></fa-icon>
-      </button>
-
-      <button class="btn btn--primary btn--sm" (click)="triggerEdit()">
-        <fa-icon [icon]="faPencil"></fa-icon>
       </button>
     </div>
   </div>

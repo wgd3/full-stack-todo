@@ -49,4 +49,13 @@ export class FeatureDashboardComponent implements OnInit {
         this.refreshItems();
       });
   }
+
+  editTodo(todo: ITodo) {
+    this.apiService
+      .updateToDo(todo.id, todo)
+      .pipe(take(1))
+      .subscribe(() => {
+        this.refreshItems();
+      });
+  }
 }

@@ -18,7 +18,7 @@ export const ToDoEntitySchema = new EntitySchema<ITodo>({
       nullable: true,
     },
     completed: {
-      type: 'datetime',
+      type: 'boolean',
       default: false,
       nullable: false,
     },

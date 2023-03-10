@@ -24,6 +24,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.2.1",
     "@nestjs/typeorm": "^9.0.1",
+    "@ngneat/edit-in-place": "^1.6.1",
     "@nrwl/angular": "15.8.5",
     "axios": "^1.0.0",
     "class-transformer": "^0.5.1",

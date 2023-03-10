@@ -1,4 +1,5 @@
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { EditableModule } from '@ngneat/edit-in-place';
 import { randBoolean, randProduct } from '@ngneat/falso';
 import {
   componentWrapperDecorator,
@@ -28,7 +29,7 @@ export default {
   component: ToDoComponent,
   decorators: [
     moduleMetadata({
-      imports: [FontAwesomeModule],
+      imports: [FontAwesomeModule, EditableModule],
     }),
     componentWrapperDecorator(
       (s) => `
@@ -40,9 +41,9 @@ export default {
     triggerDelete: {
       action: 'delete',
     },
-    triggerEdit: {
-      action: 'edit',
-    },
+    // triggerEdit: {
+    //   action: 'edit',
+    // },
     triggerToggleComplete: {
       action: 'toggleComplete',
     },

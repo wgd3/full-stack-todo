@@ -4,8 +4,15 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnInit,
   Output,
 } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faCircle as faCircleOutline,
@@ -13,20 +20,35 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import { faCheck, faPencil } from '@fortawesome/free-solid-svg-icons';
 import { ITodo } from '@fst/shared/domain';
+import { EditableModule } from '@ngneat/edit-in-place';
+
+/**
+ * Create a type for the FormGroup, using only the properties of
+ * a to-do item that we want to be able to edit.
+ */
+type TodoFormType = {
+  [k in keyof Pick<ITodo, 'description' | 'title'>]: FormControl<string>;
+};
 
 @Component({
   selector: 'fst-todo',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [
+    CommonModule,
+    FontAwesomeModule,
+    FormsModule,
+    ReactiveFormsModule,
+    EditableModule,
+  ],
   templateUrl: './to-do.component.html',
   styleUrls: ['./to-do.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ToDoComponent {
+export class ToDoComponent implements OnInit {
   @Input() todo: ITodo | undefined;
 
   @Output() toggleComplete = new EventEmitter<ITodo>();
-  @Output() editTodo = new EventEmitter<ITodo>();
+  @Output() updateTodo = new EventEmitter<ITodo>();
   @Output() deleteTodo = new EventEmitter<ITodo>();
 
   faCheck = faCheck;
@@ -34,19 +56,45 @@ export class ToDoComponent {
   faPencil = faPencil;
   faTrashCan = faTrashCan;
 
-  /**
-   * Simply emit the opposite of the current completed value
-   */
-  triggerToggleComplete() {
-    this.toggleComplete.emit(this.todo);
+  todoForm!: FormGroup<TodoFormType>;
+
+  ngOnInit(): void {
+    if (this.todo) {
+      this.todoForm = new FormGroup({
+        title: new FormControl(this.todo.title, { nonNullable: true }),
+        description: new FormControl(this.todo.description, {
+          nonNullable: true,
+        }),
+      });
+    }
   }
 
-  /**
-   * Emit the current todo data so that a service or parent component
-   * knows what to work with.
-   */
-  triggerEdit() {
-    this.editTodo.emit(this.todo);
+  saveEdit() {
+    this.triggerUpdate({
+      ...this.todo,
+      ...this.todoForm.value,
+    });
+  }
+
+  cancelEdit() {
+    this.todoForm.reset();
+  }
+
+  triggerToggleComplete() {
+    this.triggerUpdate({
+      ...this.todo,
+      completed: !this.todo?.completed,
+    });
+  }
+
+  triggerUpdate(todo: Partial<ITodo>) {
+    if (!this.todo) {
+      return;
+    }
+    this.updateTodo.emit({
+      ...this.todo,
+      ...todo,
+    });
   }
 
   /**
