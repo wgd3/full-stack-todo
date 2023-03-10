@@ -20,13 +20,19 @@ EXPOSE ${PORT}
 RUN addgroup --system server && \
     adduser --system -G server server
 
-COPY --from=build-stage /app/dist/apps/server server
+WORKDIR /app
+
+COPY --from=build-stage /app/dist/apps/server /app
 RUN chown -R server:server .
 
-# RUN npm install reflect-metadata tslib rxjs sqlite3 mysql2 pg
+# install extracted packages from build
+RUN npm i --ci --omit=dev
+
+# install extra stuff
+RUN npm install reflect-metadata tslib rxjs sqlite3 mysql2 pg
 
 # You can remove this install step if you build with `--bundle` option.
 # The bundled output will include external dependencies.
 # RUN npm --prefix server --omit=dev -f install
 
-CMD [ "node", "server" ]
+CMD [ "node", "main.js" ]
