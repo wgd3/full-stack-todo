@@ -1,5 +1,5 @@
 import { ServerFeatureTodoModule } from '@fst/server/feature-todo';
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 
@@ -20,33 +20,50 @@ import { AppService } from './app.service';
     TypeOrmModule.forRootAsync({
       useFactory: (config: ConfigService) => {
         const env = config.get('ENVIRONMENT') ?? 'development';
-        if (env === 'docker') {
-          console.log(
-            `Detected Docker environment, connecting to docker DB: ${config.get(
-              'DATABASE_HOST'
-            )}`
-          );
-          return {
-            type: config.get('DATABASE_TYPE'),
-            host: config.get('DATABASE_HOST'),
-            username: config.get('DATABASE_USERNAME'),
-            password: config.get('DATABASE_PASSWORD'),
-            port: config.get('DATABASE_PORT'),
-            database: config.get('DATABASE_NAME'),
-            synchronize: true,
-            logging: true,
-            autoLoadEntities: true,
-          } as TypeOrmModuleAsyncOptions; // HERES THE PROBLEM
-        }
-        // default to local devl
-        console.log(`Using SQLite for local dev environment`);
+        Logger.log(`Detected environment: ${env}`);
+        Logger.log(
+          `Attempting connection to ${config.get(
+            `DATABASE_TYPE`
+          )} database '${config.get(`DATABASE_NAME`)}'`
+        );
+        // if (env === 'docker') {
+        //   console.log(
+        //     `Detected Docker environment, connecting to docker DB: ${config.get(
+        //       'DATABASE_HOST'
+        //     )}`
+        //   );
+        //   return {
+        //     type: config.get('DATABASE_TYPE'),
+        //     host: config.get('DATABASE_HOST'),
+        //     username: config.get('DATABASE_USERNAME'),
+        //     password: config.get('DATABASE_PASSWORD'),
+        //     port: config.get('DATABASE_PORT'),
+        //     database: config.get('DATABASE_NAME'),
+        //     synchronize: true,
+        //     logging: true,
+        //     autoLoadEntities: true,
+        //   } as TypeOrmModuleAsyncOptions; // HERES THE PROBLEM
+        // }
+        // // default to local devl
+        // console.log(`Using SQLite for local dev environment`);
+        // return {
+        //   type: 'sqlite',
+        //   database: config.get('DATABASE_PATH'),
+        //   synchronize: true,
+        //   logging: true,
+        //   autoLoadEntities: true,
+        // };
         return {
-          type: 'sqlite',
-          database: config.get('DATABASE_PATH'),
+          type: config.get('DATABASE_TYPE'),
+          host: config.get('DATABASE_HOST'),
+          username: config.get('DATABASE_USERNAME'),
+          password: config.get('DATABASE_PASSWORD'),
+          port: config.get('DATABASE_PORT'),
+          database: config.get('DATABASE_NAME'),
           synchronize: true,
           logging: true,
           autoLoadEntities: true,
-        };
+        } as TypeOrmModuleAsyncOptions; // HERES THE PROBLEM
       },
       inject: [ConfigService],
     }),
