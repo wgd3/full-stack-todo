@@ -29,7 +29,7 @@ services:
     repo: https://github.com/wgd3/full-stack-todo.git
     env: docker
     plan: free
-    dockerfilePath: ./server/Dockerfile.render
+    dockerfilePath: ./apps/server/Dockerfile.render
     dockerContext: ./
     envVars:
       - key: 'DATABASE_HOST'
