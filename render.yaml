@@ -32,29 +32,29 @@ services:
     dockerfilePath: ./apps/server/Dockerfile.render
     dockerContext: ./
     envVars:
-      - key: 'DATABASE_HOST'
+      - key: 'DB_HOST'
         fromDatabase:
           name: fst-demo-db
           property: host
-      - key: 'DATABASE_PORT'
+      - key: 'DB_PORT'
         fromDatabase:
           name: fst-demo-db
           property: port
-      - key: 'DATABASE_USERNAME'
+      - key: 'DB_USERNAME'
         fromDatabase:
           name: fst-demo-db
           property: user
-      - key: 'DATABASE_PASSWORD'
+      - key: 'DB_PASSWORD'
         fromDatabase:
           name: fst-demo-db
           property: password
-      - key: 'DATABASE_NAME'
+      - key: 'DB_NAME'
         fromDatabase:
           name: fst-demo-db
           property: database
-      - key: 'DATABASE_TYPE'
+      - key: 'DB_TYPE'
         value: 'postgres'
-      - key: 'ENVIRONMENT'
+      - key: 'ENV'
         value: 'render'
     buildFilter:
       paths:
