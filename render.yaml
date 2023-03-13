@@ -71,5 +71,4 @@ services:
 
 databases:
   - name: fst-demo-db
-    databaseName: full-stack-todo
     plan: free
