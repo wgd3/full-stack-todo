@@ -27,7 +27,6 @@ services:
   - type: web
     name: fst-demo-server
     repo: https://github.com/wgd3/full-stack-todo.git
-    healthcheck: /api/health
     env: docker
     plan: free
     dockerfilePath: ./server/Dockerfile.render
