@@ -4,7 +4,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: server
-  # this matches the "upstream" name specified in the nginx config of the 
+  # this matches the "upstream" name specified in the nginx config of the
   # client container so redirects for API calls automatically work
   name: server
   namespace: fullstacktodo
