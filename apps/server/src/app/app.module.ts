@@ -6,9 +6,6 @@ import * as Joi from 'joi';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 
 import { ServerFeatureHealthModule } from '@fst/server/feature-health';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -70,7 +67,7 @@ import { AppService } from './app.service';
     ServerFeatureTodoModule,
     ServerFeatureHealthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
