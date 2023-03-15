@@ -4,7 +4,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: client
-  name: client-svc
+  name: client
   namespace: fullstacktodo
 spec:
   type: LoadBalancer

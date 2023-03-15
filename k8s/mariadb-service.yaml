@@ -4,7 +4,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: mariadb
-  name: mariadb-svc
+  name: mariadb
   namespace: fullstacktodo
 spec:
   type: LoadBalancer
