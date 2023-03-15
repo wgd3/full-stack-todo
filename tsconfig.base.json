@@ -10,23 +10,16 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@fst/client/data-access": [
-        "libs/client/data-access/src/index.ts"
-      ],
+      "@fst/client/data-access": ["libs/client/data-access/src/index.ts"],
       "@fst/client/feature-dashboard": [
         "libs/client/feature-dashboard/src/index.ts"
       ],
-      "@fst/client/ui-components/*": [
-        "libs/client/ui-components/src/lib/*"
-      ],
+      "@fst/client/ui-components/*": ["libs/client/ui-components/src/lib/*"],
       "@fst/server/data-access-todo": [
         "libs/server/data-access-todo/src/index.ts"
       ],
@@ -37,8 +30,5 @@
       "@fst/shared/util-testing": ["libs/shared/util-testing/src/index.ts"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }
