@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: server
+    app: fst-demo
+  name: server
+  namespace: fullstacktodo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: server
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: server
+    spec:
+      containers:
+        - env:
+            - name: DATABASE_HOST
+              value: $(MARIADB_SERVICE_HOST)
+            - name: DATABASE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_NAME
+                  name: env
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_PASSWORD
+                  name: database-secret
+            - name: DATABASE_PATH
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_PATH
+                  name: env
+            - name: DATABASE_PORT
+              value: $(MARIADB_SERVICE_PORT)
+            - name: DATABASE_TYPE
+              value: mariadb
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_USERNAME
+                  name: database-secret
+            - name: ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  key: ENVIRONMENT
+                  name: env
+            - name: GENERATE_SWAGGER_JSON
+              valueFrom:
+                configMapKeyRef:
+                  key: GENERATE_SWAGGER_JSON
+                  name: env
+            - name: SWAGGER_JSON_FILE
+              valueFrom:
+                configMapKeyRef:
+                  key: SWAGGER_JSON_FILE
+                  name: env
+          image: ghcr.io/wgd3/fst-server
+          name: server
+          ports:
+            - containerPort: 3333
+          resources: {}
+      restartPolicy: Always
+status: {}

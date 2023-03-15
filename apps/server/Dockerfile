@@ -6,6 +6,10 @@
 # Run the container with `docker run -p 3000:3000 -t server`.
 FROM docker.io/node:lts-alpine
 
+LABEL org.opencontainers.image.source=https://github.com/wgd3/full-stack-todo
+LABEL org.opencontainers.image.description="NestJS REST API for the Full Stack To-Do demo application"
+LABEL org.opencontainers.image.licenses=MIT
+
 ENV HOST=0.0.0.0
 ENV PORT=3333
 

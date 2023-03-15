@@ -3,5 +3,4 @@ tmp/
 .github/
 .vscode/
 coverage/
-dist/
 apps/*-e2e
