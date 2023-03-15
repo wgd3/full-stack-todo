@@ -1,1 +1,231 @@
-{"openapi":"3.0.0","paths":{"/api":{"get":{"operationId":"AppController_getData","parameters":[],"responses":{"200":{"description":""}}}},"/api/v1/todos":{"get":{"operationId":"ServerFeatureTodoController_getAll","summary":"Returns all to-do items","tags":["todos"],"parameters":[],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/TodoDto"}}}}}}},"post":{"operationId":"ServerFeatureTodoController_create","summary":"Creates a new to-do and returns the saved object","tags":["todos"],"parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CreateTodoDto"}}}},"responses":{"201":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/TodoDto"}}}}}}},"/api/v1/todos/{id}":{"get":{"operationId":"ServerFeatureTodoController_getOne","summary":"Returns a single to-do if it exists","tags":["todos"],"parameters":[{"name":"id","required":true,"in":"path","schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/TodoDto"}}}}}},"put":{"operationId":"ServerFeatureTodoController_upsertOne","summary":"Replaces all values for a single to-do","tags":["todos"],"parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UpsertTodoDto"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/TodoDto"}}}},"201":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/TodoDto"}}}}}},"patch":{"operationId":"ServerFeatureTodoController_update","summary":"Partially updates a single to-do","tags":["todos"],"parameters":[{"name":"id","required":true,"in":"path","schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UpdateTodoDto"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/TodoDto"}}}}}},"delete":{"operationId":"ServerFeatureTodoController_delete","summary":"Deletes a specific to-do item","tags":["todos"],"parameters":[{"name":"id","required":true,"in":"path","schema":{"type":"string"}}],"responses":{"204":{"description":""}}}}},"info":{"title":"Full Stack To-Do REST API","description":"","version":"1.0","contact":{}},"tags":[],"servers":[],"components":{"schemas":{"TodoDto":{"type":"object","properties":{"title":{"type":"string","example":"Create a new blog post","readOnly":true},"description":{"type":"string","example":"The Full Stack Engineer blog needs a new post!","readOnly":true},"id":{"type":"string","readOnly":true,"example":"DCA76BCC-F6CD-4211-A9F5-CD4E24381EC8"},"completed":{"type":"boolean","readOnly":true,"default":false}},"required":["title","description","id","completed"]},"CreateTodoDto":{"type":"object","properties":{"title":{"type":"string","example":"Create a new blog post"},"description":{"type":"string","example":"The Full Stack Engineer blog needs a new post!"}},"required":["title","description"]},"UpsertTodoDto":{"type":"object","properties":{"title":{"type":"string","example":"Create a new blog post"},"description":{"type":"string","example":"The Full Stack Engineer blog needs a new post!"},"id":{"type":"string"},"completed":{"type":"boolean","default":false}},"required":["title","description","id","completed"]},"UpdateTodoDto":{"type":"object","properties":{"title":{"type":"string","example":"The Full Stack Engineer blog needs a new post!"},"description":{"type":"string","example":"The Full Stack Engineer blog needs a new post!"},"completed":{"type":"boolean","default":false}}}}}}
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api": {
+      "get": {
+        "operationId": "AppController_getData",
+        "parameters": [],
+        "responses": { "200": { "description": "" } }
+      }
+    },
+    "/api/v1/todos": {
+      "get": {
+        "operationId": "ServerFeatureTodoController_getAll",
+        "summary": "Returns all to-do items",
+        "tags": ["todos"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/TodoDto" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "ServerFeatureTodoController_create",
+        "summary": "Creates a new to-do and returns the saved object",
+        "tags": ["todos"],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateTodoDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TodoDto" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/todos/{id}": {
+      "get": {
+        "operationId": "ServerFeatureTodoController_getOne",
+        "summary": "Returns a single to-do if it exists",
+        "tags": ["todos"],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TodoDto" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "ServerFeatureTodoController_upsertOne",
+        "summary": "Replaces all values for a single to-do",
+        "tags": ["todos"],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpsertTodoDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TodoDto" }
+              }
+            }
+          },
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TodoDto" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "ServerFeatureTodoController_update",
+        "summary": "Partially updates a single to-do",
+        "tags": ["todos"],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateTodoDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TodoDto" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "ServerFeatureTodoController_delete",
+        "summary": "Deletes a specific to-do item",
+        "tags": ["todos"],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "204": { "description": "" } }
+      }
+    }
+  },
+  "info": {
+    "title": "Full Stack To-Do REST API",
+    "description": "",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "TodoDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Create a new blog post",
+            "readOnly": true
+          },
+          "description": {
+            "type": "string",
+            "example": "The Full Stack Engineer blog needs a new post!",
+            "readOnly": true
+          },
+          "id": {
+            "type": "string",
+            "readOnly": true,
+            "example": "DCA76BCC-F6CD-4211-A9F5-CD4E24381EC8"
+          },
+          "completed": { "type": "boolean", "readOnly": true, "default": false }
+        },
+        "required": ["title", "description", "id", "completed"]
+      },
+      "CreateTodoDto": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "example": "Create a new blog post" },
+          "description": {
+            "type": "string",
+            "example": "The Full Stack Engineer blog needs a new post!"
+          }
+        },
+        "required": ["title", "description"]
+      },
+      "UpsertTodoDto": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "example": "Create a new blog post" },
+          "description": {
+            "type": "string",
+            "example": "The Full Stack Engineer blog needs a new post!"
+          },
+          "id": { "type": "string" },
+          "completed": { "type": "boolean", "default": false }
+        },
+        "required": ["title", "description", "id", "completed"]
+      },
+      "UpdateTodoDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "The Full Stack Engineer blog needs a new post!"
+          },
+          "description": {
+            "type": "string",
+            "example": "The Full Stack Engineer blog needs a new post!"
+          },
+          "completed": { "type": "boolean", "default": false }
+        }
+      }
+    }
+  }
+}

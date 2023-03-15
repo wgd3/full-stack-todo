@@ -9,20 +9,20 @@ services:
     dockerContext: ./
     buildFilter:
       paths:
-      - apps/client/**/*.ts
-      - apps/client/**/*.html
-      - apps/client/**/*.scss
-      - apps/client/src/assets/*
-      - libs/client/**/*
-      - libs/shared/**/*
-      - docker/Dockerfile.render
+        - apps/client/**/*.ts
+        - apps/client/**/*.html
+        - apps/client/**/*.scss
+        - apps/client/src/assets/*
+        - libs/client/**/*
+        - libs/shared/**/*
+        - docker/Dockerfile.render
       ignoredPaths:
-      - apps/client-e2e
-      - apps/ui-components-e2e
-      - apps/client/**/*.spec.ts
-      - apps/client/**/*test*
-      - libs/client/**/*.spec.ts
-      - libs/client/**/*test*
+        - apps/client-e2e
+        - apps/ui-components-e2e
+        - apps/client/**/*.spec.ts
+        - apps/client/**/*test*
+        - libs/client/**/*.spec.ts
+        - libs/client/**/*test*
 
   - type: web
     name: fst-demo-server
@@ -58,16 +58,15 @@ services:
         value: 'render'
     buildFilter:
       paths:
-      - libs/server/**/*.ts
-      - apps/server/**/*.ts
-      - apps/server/Dockerfile.render
+        - libs/server/**/*.ts
+        - apps/server/**/*.ts
+        - apps/server/Dockerfile.render
       ignoredPaths:
-      - apps/server/**/*.spec.ts
-      - apps/server/**/*test*
-      - libs/server/**/*.spec.ts
-      - libs/server/**/*test*
-      - apps/server-e2e
-
+        - apps/server/**/*.spec.ts
+        - apps/server/**/*test*
+        - libs/server/**/*.spec.ts
+        - libs/server/**/*test*
+        - apps/server-e2e
 
 databases:
   - name: fst-demo-db
