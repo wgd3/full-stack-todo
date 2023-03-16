@@ -43,3 +43,5 @@ Thumbs.db
 migrations.json
 
 .env
+
+.nx-container

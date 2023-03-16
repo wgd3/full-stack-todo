@@ -123,6 +123,49 @@
     "docker-build": {
       "dependsOn": ["build"],
       "command": "docker build -f apps/client/Dockerfile . -t client"
+    },
+    "container": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "engine": "docker",
+        "metadata": {
+          "images": ["ghcr.io/wgd3/fst-client"],
+          "load": true,
+          "push": true,
+          "tags": [
+            "type=schedule",
+            "type=ref,event=branch",
+            "type=ref,event=tag",
+            "type=ref,event=pr",
+            "type=sha,prefix=sha-"
+          ]
+        }
+      },
+      "configurations": {
+        "ci": {
+          "metadata": {
+            "images": ["ghcr.io/wgd3/fst-client"],
+            "load": true,
+            "push": true,
+            "cache-from": ["type=gha"],
+            "cache-to": ["type=gha,mode=max"],
+            "tags": [
+              "type=ref,event=branch",
+              "type=ref,event=tag",
+              "type=sha",
+              "type=sha,format=long",
+              "latest"
+            ]
+          }
+        },
+        "local": {
+          "metadata": {
+            "images": ["fst-client"],
+            "push": false,
+            "tags": ["type=sha,prefix=sha-"]
+          }
+        }
+      }
     }
   },
   "tags": ["type:app", "scope:client"]
