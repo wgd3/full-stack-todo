@@ -1,0 +1,66 @@
+name: CI
+
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+
+on:
+  pull_request:
+
+jobs:
+  main:
+    name: Nx Cloud - Main Job
+    uses: nrwl/ci/.github/workflows/nx-cloud-main.yml@v0.11.3
+    with:
+      number-of-agents: 3
+      init-commands: |
+        npx nx-cloud start-ci-run --stop-agents-after="build" --agent-count=3
+      parallel-commands: |
+        npx nx-cloud record -- npx nx format:check
+      parallel-commands-on-agents: |
+        npx nx affected --target=lint --parallel=3
+        npx nx affected --target=test --parallel=3 --ci --code-coverage
+        npx nx affected --target=build --parallel=3
+      artifacts-path: dist/
+      artifacts-name: dist-artifacts
+
+  agents:
+    name: Nx Cloud - Agents
+    uses: nrwl/ci/.github/workflows/nx-cloud-agents.yml@v0.11.3
+    with:
+      number-of-agents: 3
+
+  # docker-build:
+  #   name: Docker Build
+  #   needs: main
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     INPUT_PUSH: true
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v2
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v2
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Derive appropriate SHAs for base and head for `nx affected` commands
+  #       uses: nrwl/nx-set-shas@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         cache: 'npm'
+  #         node-version-file: '.nvmrc'
+  #     - name: 'Downloading artifacts'
+  #       continue-on-error: true
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: dist-artifacts
+  #         path: dist
+  #     - run: npm install
+  #     - run: npx nx affected --base=$NX_BASE --head=$NX_HEAD --target=container --parallel=2 --configuration=ci
+  #       env:
+  #         INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

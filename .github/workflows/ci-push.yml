@@ -10,7 +10,6 @@ on:
       - 'part*'
     tags:
       - 'part*'
-  pull_request:
 
 jobs:
   main:
