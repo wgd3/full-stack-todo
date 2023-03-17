@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Code Coverage
     steps:
-      - uses: actions/checkout@mv3
+      - uses: actions/checkout@m3
       - uses: actions/download-artifact@v3
         with:
           name: dist-and-coverage-artifacts
