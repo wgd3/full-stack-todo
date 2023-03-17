@@ -1,4 +1,4 @@
-name: CI
+name: Pull Request CI
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
@@ -34,6 +34,7 @@ jobs:
   codecoverage:
     runs-on: ubuntu-latest
     name: Code Coverage
+    needs: ['main']
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
