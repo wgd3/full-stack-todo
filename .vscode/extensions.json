@@ -4,6 +4,7 @@
     "esbenp.prettier-vscode",
     "firsttris.vscode-jest-runner",
     "dbaeumer.vscode-eslint",
-    "stylelint.vscode-stylelint"
+    "stylelint.vscode-stylelint",
+    "vivaxy.vscode-conventional-commits"
   ]
 }
