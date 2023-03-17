@@ -13,4 +13,5 @@ module.exports = {
    */
   snapshotFormat: { escapeString: true, printBasicPrototype: true },
   reporters: [['github-actions', { silent: false }], 'summary'],
+  coverageReporters: ['clover', 'json', 'lcov', ['text', { skipFull: true }]],
 };
