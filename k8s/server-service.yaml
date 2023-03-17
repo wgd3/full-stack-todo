@@ -10,6 +10,7 @@ metadata:
   namespace: fullstacktodo
 spec:
   type: LoadBalancer
+  loadBalancerIP: 10.0.0.60
   ports:
     - name: http
       port: 3333

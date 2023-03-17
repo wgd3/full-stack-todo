@@ -8,6 +8,7 @@ metadata:
   namespace: fullstacktodo
 spec:
   type: LoadBalancer
+  loadBalancerIP: 10.0.0.67
   ports:
     - name: '3306'
       port: 3306
