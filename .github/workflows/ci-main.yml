@@ -3,7 +3,6 @@ name: CI
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
-
 # this workflow runs only on the main branch
 on:
   push:
@@ -45,11 +44,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "lts/*"
+          node-version: 'lts/*'
       - name: Install dependencies
         run: npm ci
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release --extends ./release.config.js
-

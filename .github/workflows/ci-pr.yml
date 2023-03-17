@@ -20,11 +20,32 @@ jobs:
         npx nx affected --target=lint --parallel=3
         npx nx affected --target=test --parallel=3 --ci --code-coverage
         npx nx affected --target=build --parallel=3
-      artifacts-path: dist/
-      artifacts-name: dist-artifacts
+      artifacts-path: |
+        dist/
+        coverage
+      artifacts-name: dist-and-coverage-artifacts
 
   agents:
     name: Nx Cloud - Agents
     uses: nrwl/ci/.github/workflows/nx-cloud-agents.yml@v0.11.3
     with:
       number-of-agents: 3
+
+  codecoverage:
+    runs-on: ubuntu-latest
+    name: Code Coverage
+    steps:
+      - uses: actions/checkout@mv3
+      - uses: actions/download-artifact@v3
+        with:
+          name: dist-and-coverage-artifacts
+          path: coverage
+      - name: Display structure of downloaded files
+        run: ls -R
+      - uses: codecov/codecov-action@v3
+        with:
+          directory: coverage
+          flags: unittests # optional
+          name: codecov-umbrella # optional
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true # optional (default = false)

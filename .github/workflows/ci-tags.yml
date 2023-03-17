@@ -3,7 +3,6 @@ name: CI
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
-
 # This file builds docker images whenever a new tag is published
 on:
   push:
