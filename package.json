@@ -1,6 +1,6 @@
 {
   "name": "full-stack-todo",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "license": "MIT",
   "scripts": {
     "prepare": "husky install"
@@ -104,6 +104,8 @@
     "nx": "15.8.5",
     "nx-stylelint": "^15.0.0",
     "prettier": "^2.6.2",
+    "semantic-release-npm-github-publish": "^1.5.4",
+    "semantic-release-plus": "^20.0.0",
     "stylelint": "^15.0.0",
     "stylelint-config-standard": "^30.0.0",
     "stylelint-config-standard-scss": "^7.0.0",
