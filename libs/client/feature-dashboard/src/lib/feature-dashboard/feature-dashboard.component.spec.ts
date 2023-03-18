@@ -1,4 +1,6 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ApiService } from '@fst/client/data-access';
 
 import { FeatureDashboardComponent } from './feature-dashboard.component';
 
@@ -8,7 +10,8 @@ describe('FeatureDashboardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FeatureDashboardComponent],
+      imports: [FeatureDashboardComponent, HttpClientTestingModule],
+      providers: [ApiService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FeatureDashboardComponent);

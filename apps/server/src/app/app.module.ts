@@ -1,13 +1,11 @@
 import { ServerFeatureTodoModule } from '@fst/server/feature-todo';
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-
+import { ServerFeatureHealthModule } from '@fst/server/feature-health';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -17,18 +15,30 @@ import { AppService } from './app.service';
       }),
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: (config: ConfigService) => ({
-        type: 'sqlite',
-        database: config.get('DATABASE_PATH'),
-        synchronize: true,
-        logging: true,
-        autoLoadEntities: true,
-      }),
+      useFactory: (config: ConfigService) => {
+        const env = config.get('ENVIRONMENT') ?? 'development';
+        const dbType = config.getOrThrow('DATABASE_TYPE');
+        const dbName = config.getOrThrow('DATABASE_NAME');
+        Logger.debug(`Detected environment: ${env}`);
+        Logger.debug(`Attempting connection to ${dbType} database '${dbName}'`);
+        return {
+          type: dbType,
+          host: config.get('DATABASE_HOST'),
+          username: config.get('DATABASE_USERNAME'),
+          password: config.get('DATABASE_PASSWORD'),
+          port: config.get('DATABASE_PORT'),
+          database: dbName,
+          synchronize: true,
+          logging: true,
+          autoLoadEntities: true,
+        } as TypeOrmModuleAsyncOptions; // HERES THE PROBLEM
+      },
       inject: [ConfigService],
     }),
     ServerFeatureTodoModule,
+    ServerFeatureHealthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

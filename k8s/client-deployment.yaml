@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: client
+  name: client
+  namespace: fullstacktodo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: client
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: client
+    spec:
+      containers:
+        - image: ghcr.io/wgd3/fst-client
+          name: client
+          ports:
+            - containerPort: 80
+          resources: {}
+      restartPolicy: Always
+status: {}

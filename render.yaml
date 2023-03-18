@@ -1,0 +1,73 @@
+---
+services:
+  - type: web
+    name: fst-demo-client
+    repo: https://github.com/wgd3/full-stack-todo.git
+    env: docker
+    plan: free
+    dockerfilePath: ./apps/client/Dockerfile.render
+    dockerContext: ./
+    buildFilter:
+      paths:
+        - apps/client/**/*.ts
+        - apps/client/**/*.html
+        - apps/client/**/*.scss
+        - apps/client/src/assets/*
+        - libs/client/**/*
+        - libs/shared/**/*
+        - docker/Dockerfile.render
+      ignoredPaths:
+        - apps/client-e2e
+        - apps/ui-components-e2e
+        - apps/client/**/*.spec.ts
+        - apps/client/**/*test*
+        - libs/client/**/*.spec.ts
+        - libs/client/**/*test*
+
+  - type: web
+    name: fst-demo-server
+    repo: https://github.com/wgd3/full-stack-todo.git
+    env: docker
+    plan: free
+    dockerfilePath: ./apps/server/Dockerfile.render
+    dockerContext: ./
+    envVars:
+      - key: 'DB_HOST'
+        fromDatabase:
+          name: fst-demo-db
+          property: host
+      - key: 'DB_PORT'
+        fromDatabase:
+          name: fst-demo-db
+          property: port
+      - key: 'DB_USERNAME'
+        fromDatabase:
+          name: fst-demo-db
+          property: user
+      - key: 'DB_PASSWORD'
+        fromDatabase:
+          name: fst-demo-db
+          property: password
+      - key: 'DB_NAME'
+        fromDatabase:
+          name: fst-demo-db
+          property: database
+      - key: 'DB_TYPE'
+        value: 'postgres'
+      - key: 'ENV'
+        value: 'render'
+    buildFilter:
+      paths:
+        - libs/server/**/*.ts
+        - apps/server/**/*.ts
+        - apps/server/Dockerfile.render
+      ignoredPaths:
+        - apps/server/**/*.spec.ts
+        - apps/server/**/*test*
+        - libs/server/**/*.spec.ts
+        - libs/server/**/*test*
+        - apps/server-e2e
+
+databases:
+  - name: fst-demo-db
+    plan: free

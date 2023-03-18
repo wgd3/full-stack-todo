@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  client:
+    container_name: client
+    image: client
+    ports:
+      - 4200:80
+    depends_on:
+      - server
+    healthcheck:
+      test: service nginx status || exit 1
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  server:
+    container_name: server
+    image: server
+    ports:
+      - 3333:3333
+    env_file:
+      - .env
+    environment:
+      - ENVIRONMENT=docker
+      - DATABASE_HOST=mariadb # this has to match the name of the database service being used!
+    healthcheck:
+      test: wget localhost:3333/api/health -q -O - > /dev/null 2>&1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+  swagger-ui:
+    container_name: swagger
+    image: 'swaggerapi/swagger-ui:v3.25.0'
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./${SWAGGER_JSON_FILE}:/usr/share/spec/${SWAGGER_JSON_FILE}
+    environment:
+      SWAGGER_JSON: /usr/share/spec/${SWAGGER_JSON_FILE}
+    healthcheck:
+      test: ['CMD', 'wget', 'localhost:8080 -q -O - > /dev/null 2>&1']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # postgres:
+  #   container_name: postgres
+  #   image: postgres:alpine
+  #   ports:
+  #     - 5432:5432
+  #   # explicitly set because the .env variable names don't match
+  #   # what is expected in the container
+  #   environment:
+  #     - POSTGRES_USER=${DATABASE_USERNAME}
+  #     - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+  #     - POSTGRES_DB=${DATABASE_NAME}
+  #   healthcheck:
+  #     test: ["CMD-SHELL",  "su -c 'pg_isready -U postgres' postgres"]
+  #     interval: 30s
+  #     timeout: 5s
+  #     retries: 3
+
+  mariadb:
+    container_name: mariadb
+    image: mariadb:latest
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_USER=${DATABASE_USERNAME}
+      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_DATABASE=${DATABASE_NAME}
+      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'mysqladmin',
+          'ping',
+          '-h',
+          'localhost',
+          '--password=$DATABASE_PASSWORD',
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s

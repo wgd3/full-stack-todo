@@ -1,0 +1,23 @@
+FROM node:latest AS build-stage
+
+WORKDIR /app
+
+COPY package*.json /app/
+
+RUN npm install --ci
+
+COPY ./ /app/
+
+ARG configuration=production
+
+RUN npx nx run client:build:render
+
+
+FROM nginxinc/nginx-unprivileged
+
+
+COPY --from=build-stage /app/dist/apps/client /usr/share/nginx/html
+COPY apps/client/nginx-render.conf  /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+

@@ -15,24 +15,48 @@
         "tsConfig": "apps/server/tsconfig.app.json",
         "assets": ["apps/server/src/assets"],
         "webpackConfig": "apps/server/webpack.config.js",
-        "babelUpwardRootMode": true
+        "babelUpwardRootMode": true,
+        "generatePackageJson": true
       },
       "configurations": {
         "production": {
           "optimization": true,
           "extractLicenses": true,
           "inspect": false
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "inspect": true
+        },
+        "render": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "libs/shared/util-env/src/lib/environment.ts",
+              "with": "libs/shared/util-env/src/lib/environment.render.ts"
+            }
+          ]
         }
       }
     },
     "serve": {
       "executor": "@nrwl/js:node",
+      "defaultConfiguration": "development",
       "options": {
         "buildTarget": "server:build"
       },
       "configurations": {
         "production": {
           "buildTarget": "server:build:production"
+        },
+        "development": {
+          "buildTarget": "server:build:development"
+        },
+        "render": {
+          "buildTarget": "server:build:render"
         }
       }
     },
@@ -54,6 +78,46 @@
         "ci": {
           "ci": true,
           "codeCoverage": true
+        }
+      }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/server/Dockerfile . -t server"
+    },
+    "container": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "engine": "docker",
+        "metadata": {
+          "images": ["fst-server"],
+          "push": false,
+          "tags": ["type=sha,prefix=sha-", "latest"]
+        }
+      },
+      "configurations": {
+        "ci": {
+          "metadata": {
+            "images": ["ghcr.io/wgd3/fst-server"],
+            "load": true,
+            "push": true,
+            "cache-from": ["type=gha"],
+            "cache-to": ["type=gha,mode=max"],
+            "tags": [
+              "type=ref,event=branch",
+              "type=ref,event=tag",
+              "type=sha",
+              "type=sha,format=long",
+              "latest"
+            ]
+          }
+        },
+        "local": {
+          "metadata": {
+            "images": ["fst-server"],
+            "push": false,
+            "tags": ["type=sha,prefix=sha-", "latest"]
+          }
         }
       }
     }

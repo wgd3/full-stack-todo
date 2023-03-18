@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: server
+  # this matches the "upstream" name specified in the nginx config of the
+  # client container so redirects for API calls automatically work
+  name: server
+  namespace: fullstacktodo
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.0.0.60
+  ports:
+    - name: http
+      port: 3333
+      targetPort: 3333
+  selector:
+    io.kompose.service: server
+status:
+  loadBalancer: {}

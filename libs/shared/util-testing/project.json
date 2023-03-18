@@ -1,0 +1,16 @@
+{
+  "name": "shared-util-testing",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/util-testing/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shared/util-testing/**/*.ts"]
+      }
+    }
+  },
+  "tags": ["type:util", "scope:shared"]
+}
