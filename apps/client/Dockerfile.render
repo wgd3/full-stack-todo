@@ -1,4 +1,4 @@
-FROM node:latest as build-stage
+FROM node:latest AS build-stage
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ ARG configuration=production
 RUN npx nx run client:build:render
 
 
-FROM nginx:latest
+FROM nginxinc/nginx-unprivileged
 
 
 COPY --from=build-stage /app/dist/apps/client /usr/share/nginx/html

@@ -1,4 +1,4 @@
-FROM node:latest as build-stage
+FROM node:latest AS build-stage
 
 WORKDIR /app
 
@@ -35,6 +35,8 @@ EXPOSE ${PORT}
 
 RUN addgroup --system server && \
     adduser --system -G server server
+
+USER server
 
 WORKDIR /app
 

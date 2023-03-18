@@ -2,7 +2,7 @@
 # Builder image, install all needed packages
 ######################################################
 # Install dependencies only when needed
-FROM docker.io/node:lts-alpine as deps
+FROM docker.io/node:lts-alpine AS deps
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine 
 # to understand why libc6-compat might be needed.
@@ -20,7 +20,7 @@ RUN npm install reflect-metadata tslib rxjs sqlite3 mysql2 pg
 ######################################################
 # Production image, copy all the files and run nest
 ######################################################
-FROM docker.io/node:lts-alpine as runner
+FROM docker.io/node:lts-alpine AS runner
 
 LABEL org.opencontainers.image.title="full-stack-todo nestjs server"
 LABEL org.opencontainers.image.url="https://github.com/wgd3/full-stack-todo"

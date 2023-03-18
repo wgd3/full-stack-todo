@@ -2,7 +2,7 @@
 # Tip: Modify "docker-build" options in project.json to change docker build args.
 #
 # Run the container with `docker run -p 3000:3000 -t client`.
-FROM docker.io/nginx:stable-alpine
+FROM nginxinc/nginx-unprivileged
 
 LABEL org.opencontainers.image.title="full-stack-todo angular client"
 LABEL org.opencontainers.image.url="https://github.com/wgd3/full-stack-todo"
