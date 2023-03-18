@@ -19,29 +19,4 @@ module.exports = {
       ],
     ],
   },
-  prompt: {
-    settings: {
-      enableMultipleScopes: true,
-    },
-    messages: {},
-    questions: {
-      //   type: {
-      //     description: 'please input type:',
-      //   },
-      //   scope: {
-      //     description:
-      //       '(rc file) Select the app or library affected by this change',
-      //     messages: {
-      //       'test-foo': 'test-bar',
-      //     },
-      //     enum: {
-      //       foo: {
-      //         description: 'foooo',
-      //         title: 'foooooo',
-      //       },
-      //     },
-      //   },
-    },
-  },
-  // . . .
 };

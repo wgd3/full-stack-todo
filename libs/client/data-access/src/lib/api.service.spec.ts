@@ -1,19 +1,55 @@
+import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { ITodo } from '@fst/shared/domain';
+import { createMockTodo } from '@fst/shared/util-testing';
+import { of } from 'rxjs';
+import exp = require('constants');
 
 import { ApiService } from './api.service';
 
 describe('ApiService', () => {
   let service: ApiService;
+  let http: HttpClient;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
     service = TestBed.inject(ApiService);
+    http = TestBed.inject(HttpClient);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('should get a list of to-do items', (done) => {
+    const todos: ITodo[] = Array.from({ length: 5 }).map(() =>
+      createMockTodo()
+    );
+    const httpSpy = jest.spyOn(http, 'get').mockReturnValue(of(todos));
+    service.getAllToDoItems().subscribe({
+      next: (val) => {
+        expect(val).toStrictEqual(todos);
+        expect(val.length).toEqual(todos.length);
+        done();
+      },
+      error: done.fail,
+    });
+    expect(httpSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should get a single to-do item', (done) => {
+    const todo = createMockTodo();
+    const httpSpy = jest.spyOn(http, 'get').mockReturnValue(of(todo));
+    service.getToDoById(todo.id).subscribe({
+      next: (val) => {
+        expect(val).toStrictEqual(todo);
+        done();
+      },
+      error: done.fail,
+    });
+    expect(httpSpy).toHaveBeenCalledTimes(1);
   });
 });
