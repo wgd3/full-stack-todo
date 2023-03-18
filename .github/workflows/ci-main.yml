@@ -37,7 +37,9 @@ jobs:
   codecoverage:
     runs-on: ubuntu-latest
     name: Code Coverage
-    needs: ['main']
+    needs:
+      - main
+      - agents
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
@@ -56,7 +58,9 @@ jobs:
 
   sonarcloud:
     name: SonarCloud
-    needs: ['main']
+    needs:
+      - main
+      - agents
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
