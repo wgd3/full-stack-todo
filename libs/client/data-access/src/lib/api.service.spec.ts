@@ -52,4 +52,60 @@ describe('ApiService', () => {
     });
     expect(httpSpy).toHaveBeenCalledTimes(1);
   });
+
+  it('should create a single to-do item', (done) => {
+    const todo = createMockTodo();
+    const httpSpy = jest.spyOn(http, 'post').mockReturnValue(of(todo));
+    service.createToDo(todo).subscribe({
+      next: (val) => {
+        expect(val).toStrictEqual(todo);
+        done();
+      },
+      error: done.fail,
+    });
+    expect(httpSpy).toHaveBeenCalledTimes(1);
+    expect(httpSpy).lastCalledWith(`/api/v1/todos`, { ...todo });
+  });
+
+  it('should update a single to-do item', (done) => {
+    const todo = createMockTodo();
+    const httpSpy = jest.spyOn(http, 'patch').mockReturnValue(of(todo));
+    service.updateToDo(todo.id, todo).subscribe({
+      next: (val) => {
+        expect(val).toStrictEqual(todo);
+        done();
+      },
+      error: done.fail,
+    });
+    expect(httpSpy).toHaveBeenCalledTimes(1);
+    expect(httpSpy).lastCalledWith(`/api/v1/todos/${todo.id}`, { ...todo });
+  });
+
+  it('should update a single to-do item', (done) => {
+    const todo = createMockTodo();
+    const httpSpy = jest.spyOn(http, 'put').mockReturnValue(of(todo));
+    service.createOrUpdateToDo(todo.id, todo).subscribe({
+      next: (val) => {
+        expect(val).toStrictEqual(todo);
+        done();
+      },
+      error: done.fail,
+    });
+    expect(httpSpy).toHaveBeenCalledTimes(1);
+    expect(httpSpy).lastCalledWith(`/api/v1/todos/${todo.id}`, { ...todo });
+  });
+
+  it('should delete a single to-do item', (done) => {
+    const todo = createMockTodo();
+    const httpSpy = jest.spyOn(http, 'delete').mockReturnValue(of(null));
+    service.deleteToDo(todo.id).subscribe({
+      next: (val) => {
+        expect(val).toBeNull();
+        done();
+      },
+      error: done.fail,
+    });
+    expect(httpSpy).toHaveBeenCalledTimes(1);
+    expect(httpSpy).lastCalledWith(`/api/v1/todos/${todo.id}`);
+  });
 });

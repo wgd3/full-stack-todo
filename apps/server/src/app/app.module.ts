@@ -17,46 +17,17 @@ import { ServerFeatureHealthModule } from '@fst/server/feature-health';
     TypeOrmModule.forRootAsync({
       useFactory: (config: ConfigService) => {
         const env = config.get('ENVIRONMENT') ?? 'development';
-        Logger.log(`Detected environment: ${env}`);
-        Logger.log(
-          `Attempting connection to ${config.get(
-            `DATABASE_TYPE`
-          )} database '${config.get(`DATABASE_NAME`)}'`
-        );
-        // if (env === 'docker') {
-        //   console.log(
-        //     `Detected Docker environment, connecting to docker DB: ${config.get(
-        //       'DATABASE_HOST'
-        //     )}`
-        //   );
-        //   return {
-        //     type: config.get('DATABASE_TYPE'),
-        //     host: config.get('DATABASE_HOST'),
-        //     username: config.get('DATABASE_USERNAME'),
-        //     password: config.get('DATABASE_PASSWORD'),
-        //     port: config.get('DATABASE_PORT'),
-        //     database: config.get('DATABASE_NAME'),
-        //     synchronize: true,
-        //     logging: true,
-        //     autoLoadEntities: true,
-        //   } as TypeOrmModuleAsyncOptions; // HERES THE PROBLEM
-        // }
-        // // default to local devl
-        // console.log(`Using SQLite for local dev environment`);
-        // return {
-        //   type: 'sqlite',
-        //   database: config.get('DATABASE_PATH'),
-        //   synchronize: true,
-        //   logging: true,
-        //   autoLoadEntities: true,
-        // };
+        const dbType = config.getOrThrow('DATABASE_TYPE');
+        const dbName = config.getOrThrow('DATABASE_NAME');
+        Logger.debug(`Detected environment: ${env}`);
+        Logger.debug(`Attempting connection to ${dbType} database '${dbName}'`);
         return {
-          type: config.get('DATABASE_TYPE'),
+          type: dbType,
           host: config.get('DATABASE_HOST'),
           username: config.get('DATABASE_USERNAME'),
           password: config.get('DATABASE_PASSWORD'),
           port: config.get('DATABASE_PORT'),
-          database: config.get('DATABASE_NAME'),
+          database: dbName,
           synchronize: true,
           logging: true,
           autoLoadEntities: true,
