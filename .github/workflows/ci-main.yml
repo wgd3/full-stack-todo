@@ -55,31 +55,10 @@ jobs:
           fail_ci_if_error: true # optional (default = false)
           verbose: true # optional (default = false)
 
-  sonarcloud:
-    name: SonarCloud
-    needs:
-      - main
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.organization=wgd3
-            -Dsonar.projectKey=full-stack-todo
-            -Dsonar.verbose=true
-
   release:
     name: Release
     needs:
       - codecoverage
-      - sonarcloud
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
