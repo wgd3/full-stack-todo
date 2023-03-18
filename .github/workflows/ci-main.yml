@@ -32,6 +32,40 @@ jobs:
     with:
       number-of-agents: 3
 
+  codecoverage:
+    runs-on: ubuntu-latest
+    name: Code Coverage
+    needs: ['main']
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: dist-and-coverage-artifacts
+          path: coverage
+      - name: Display structure of downloaded files
+        run: ls -R
+      - uses: codecov/codecov-action@v3
+        with:
+          directory: ./coverage/coverage
+          flags: unittests # optional
+          name: codecov-umbrella # optional
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true # optional (default = false)
+
+  sonarcloud:
+    name: SonarCloud
+    needs: ['main']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   release:
     name: Release
     needs: ['main']
