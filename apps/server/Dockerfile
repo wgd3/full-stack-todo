@@ -46,7 +46,7 @@ RUN npm install reflect-metadata tslib rxjs sqlite3 mysql2 pg
 ######################################################
 # Production image, copy all the files and run nest
 ######################################################
-FROM docker.io/node:lts-alpine as runner
+FROM docker.io/node:lts-alpine AS runner
 
 LABEL org.opencontainers.image.title="full-stack-todo nestjs server"
 LABEL org.opencontainers.image.url="https://github.com/wgd3/full-stack-todo"
