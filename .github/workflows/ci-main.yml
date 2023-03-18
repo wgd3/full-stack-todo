@@ -23,8 +23,10 @@ jobs:
         npx nx affected --target=lint --parallel=3
         npx nx affected --target=test --parallel=3 --ci --code-coverage
         npx nx affected --target=build --parallel=3
-      artifacts-path: dist/
-      artifacts-name: dist-artifacts
+      artifacts-path: |
+        dist/
+        coverage
+      artifacts-name: dist-and-coverage-artifacts
 
   agents:
     name: Nx Cloud - Agents
@@ -59,16 +61,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0  
+          fetch-depth: 0
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   release:
     name: Release
-    needs: ['main']
+    needs:
+      - main
+      - codecoverage
+      - sonarcloud
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
