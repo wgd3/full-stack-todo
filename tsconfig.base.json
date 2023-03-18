@@ -26,7 +26,8 @@
       "@fst/server/feature-health": ["libs/server/feature-health/src/index.ts"],
       "@fst/server/feature-todo": ["libs/server/feature-todo/src/index.ts"],
       "@fst/shared/domain": ["libs/shared/domain/src/index.ts"],
-      "@fst/shared/util-env": ["libs/shared/util-env/src/index.ts"]
+      "@fst/shared/util-env": ["libs/shared/util-env/src/index.ts"],
+      "@fst/shared/util-testing": ["libs/shared/util-testing/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
