@@ -30,6 +30,32 @@ LABEL org.opencontainers.image.licenses=MIT
 
 RUN apk add --no-cache dumb-init
 
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine 
+# to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /usr/src/app
+COPY dist/apps/server/package*.json ./
+
+# install extracted deps
+RUN npm install --only=production
+
+# install additional deps
+RUN npm install reflect-metadata tslib rxjs sqlite3 mysql2 pg
+
+######################################################
+# Production image, copy all the files and run nest
+######################################################
+FROM docker.io/node:lts-alpine AS runner
+
+LABEL org.opencontainers.image.title="full-stack-todo nestjs server"
+LABEL org.opencontainers.image.url="https://github.com/wgd3/full-stack-todo"
+LABEL org.opencontainers.image.source=https://github.com/wgd3/full-stack-todo
+LABEL org.opencontainers.image.description="NestJS REST API for the Full Stack To-Do demo application"
+LABEL org.opencontainers.image.licenses=MIT
+
+RUN apk add --no-cache dumb-init
+
 ENV HOST=0.0.0.0
 ENV PORT=3333
 

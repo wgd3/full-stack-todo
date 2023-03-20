@@ -11,6 +11,7 @@ LABEL org.opencontainers.image.description="Angular client for the Full Stack To
 LABEL org.opencontainers.image.licenses=MIT
 
 
+
 COPY dist/apps/client /usr/share/nginx/html
 COPY apps/client/nginx.conf  /etc/nginx/conf.d/default.conf
 

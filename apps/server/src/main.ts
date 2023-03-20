@@ -7,8 +7,6 @@ import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { writeFileSync } from 'fs';
-import * as path from 'path';
 
 import { AppModule } from './app/app.module';
 
@@ -19,7 +17,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   const configService = app.get(ConfigService);
-  const port = process.env.PORT || 3333;
+  const port = configService.get('PORT') || 3333;
 
   // set up versioning
   app.enableVersioning({
@@ -38,13 +36,9 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/v1', app, document);
-
-  if (configService.get('GENERATE_SWAGGER_JSON') === true) {
-    console.log(`Generating swagger.json..`);
-    const outputPath = path.resolve(process.cwd(), 'swagger.json');
-    writeFileSync(outputPath, JSON.stringify(document), { encoding: 'utf-8' });
-  }
+  SwaggerModule.setup('api/v1', app, document, {
+    jsonDocumentUrl: 'api/v1/swagger.json',
+  });
 
   await app.listen(port);
   Logger.log(
