@@ -1,5 +1,9 @@
 import { LoggerService } from '@nestjs/common';
-import { TerminusModule, TypeOrmHealthIndicator } from '@nestjs/terminus';
+import {
+  HealthCheckService,
+  TerminusModule,
+  TypeOrmHealthIndicator,
+} from '@nestjs/terminus';
 import { HealthCheckExecutor } from '@nestjs/terminus/dist/health-check/health-check-executor.service';
 import { TERMINUS_LOGGER } from '@nestjs/terminus/dist/health-check/logger/logger.provider';
 import { Test } from '@nestjs/testing';
@@ -18,6 +22,7 @@ const healthCheckExecutorMock: Partial<HealthCheckExecutor> = {
 
 describe('ServerFeatureHealthController', () => {
   let controller: ServerFeatureHealthController;
+  let healthCheck: HealthCheckService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -38,9 +43,22 @@ describe('ServerFeatureHealthController', () => {
     }).compile();
 
     controller = module.get(ServerFeatureHealthController);
+    healthCheck = module.get(HealthCheckService);
   });
 
   it('should be defined', () => {
     expect(controller).toBeTruthy();
+  });
+
+  it('should return a healthy state', () => {
+    jest.spyOn(healthCheck, 'check').mockReturnValue(
+      new Promise((res) =>
+        res({
+          status: 'ok',
+          details: {},
+        })
+      )
+    );
+    expect(controller.healthcheck()).toBeTruthy();
   });
 });
