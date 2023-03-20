@@ -86,6 +86,7 @@
       "command": "docker build -f apps/server/Dockerfile . -t server"
     },
     "container": {
+      "dependsOn": ["build"],
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "engine": "docker",
