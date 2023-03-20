@@ -1,11 +1,11 @@
-import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
 import {
   ICreateTodo,
   ITodo,
   IUpdateTodo,
   IUpsertTodo,
 } from '@fst/shared/domain';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 /**
  * This DTO was added so that a class can be used as a return type in the
@@ -120,7 +120,7 @@ export class UpdateTodoDto implements IUpdateTodo {
   })
   @IsString()
   @IsOptional()
-  title!: string;
+  title?: string;
 
   @ApiProperty({
     type: String,
@@ -129,7 +129,7 @@ export class UpdateTodoDto implements IUpdateTodo {
   })
   @IsString()
   @IsOptional()
-  description!: string;
+  description?: string;
 
   @ApiProperty({
     type: Boolean,
@@ -138,5 +138,5 @@ export class UpdateTodoDto implements IUpdateTodo {
   })
   @IsBoolean()
   @IsOptional()
-  completed!: boolean;
+  completed?: boolean;
 }
