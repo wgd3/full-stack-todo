@@ -1,4 +1,4 @@
-name: CI
+name: Tag CI
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
@@ -33,6 +33,7 @@ jobs:
           cache: 'npm'
           node-version-file: '.nvmrc'
       - run: npm ci
+      - run: npx nx run-many --target=build --all
       - run: npx nx run-many --target=container --all --parallel=2 --configuration=ci
         env:
           INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
