@@ -23,6 +23,7 @@ const healthCheckExecutorMock: Partial<HealthCheckExecutor> = {
 describe('ServerFeatureHealthController', () => {
   let controller: ServerFeatureHealthController;
   let healthCheck: HealthCheckService;
+  let dbService: TypeOrmHealthIndicator;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -44,21 +45,32 @@ describe('ServerFeatureHealthController', () => {
 
     controller = module.get(ServerFeatureHealthController);
     healthCheck = module.get(HealthCheckService);
+    dbService = await module.resolve(TypeOrmHealthIndicator);
   });
 
   it('should be defined', () => {
     expect(controller).toBeTruthy();
   });
 
-  it('should return a healthy state', () => {
+  it('should return a healthy state', async () => {
     jest.spyOn(healthCheck, 'check').mockReturnValue(
-      new Promise((res) =>
-        res({
-          status: 'ok',
-          details: {},
-        })
-      )
+      Promise.resolve({
+        status: 'ok',
+        details: {},
+      })
     );
-    expect(controller.healthcheck()).toBeTruthy();
+    expect(await controller.healthcheck()).toBeTruthy();
   });
+
+  // it('should report a happy database', async () => {
+  //   jest.spyOn(dbService, 'pingCheck').mockReturnValue(
+  //     Promise.resolve({
+  //       db: {
+  //         status: 'up',
+  //       },
+  //     })
+  //   );
+  //   const res = await controller.healthcheck();
+  //   expect(res.info?.['db']?.status).toBe('up');
+  // });
 });

@@ -43,19 +43,13 @@ describe('ServerFeatureTodoController', () => {
 
   it('should return a single todo by ID', async () => {
     const todo = createMockTodo();
-    jest.spyOn(service, 'getOne').mockReturnValue(
-      new Promise((res) => {
-        res(todo);
-      })
-    );
+    jest.spyOn(service, 'getOne').mockReturnValue(Promise.resolve(todo));
     expect(await controller.getOne(todo.id)).toStrictEqual(todo);
   });
 
   it('should be able to create a new todo', async () => {
     const todo = createMockTodo();
-    jest
-      .spyOn(service, 'create')
-      .mockReturnValue(new Promise((res) => res(todo)));
+    jest.spyOn(service, 'create').mockReturnValue(Promise.resolve(todo));
     const res = await controller.create({ ...todo });
     expect(res).toStrictEqual(todo);
   });
@@ -74,13 +68,13 @@ describe('ServerFeatureTodoController', () => {
     const newTitle = 'newTitle';
     jest
       .spyOn(service, 'update')
-      .mockReturnValue(new Promise((res) => res({ ...todo, title: newTitle })));
+      .mockReturnValue(Promise.resolve({ ...todo, title: newTitle }));
     const updated = await controller.update(todo.id, { title: newTitle });
     expect(updated.title).toBe(newTitle);
   });
 
   it('should delete a todo', async () => {
-    jest.spyOn(service, 'delete').mockReturnValue(new Promise((res) => res()));
+    jest.spyOn(service, 'delete').mockReturnValue(Promise.resolve());
     expect(await controller.delete('')).toBe(undefined);
   });
 });
