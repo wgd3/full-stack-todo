@@ -1,10 +1,10 @@
 import { ToDoEntitySchema } from '@fst/server/data-access-todo';
-import { ITodo } from '@fst/shared/domain';
+import { ICreateTodo, ITodo } from '@fst/shared/domain';
 import { createMockTodo } from '@fst/shared/util-testing';
 import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { ServerFeatureTodoService } from './server-feature-todo.service';
 
 export type MockType<T> = {
@@ -74,6 +74,21 @@ describe('ServerFeatureTodoService', () => {
     repoMock.save?.mockReturnValue(todo);
     expect(await service.create(todo)).toStrictEqual(todo);
     expect(repoMock.save).toHaveBeenCalledWith(todo);
+  });
+
+  it('should catch an error if a duplicate title is detected', async () => {
+    const todo = createMockTodo();
+    repoMock.save?.mockImplementation((todo: ICreateTodo) => {
+      const err = new QueryFailedError('unique constraint failed', [], {});
+      err.message =
+        'ERROR SQLITE_CONSTRAINT: UNIQUE constraint failed: todo.title';
+      throw err;
+    });
+    try {
+      await service.create(todo);
+    } catch (err) {
+      expect(err).toBeInstanceOf(QueryFailedError);
+    }
   });
 
   it('should update a todo', async () => {

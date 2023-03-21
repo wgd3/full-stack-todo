@@ -12,6 +12,7 @@ export const ToDoEntitySchema = new EntitySchema<ITodo>({
     title: {
       type: String,
       nullable: false,
+      unique: true,
     },
     description: {
       type: String,
