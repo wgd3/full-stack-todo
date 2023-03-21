@@ -13,6 +13,7 @@ declare namespace Cypress {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Chainable<Subject> {
     login(email: string, password: string): void;
+    storyAction(actionName: string): void;
   }
 }
 //
@@ -31,3 +32,10 @@ Cypress.Commands.add('login', (email, password) => {
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('storyAction', (actionName) => {
+  cy.document().then((doc) => {
+    const stub = cy.stub().as(actionName);
+    doc.addEventListener(actionName, (e: CustomEvent) => stub(e.detail));
+  });
+});

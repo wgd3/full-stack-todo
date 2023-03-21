@@ -5,6 +5,7 @@ import {
   HealthCheckService,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
+import { DATABASE_HEALTHCHECK_KEY } from './constants';
 
 @ApiTags('health')
 @Controller({ path: 'health' })
@@ -17,6 +18,8 @@ export class ServerFeatureHealthController {
   @Get()
   @HealthCheck()
   healthcheck() {
-    return this.health.check([() => this.db.pingCheck('database')]);
+    return this.health.check([
+      () => this.db.pingCheck(DATABASE_HEALTHCHECK_KEY),
+    ]);
   }
 }

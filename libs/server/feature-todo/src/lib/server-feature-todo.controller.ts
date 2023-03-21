@@ -1,3 +1,4 @@
+import { QueryErrorFilter } from '@fst/server/util';
 import { ITodo } from '@fst/shared/domain';
 import {
   Body,
@@ -8,6 +9,7 @@ import {
   Patch,
   Post,
   Put,
+  UseFilters,
 } from '@nestjs/common';
 import {
   ApiCreatedResponse,
@@ -24,6 +26,7 @@ import {
 import { ServerFeatureTodoService } from './server-feature-todo.service';
 
 @Controller({ path: 'todos', version: '1' })
+@UseFilters(new QueryErrorFilter())
 export class ServerFeatureTodoController {
   constructor(private serverFeatureTodoService: ServerFeatureTodoService) {}
 

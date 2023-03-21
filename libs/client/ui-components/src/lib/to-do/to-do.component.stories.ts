@@ -41,9 +41,9 @@ export default {
     triggerDelete: {
       action: 'delete',
     },
-    // triggerEdit: {
-    //   action: 'edit',
-    // },
+    triggerEdit: {
+      action: 'edit',
+    },
     triggerToggleComplete: {
       action: 'toggleComplete',
     },

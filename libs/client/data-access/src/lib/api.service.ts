@@ -36,7 +36,7 @@ export class ApiService {
     return this.http.put<ITodo>(`${this.baseUrl}/todos/${todoId}`, todoData);
   }
 
-  deleteToDo(todoId: string): Observable<never> {
-    return this.http.delete<never>(`${this.baseUrl}/todos/${todoId}`);
+  deleteToDo(todoId: string): Observable<null> {
+    return this.http.delete<null>(`${this.baseUrl}/todos/${todoId}`);
   }
 }
