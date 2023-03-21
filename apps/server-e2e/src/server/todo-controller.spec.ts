@@ -5,7 +5,8 @@ import {
 } from '@fst/server/feature-todo';
 import { ITodo } from '@fst/shared/domain';
 import { createMockTodo } from '@fst/shared/util-testing';
-import { HttpStatus, INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
+import { APP_PIPE } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import * as request from 'supertest';
@@ -39,6 +40,14 @@ describe('ServerFeatureTodoController E2E', () => {
         {
           provide: getRepositoryToken(ToDoEntitySchema),
           useFactory: repositoryMockFactory,
+        },
+        {
+          provide: APP_PIPE,
+          useValue: new ValidationPipe({
+            transform: true,
+            whitelist: true,
+            forbidNonWhitelisted: true,
+          }),
         },
       ],
       controllers: [ServerFeatureTodoController],
@@ -81,12 +90,20 @@ describe('ServerFeatureTodoController E2E', () => {
         .expect(HttpStatus.CREATED);
     });
 
-    xit('should prevent adding a to-do with an ID', () => {
-      const todo = createMockTodo();
+    it('should prevent adding a to-do with an ID', () => {
+      const { id, title, description } = createMockTodo();
       return request
         .default(app.getHttpServer())
         .post(todoUrl)
-        .send(todo)
+        .send({ id, title, description })
+        .expect((resp) => {
+          const { message } = resp.body;
+          expect(
+            (message as string[]).some(
+              (m) => m === 'property id must not exist'
+            )
+          );
+        })
         .expect(HttpStatus.BAD_REQUEST);
     });
 
@@ -99,35 +116,42 @@ describe('ServerFeatureTodoController E2E', () => {
         .expect(HttpStatus.BAD_REQUEST);
     });
 
-    xit('should prevent adding a todo item with a completed status', () => {
+    it('should prevent adding a todo item with a completed status', () => {
       const { id, ...todo } = createMockTodo();
       return request
         .default(app.getHttpServer())
         .post(todoUrl)
         .send(todo)
+        .expect((resp) => {
+          const { message } = resp.body;
+          expect(
+            (message as string[]).some(
+              (m) => m === 'property should must not exist'
+            )
+          );
+        })
         .expect(HttpStatus.BAD_REQUEST);
     });
 
-    xit('should enforce strings for title', () => {
+    it('should enforce strings for title', () => {
       return request
         .default(app.getHttpServer())
         .post(todoUrl)
         .send({ title: 123 })
-        .expect(HttpStatus.BAD_REQUEST)
         .expect((resp) => {
           const { message } = resp.body;
           expect(
             (message as string[]).some((m) => m === 'title must be a string')
           );
-        });
+        })
+        .expect(HttpStatus.BAD_REQUEST);
     });
 
-    xit('should enforce strings for description', () => {
+    it('should enforce strings for description', () => {
       return request
         .default(app.getHttpServer())
         .post(todoUrl)
         .send({ description: false })
-        .expect(HttpStatus.BAD_REQUEST)
         .expect((resp) => {
           const { message } = resp.body;
           expect(
@@ -135,21 +159,22 @@ describe('ServerFeatureTodoController E2E', () => {
               (m) => m === 'description must be a string'
             )
           );
-        });
+        })
+        .expect(HttpStatus.BAD_REQUEST);
     });
 
-    xit('should enforce a required title', () => {
+    it('should enforce a required title', () => {
       return request
         .default(app.getHttpServer())
         .post(todoUrl)
         .send({ description: false })
-        .expect(HttpStatus.BAD_REQUEST)
         .expect((resp) => {
           const { message } = resp.body;
           expect(
             (message as string[]).some((m) => m === 'title should not be empty')
           );
-        });
+        })
+        .expect(HttpStatus.BAD_REQUEST);
     });
   });
 
