@@ -31,11 +31,12 @@ describe('ServerFeatureTodoController', () => {
   });
 
   it('should return an array of to-do items', async () => {
-    jest.spyOn(service, 'getAll').mockReturnValue(
-      new Promise((res, rej) => {
-        res(Array.from({ length: 5 }).map(() => createMockTodo()));
-      })
-    );
+    jest
+      .spyOn(service, 'getAll')
+      .mockReturnValue(
+        Promise.resolve(Array.from({ length: 5 }).map(() => createMockTodo()))
+      );
+
     const res = await controller.getAll();
     expect(Array.isArray(res)).toBe(true);
     expect(res.length).toBe(5);
@@ -56,9 +57,7 @@ describe('ServerFeatureTodoController', () => {
 
   it('should allow upserting a new todo', async () => {
     const todo = createMockTodo();
-    jest
-      .spyOn(service, 'upsert')
-      .mockReturnValue(new Promise((res) => res(todo)));
+    jest.spyOn(service, 'upsert').mockReturnValue(Promise.resolve(todo));
     const res = await controller.upsertOne(todo);
     expect(res).toStrictEqual(todo);
   });
