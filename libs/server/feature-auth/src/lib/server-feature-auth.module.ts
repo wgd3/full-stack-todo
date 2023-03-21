@@ -1,10 +1,28 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './jwt-strategy.service';
 import { ServerFeatureAuthController } from './server-feature-auth.controller';
 import { ServerFeatureAuthService } from './server-feature-auth.service';
 
 @Module({
+  imports: [
+    ConfigModule,
+    JwtModule.registerAsync({
+      useFactory: (config: ConfigService) => ({
+        secret: config.getOrThrow<string>('JWT_SECRET'),
+        signOptions: {
+          expiresIn:
+            config.get<string>('JWT_ACCESS_TOKEN_EXPIRES_IN') || '600s',
+        },
+      }),
+      inject: [ConfigService],
+    }),
+    PassportModule,
+  ],
   controllers: [ServerFeatureAuthController],
-  providers: [ServerFeatureAuthService],
+  providers: [ServerFeatureAuthService, JwtStrategy],
   exports: [ServerFeatureAuthService],
 })
 export class ServerFeatureAuthModule {}
