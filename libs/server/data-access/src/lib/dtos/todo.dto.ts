@@ -3,6 +3,7 @@ import {
   ITodo,
   IUpdateTodo,
   IUpsertTodo,
+  IUser,
 } from '@fst/shared/domain';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
@@ -53,6 +54,10 @@ export class TodoDto implements ITodo {
   @IsBoolean()
   @IsNotEmpty()
   completed!: boolean;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  user!: IUser;
 }
 
 export class CreateTodoDto implements ICreateTodo {

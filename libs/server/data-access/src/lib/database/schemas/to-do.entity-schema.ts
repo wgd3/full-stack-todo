@@ -24,4 +24,14 @@ export const ToDoEntitySchema = new EntitySchema<ITodo>({
       nullable: false,
     },
   },
+  relations: {
+    user: {
+      type: 'many-to-one',
+      target: 'user',
+      joinColumn: {
+        name: 'user_id',
+      },
+      inverseSide: 'todos',
+    },
+  },
 });

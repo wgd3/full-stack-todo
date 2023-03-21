@@ -1,3 +1,9 @@
+import {
+  CreateTodoDto,
+  TodoDto,
+  UpdateTodoDto,
+  UpsertTodoDto,
+} from '@fst/server/data-access';
 import { QueryErrorFilter } from '@fst/server/util';
 import { ITodo } from '@fst/shared/domain';
 import {
@@ -17,12 +23,6 @@ import {
   ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
-import {
-  CreateTodoDto,
-  TodoDto,
-  UpdateTodoDto,
-  UpsertTodoDto,
-} from './dtos/todo.dto';
 import { ServerFeatureTodoService } from './server-feature-todo.service';
 
 @Controller({ path: 'todos', version: '1' })
