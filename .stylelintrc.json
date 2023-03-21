@@ -1,24 +1,14 @@
 {
-  "ignoreFiles": [
-    "**/*"
-  ],
+  "ignoreFiles": ["**/*"],
   "overrides": [
     {
-      "files": [
-        "**/*.css"
-      ],
-      "extends": [
-        "stylelint-config-standard"
-      ],
+      "files": ["**/*.css"],
+      "extends": ["stylelint-config-standard"],
       "rules": {}
     },
     {
-      "files": [
-        "**/*.scss"
-      ],
-      "extends": [
-        "stylelint-config-standard-scss"
-      ],
+      "files": ["**/*.scss"],
+      "extends": ["stylelint-config-standard-scss"],
       "rules": {
         "selector-class-pattern": null
       }

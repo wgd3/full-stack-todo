@@ -2,3 +2,6 @@
 
 /dist
 /coverage
+.angular/
+.husky/
+tmp/
