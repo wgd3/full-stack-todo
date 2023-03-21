@@ -8,5 +8,8 @@
   "stylelint.validate": ["css", "less", "postcss", "scss"],
   "css.validate": false,
   "scss.validate": false,
-  "jest.testExplorer": null
+  "jest.testExplorer": null,
+  "jestTestExplorer.logpanel": true,
+  "jestTestExplorer.pathToJest": "node_modules/.bin/jest",
+  "testExplorer.useNativeTesting": true
 }
