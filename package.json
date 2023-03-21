@@ -78,6 +78,7 @@
     "@nx-tools/container-metadata": "^4.0.3",
     "@nx-tools/nx-container": "^4.0.3",
     "@schematics/angular": "~15.1.0",
+    "@storybook/addon-actions": "^7.0.0-rc.5",
     "@storybook/addon-essentials": "^7.0.0-rc.5",
     "@storybook/angular": "^7.0.0-rc.5",
     "@storybook/core-common": "^6.5.15",
