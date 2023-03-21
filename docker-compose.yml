@@ -23,7 +23,7 @@ services:
       - .env
     environment:
       - ENVIRONMENT=docker
-      - DATABASE_HOST=mariadb # this has to match the name of the database service being used!
+      - DATABASE_HOST=postgres # this has to match the name of the database service being used!
     healthcheck:
       test: wget localhost:3333/api/health -q -O - > /dev/null 2>&1
       interval: 10s
@@ -31,7 +31,7 @@ services:
       retries: 3
       start_period: 30s
     depends_on:
-      mariadb:
+      postgres:
         condition: service_healthy
 
   swagger-ui:
@@ -49,44 +49,44 @@ services:
       timeout: 10s
       retries: 5
 
-  # postgres:
-  #   container_name: postgres
-  #   image: postgres:alpine
-  #   ports:
-  #     - 5432:5432
-  #   # explicitly set because the .env variable names don't match
-  #   # what is expected in the container
-  #   environment:
-  #     - POSTGRES_USER=${DATABASE_USERNAME}
-  #     - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-  #     - POSTGRES_DB=${DATABASE_NAME}
-  #   healthcheck:
-  #     test: ["CMD-SHELL",  "su -c 'pg_isready -U postgres' postgres"]
-  #     interval: 30s
-  #     timeout: 5s
-  #     retries: 3
-
-  mariadb:
-    container_name: mariadb
-    image: mariadb:latest
+  postgres:
+    container_name: postgres
+    image: postgres:alpine
     ports:
-      - 3306:3306
+      - 5432:5432
+    # explicitly set because the .env variable names don't match
+    # what is expected in the container
     environment:
-      - MYSQL_USER=${DATABASE_USERNAME}
-      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
-      - MYSQL_DATABASE=${DATABASE_NAME}
-      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
     healthcheck:
-      test:
-        [
-          'CMD',
-          'mysqladmin',
-          'ping',
-          '-h',
-          'localhost',
-          '--password=$DATABASE_PASSWORD',
-        ]
+      test: ['CMD-SHELL', "su -c 'pg_isready -U postgres' postgres"]
       interval: 30s
       timeout: 5s
-      retries: 5
-      start_period: 10s
+      retries: 3
+
+  # mariadb:
+  #   container_name: mariadb
+  #   image: mariadb:latest
+  #   ports:
+  #     - 3306:3306
+  #   environment:
+  #     - MYSQL_USER=${DATABASE_USERNAME}
+  #     - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+  #     - MYSQL_DATABASE=${DATABASE_NAME}
+  #     - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
+  #   healthcheck:
+  #     test:
+  #       [
+  #         'CMD',
+  #         'mysqladmin',
+  #         'ping',
+  #         '-h',
+  #         'localhost',
+  #         '--password=$DATABASE_PASSWORD',
+  #       ]
+  #     interval: 30s
+  #     timeout: 5s
+  #     retries: 5
+  #     start_period: 10s

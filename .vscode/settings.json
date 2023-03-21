@@ -11,5 +11,9 @@
   "jest.testExplorer": null,
   "jestTestExplorer.logpanel": true,
   "jestTestExplorer.pathToJest": "node_modules/.bin/jest",
-  "testExplorer.useNativeTesting": true
+  "testExplorer.useNativeTesting": true,
+  "prettier.configPath": ".prettierrc",
+  "prettier.prettierPath": "node_modules/prettier",
+  "prettier.enableDebugLogs": true,
+  "prettier.jsxSingleQuote": true
 }
