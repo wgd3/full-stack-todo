@@ -1,4 +1,4 @@
-import { ToDoEntitySchema } from '@fst/server/data-access-todo';
+import { ToDoEntitySchema } from '@fst/server/data-access';
 import { ITodo } from '@fst/shared/domain';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';

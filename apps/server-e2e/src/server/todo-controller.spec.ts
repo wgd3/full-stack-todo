@@ -1,4 +1,4 @@
-import { ToDoEntitySchema } from '@fst/server/data-access-todo';
+import { ToDoEntitySchema } from '@fst/server/data-access';
 import {
   ServerFeatureTodoController,
   ServerFeatureTodoService,

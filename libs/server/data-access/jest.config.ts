@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'server-data-access-todo',
+  displayName: 'server-data-access',
   preset: '../../../jest.preset.js',
   globals: {},
   testEnvironment: 'node',
@@ -13,5 +13,5 @@ export default {
     ],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../coverage/libs/server/data-access-todo',
+  coverageDirectory: '../../../coverage/libs/server/data-access',
 };

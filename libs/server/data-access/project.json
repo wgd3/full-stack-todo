@@ -1,21 +1,21 @@
 {
-  "name": "server-data-access-todo",
+  "name": "server-data-access",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/server/data-access-todo/src",
+  "sourceRoot": "libs/server/data-access/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/server/data-access-todo/**/*.ts"]
+        "lintFilePatterns": ["libs/server/data-access/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/server/data-access-todo/jest.config.ts",
+        "jestConfig": "libs/server/data-access/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {

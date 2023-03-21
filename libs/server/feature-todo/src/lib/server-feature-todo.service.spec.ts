@@ -1,4 +1,4 @@
-import { ToDoEntitySchema } from '@fst/server/data-access-todo';
+import { ToDoEntitySchema } from '@fst/server/data-access';
 import { ICreateTodo, ITodo } from '@fst/shared/domain';
 import { createMockTodo } from '@fst/shared/util-testing';
 import { NotFoundException } from '@nestjs/common';

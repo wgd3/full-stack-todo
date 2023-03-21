@@ -1,4 +1,4 @@
-import { ToDoEntitySchema } from '@fst/server/data-access-todo';
+import { ToDoEntitySchema } from '@fst/server/data-access';
 import { createMockTodo } from '@fst/shared/util-testing';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
