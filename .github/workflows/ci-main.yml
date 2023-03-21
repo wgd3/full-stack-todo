@@ -2,6 +2,7 @@ name: Main Branch CI
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
 # this workflow runs only on the main branch
 on:
