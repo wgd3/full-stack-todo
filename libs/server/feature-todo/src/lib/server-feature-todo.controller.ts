@@ -4,7 +4,7 @@ import {
   UpdateTodoDto,
   UpsertTodoDto,
 } from '@fst/server/data-access';
-import { QueryErrorFilter } from '@fst/server/util';
+import { QueryErrorFilter, ReqUserId } from '@fst/server/util';
 import { ITodo } from '@fst/shared/domain';
 import {
   Body,
@@ -43,8 +43,8 @@ export class ServerFeatureTodoController {
     summary: 'Returns all to-do items',
     tags: ['todos'],
   })
-  async getAll(): Promise<ITodo[]> {
-    return this.serverFeatureTodoService.getAll();
+  async getAll(@ReqUserId() userId: string): Promise<ITodo[]> {
+    return this.serverFeatureTodoService.getAll(userId);
   }
 
   @Get(':id')
@@ -55,8 +55,11 @@ export class ServerFeatureTodoController {
     summary: 'Returns a single to-do if it exists',
     tags: ['todos'],
   })
-  async getOne(@Param('id') id: string): Promise<ITodo> {
-    return this.serverFeatureTodoService.getOne(id);
+  async getOne(
+    @ReqUserId() userId: string,
+    @Param('id') id: string
+  ): Promise<ITodo> {
+    return this.serverFeatureTodoService.getOne(userId, id);
   }
 
   @Post('')
@@ -67,8 +70,11 @@ export class ServerFeatureTodoController {
     summary: 'Creates a new to-do and returns the saved object',
     tags: ['todos'],
   })
-  async create(@Body() data: CreateTodoDto): Promise<ITodo> {
-    return this.serverFeatureTodoService.create(data);
+  async create(
+    @ReqUserId() userId: string,
+    @Body() data: CreateTodoDto
+  ): Promise<ITodo> {
+    return this.serverFeatureTodoService.create(userId, data);
   }
 
   @Put(':id')
@@ -82,8 +88,11 @@ export class ServerFeatureTodoController {
     summary: 'Replaces all values for a single to-do',
     tags: ['todos'],
   })
-  async upsertOne(@Body() data: UpsertTodoDto): Promise<ITodo> {
-    return this.serverFeatureTodoService.upsert(data);
+  async upsertOne(
+    @ReqUserId() userId: string,
+    @Body() data: UpsertTodoDto
+  ): Promise<ITodo> {
+    return this.serverFeatureTodoService.upsert(userId, data);
   }
 
   @Patch(':id')
@@ -95,10 +104,11 @@ export class ServerFeatureTodoController {
     tags: ['todos'],
   })
   async update(
+    @ReqUserId() userId: string,
     @Param('id') id: string,
     @Body() data: UpdateTodoDto
   ): Promise<ITodo> {
-    return this.serverFeatureTodoService.update(id, data);
+    return this.serverFeatureTodoService.update(userId, id, data);
   }
 
   @Delete(':id')
@@ -109,7 +119,10 @@ export class ServerFeatureTodoController {
     summary: 'Deletes a specific to-do item',
     tags: ['todos'],
   })
-  async delete(@Param('id') id: string): Promise<void> {
-    return this.serverFeatureTodoService.delete(id);
+  async delete(
+    @ReqUserId() userId: string,
+    @Param('id') id: string
+  ): Promise<void> {
+    return this.serverFeatureTodoService.delete(userId, id);
   }
 }

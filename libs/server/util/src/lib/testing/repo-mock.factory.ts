@@ -9,5 +9,6 @@ export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
     findOneOrFail: jest.fn(() => ({})),
     delete: jest.fn(() => null),
     find: jest.fn((entities) => entities),
+    remove: jest.fn((entity) => entity),
   })
 );

@@ -68,10 +68,10 @@ export class ServerFeatureUserController {
   async deleteUser(
     @ReqUserId() reqUserId: string,
     @Param('id', ParseUUIDPipe) id: string
-  ): Promise<void> {
+  ): Promise<null> {
     if (reqUserId !== id) {
       throw new NotFoundException();
     }
-    await this.serverFeatureUserService.deleteUser(id);
+    return await this.serverFeatureUserService.deleteUser(id);
   }
 }

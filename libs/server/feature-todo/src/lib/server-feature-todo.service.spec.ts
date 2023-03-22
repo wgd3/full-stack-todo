@@ -1,6 +1,6 @@
 import { ToDoEntitySchema } from '@fst/server/data-access';
 import { MockType, repositoryMockFactory } from '@fst/server/util/testing';
-import { ICreateTodo, ITodo } from '@fst/shared/domain';
+import { ITodo } from '@fst/shared/domain';
 import { createMockTodo, createMockUser } from '@fst/shared/util-testing';
 import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
@@ -33,12 +33,12 @@ describe('ServerFeatureTodoService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should return an array of to-do items', async () => {
+  it('should return an array of to-do items for a specific user', async () => {
     const todos = Array.from({ length: 5 }).map(() =>
       createMockTodo(mockUser.id)
     );
     repoMock.find?.mockReturnValue(todos);
-    expect((await service.getAll()).length).toBe(todos.length);
+    expect((await service.getAll(mockUser.id)).length).toBe(todos.length);
     expect(repoMock.find).toHaveBeenCalled();
   });
 
@@ -47,37 +47,45 @@ describe('ServerFeatureTodoService', () => {
       createMockTodo(mockUser.id)
     );
     repoMock.findOneBy?.mockReturnValue(todos[0]);
-    expect(await service.getOne(todos[0].id)).toStrictEqual(todos[0]);
-    expect(repoMock.findOneBy).toHaveBeenCalledWith({ id: todos[0].id });
+    expect(await service.getOne(mockUser.id, todos[0].id)).toStrictEqual(
+      todos[0]
+    );
+    expect(repoMock.findOneBy).toHaveBeenCalledWith({
+      id: todos[0].id,
+      user_id: mockUser.id,
+    });
   });
 
   it('should throw an exception when a todo ID is not found', async () => {
     repoMock.findOneBy?.mockReturnValue(undefined);
     try {
-      await service.getOne('foo');
+      await service.getOne(mockUser.id, 'foo');
     } catch (err) {
       expect(err instanceof NotFoundException).toBe(true);
-      expect(repoMock.findOneBy).toHaveBeenCalledWith({ id: 'foo' });
+      expect(repoMock.findOneBy).toHaveBeenCalledWith({
+        id: 'foo',
+        user_id: mockUser.id,
+      });
     }
   });
 
   it('should create a todo', async () => {
     const todo = createMockTodo(mockUser.id);
     repoMock.save?.mockReturnValue(todo);
-    expect(await service.create(todo)).toStrictEqual(todo);
+    expect(await service.create(mockUser.id, todo)).toStrictEqual(todo);
     expect(repoMock.save).toHaveBeenCalledWith(todo);
   });
 
   it('should catch an error if a duplicate title is detected', async () => {
     const todo = createMockTodo(mockUser.id);
-    repoMock.save?.mockImplementation((todo: ICreateTodo) => {
+    repoMock.save?.mockImplementation(() => {
       const err = new QueryFailedError('unique constraint failed', [], {});
       err.message =
         'ERROR SQLITE_CONSTRAINT: UNIQUE constraint failed: todo.title';
       throw err;
     });
     try {
-      await service.create(todo);
+      await service.create(mockUser.id, todo);
     } catch (err) {
       expect(err).toBeInstanceOf(QueryFailedError);
     }
@@ -87,28 +95,49 @@ describe('ServerFeatureTodoService', () => {
     const todo = createMockTodo(mockUser.id);
     const newTitle = 'foo';
     repoMock.findOneOrFail?.mockReturnValue({ ...todo, title: newTitle });
-    const res = await service.update(todo.id, { title: newTitle });
+    const res = await service.update(mockUser.id, todo.id, { title: newTitle });
     expect(res.title).toBe(newTitle);
     expect(repoMock.save).toHaveBeenCalledWith({
+      user_id: mockUser.id,
       id: todo.id,
       title: newTitle,
     });
     expect(repoMock.findOneOrFail).toHaveBeenCalled();
   });
 
+  it("should not update a todo that doesn't exist", async () => {
+    repoMock.findOneBy?.mockReturnValue(null);
+    try {
+      await service.update(mockUser.id, '', {});
+    } catch (err) {
+      expect(err).toBeInstanceOf(NotFoundException);
+    }
+  });
+
   it('should upsert a todo', async () => {
     const todo = createMockTodo(mockUser.id);
     const newTitle = 'foo';
     repoMock.findOneOrFail?.mockReturnValue({ ...todo, title: newTitle });
-    const res = await service.upsert(todo);
+    const res = await service.upsert(mockUser.id, todo);
     expect(res.title).toBe(newTitle);
     expect(repoMock.save).toHaveBeenCalledWith(todo);
     expect(repoMock.findOneOrFail).toHaveBeenCalled();
   });
 
   it('should delete a todo', async () => {
-    repoMock.delete?.mockReturnValue('foo');
-    expect(await service.delete('foo')).toBeUndefined();
-    expect(repoMock.delete).toHaveBeenCalledWith({ id: 'foo' });
+    const todo = createMockTodo(mockUser.id);
+    repoMock.findOneBy?.mockReturnValue(todo);
+    repoMock.remove?.mockReturnValue(todo);
+    expect(await service.delete(mockUser.id, todo.id)).toBeUndefined();
+    expect(repoMock.remove).toHaveBeenCalledWith(todo);
+  });
+
+  it("should not delete a todo that doesn't exist", async () => {
+    repoMock.findOneBy?.mockReturnValue(null);
+    try {
+      await service.delete(mockUser.id, '');
+    } catch (err) {
+      expect(err).toBeInstanceOf(NotFoundException);
+    }
   });
 });

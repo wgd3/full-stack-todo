@@ -5,6 +5,7 @@ import { createMockUser } from '@fst/shared/util-testing';
 import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { randEmail } from '@ngneat/falso';
 import { QueryFailedError, Repository } from 'typeorm';
 import { ServerFeatureUserService } from './server-feature-user.service';
 
@@ -99,6 +100,40 @@ describe('ServerFeatureUserService', () => {
     repoMock.findOneBy?.mockImplementation(() => null);
     try {
       await service.getOneByEmail('foo');
+    } catch (err) {
+      expect(err).toBeInstanceOf(NotFoundException);
+    }
+  });
+
+  it('should update a user if it exists', async () => {
+    const user = createMockUser();
+    const newEmail = randEmail();
+    repoMock.findOneBy?.mockReturnValue(user);
+    repoMock.save?.mockReturnValue({ ...user, email: newEmail });
+    const res = await service.updateUser(user.id, { email: newEmail });
+    expect(res).toStrictEqual({ ...user, email: newEmail });
+  });
+
+  it('should throw if a user could not be found during update', async () => {
+    repoMock.findOneBy?.mockImplementation(() => null);
+    try {
+      await service.updateUser('', {});
+    } catch (err) {
+      expect(err).toBeInstanceOf(NotFoundException);
+    }
+  });
+
+  it('should delete a user if it exists', async () => {
+    const user = createMockUser();
+    repoMock.findOneBy?.mockReturnValue(user);
+    const res = await service.deleteUser(user.id);
+    expect(res).toBeNull();
+  });
+
+  it('should throw if a user could not be found during delete', async () => {
+    repoMock.findOneBy?.mockImplementation(() => null);
+    try {
+      await service.deleteUser('');
     } catch (err) {
       expect(err).toBeInstanceOf(NotFoundException);
     }

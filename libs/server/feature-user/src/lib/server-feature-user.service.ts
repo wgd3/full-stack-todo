@@ -52,7 +52,7 @@ export class ServerFeatureUserService {
     if (!user) {
       throw new NotFoundException(`User could not be found`);
     }
-    await this.userRepository.delete({ id });
+    await this.userRepository.remove(user);
     return null;
   }
 }

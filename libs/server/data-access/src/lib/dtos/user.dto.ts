@@ -90,7 +90,7 @@ export class UpdateUserDto implements IUpdateUser {
       message: `Password is not strong enough. Must contain: 8 characters, 1 number, 1 uppercase letter, 1 symbol`,
     }
   )
-  password!: string;
+  password?: string;
 
   @ApiProperty({
     type: String,
@@ -98,5 +98,5 @@ export class UpdateUserDto implements IUpdateUser {
   })
   @IsEmail()
   @IsOptional()
-  email!: string;
+  email?: string;
 }
