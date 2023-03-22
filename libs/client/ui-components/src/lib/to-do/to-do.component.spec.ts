@@ -1,10 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { createMockTodo } from '@fst/shared/util-testing';
+import { createMockTodo, createMockUser } from '@fst/shared/util-testing';
 import { EditableModule } from '@ngneat/edit-in-place';
 
 import { ToDoComponent } from './to-do.component';
+
+const mockUser = createMockUser();
 
 describe('ToDoComponent', () => {
   let component: ToDoComponent;
@@ -31,14 +33,14 @@ describe('ToDoComponent', () => {
   });
 
   it('should init with data without issue', () => {
-    const todo = createMockTodo();
+    const todo = createMockTodo(mockUser.id);
     component.todo = todo;
     component.ngOnInit();
     expect(component.todoForm).toBeDefined();
   });
 
   it('should save data', (done) => {
-    const todo = createMockTodo();
+    const todo = createMockTodo(mockUser.id);
     component.updateTodo.subscribe((data) => {
       expect(data).toStrictEqual(todo);
       done();
@@ -50,7 +52,7 @@ describe('ToDoComponent', () => {
   });
 
   it('should cancel an edit', () => {
-    const todo = createMockTodo();
+    const todo = createMockTodo(mockUser.id);
     component.todo = todo;
     component.ngOnInit();
     component.todoForm.controls.title.setValue('foo');
@@ -59,7 +61,7 @@ describe('ToDoComponent', () => {
   });
 
   it('should successfully toggle completion', (done) => {
-    const todo = createMockTodo();
+    const todo = createMockTodo(mockUser.id);
 
     component.updateTodo.subscribe((data) => {
       expect(data).toStrictEqual({ ...todo, completed: !todo.completed });
@@ -77,7 +79,7 @@ describe('ToDoComponent', () => {
   });
 
   it('should save data', (done) => {
-    const todo = createMockTodo();
+    const todo = createMockTodo(mockUser.id);
     component.deleteTodo.subscribe((data) => {
       expect(data).toStrictEqual(todo);
       done();

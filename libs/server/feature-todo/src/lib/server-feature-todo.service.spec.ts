@@ -1,26 +1,14 @@
 import { ToDoEntitySchema } from '@fst/server/data-access';
+import { MockType, repositoryMockFactory } from '@fst/server/util';
 import { ICreateTodo, ITodo } from '@fst/shared/domain';
-import { createMockTodo } from '@fst/shared/util-testing';
+import { createMockTodo, createMockUser } from '@fst/shared/util-testing';
 import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { ServerFeatureTodoService } from './server-feature-todo.service';
 
-export type MockType<T> = {
-  [P in keyof T]?: jest.Mock<unknown>;
-};
-
-export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
-  () => ({
-    findOne: jest.fn((entity) => entity),
-    findOneBy: jest.fn(() => ({})),
-    save: jest.fn((entity) => entity),
-    findOneOrFail: jest.fn(() => ({})),
-    delete: jest.fn(() => null),
-    find: jest.fn((entities) => entities),
-  })
-);
+const mockUser = createMockUser();
 
 describe('ServerFeatureTodoService', () => {
   let service: ServerFeatureTodoService;
@@ -46,14 +34,18 @@ describe('ServerFeatureTodoService', () => {
   });
 
   it('should return an array of to-do items', async () => {
-    const todos = Array.from({ length: 5 }).map(() => createMockTodo());
+    const todos = Array.from({ length: 5 }).map(() =>
+      createMockTodo(mockUser.id)
+    );
     repoMock.find?.mockReturnValue(todos);
     expect((await service.getAll()).length).toBe(todos.length);
     expect(repoMock.find).toHaveBeenCalled();
   });
 
   it('should return an a single todo by ID', async () => {
-    const todos = Array.from({ length: 5 }).map(() => createMockTodo());
+    const todos = Array.from({ length: 5 }).map(() =>
+      createMockTodo(mockUser.id)
+    );
     repoMock.findOneBy?.mockReturnValue(todos[0]);
     expect(await service.getOne(todos[0].id)).toStrictEqual(todos[0]);
     expect(repoMock.findOneBy).toHaveBeenCalledWith({ id: todos[0].id });
@@ -70,14 +62,14 @@ describe('ServerFeatureTodoService', () => {
   });
 
   it('should create a todo', async () => {
-    const todo = createMockTodo();
+    const todo = createMockTodo(mockUser.id);
     repoMock.save?.mockReturnValue(todo);
     expect(await service.create(todo)).toStrictEqual(todo);
     expect(repoMock.save).toHaveBeenCalledWith(todo);
   });
 
   it('should catch an error if a duplicate title is detected', async () => {
-    const todo = createMockTodo();
+    const todo = createMockTodo(mockUser.id);
     repoMock.save?.mockImplementation((todo: ICreateTodo) => {
       const err = new QueryFailedError('unique constraint failed', [], {});
       err.message =
@@ -92,7 +84,7 @@ describe('ServerFeatureTodoService', () => {
   });
 
   it('should update a todo', async () => {
-    const todo = createMockTodo();
+    const todo = createMockTodo(mockUser.id);
     const newTitle = 'foo';
     repoMock.findOneOrFail?.mockReturnValue({ ...todo, title: newTitle });
     const res = await service.update(todo.id, { title: newTitle });
@@ -105,7 +97,7 @@ describe('ServerFeatureTodoService', () => {
   });
 
   it('should upsert a todo', async () => {
-    const todo = createMockTodo();
+    const todo = createMockTodo(mockUser.id);
     const newTitle = 'foo';
     repoMock.findOneOrFail?.mockReturnValue({ ...todo, title: newTitle });
     const res = await service.upsert(todo);

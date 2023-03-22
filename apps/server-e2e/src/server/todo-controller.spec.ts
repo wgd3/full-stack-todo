@@ -3,8 +3,9 @@ import {
   ServerFeatureTodoController,
   ServerFeatureTodoService,
 } from '@fst/server/feature-todo';
+import { MockType, repositoryMockFactory } from '@fst/server/util';
 import { ITodo } from '@fst/shared/domain';
-import { createMockTodo } from '@fst/shared/util-testing';
+import { createMockTodo, createMockUser } from '@fst/shared/util-testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
@@ -12,20 +13,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import * as request from 'supertest';
 import { Repository } from 'typeorm';
 
-export type MockType<T> = {
-  [P in keyof T]?: jest.Mock<unknown>;
-};
-
-export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
-  () => ({
-    findOne: jest.fn((entity) => entity),
-    findOneBy: jest.fn(() => ({})),
-    save: jest.fn((entity) => entity),
-    findOneOrFail: jest.fn(() => ({})),
-    delete: jest.fn(() => null),
-    find: jest.fn((entities) => entities),
-  })
-);
+const mockUser = createMockUser();
 
 describe('ServerFeatureTodoController E2E', () => {
   const todoUrl = `/todos`;
@@ -70,7 +58,7 @@ describe('ServerFeatureTodoController E2E', () => {
 
   describe('POST /todos', () => {
     it('should create a todo item', () => {
-      const { id, completed, title, description } = createMockTodo();
+      const { id, completed, title, description } = createMockTodo(mockUser.id);
       jest
         .spyOn(repoMock, 'save')
         .mockReturnValue(
@@ -91,7 +79,7 @@ describe('ServerFeatureTodoController E2E', () => {
     });
 
     it('should prevent adding a to-do with an ID', () => {
-      const { id, title, description } = createMockTodo();
+      const { id, title, description } = createMockTodo(mockUser.id);
       return request
         .default(app.getHttpServer())
         .post(todoUrl)
@@ -108,7 +96,7 @@ describe('ServerFeatureTodoController E2E', () => {
     });
 
     xit('should prevent adding a to-do with an existing title', () => {
-      const todo = createMockTodo();
+      const todo = createMockTodo(mockUser.id);
       return request
         .default(app.getHttpServer())
         .post(todoUrl)
@@ -117,7 +105,7 @@ describe('ServerFeatureTodoController E2E', () => {
     });
 
     it('should prevent adding a todo item with a completed status', () => {
-      const { id, ...todo } = createMockTodo();
+      const { id, ...todo } = createMockTodo(mockUser.id);
       return request
         .default(app.getHttpServer())
         .post(todoUrl)

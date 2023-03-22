@@ -1,10 +1,12 @@
 import { ToDoEntitySchema } from '@fst/server/data-access';
-import { createMockTodo } from '@fst/shared/util-testing';
+import { repositoryMockFactory } from '@fst/server/util';
+import { createMockTodo, createMockUser } from '@fst/shared/util-testing';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ServerFeatureTodoController } from './server-feature-todo.controller';
 import { ServerFeatureTodoService } from './server-feature-todo.service';
-import { repositoryMockFactory } from './server-feature-todo.service.spec';
+
+const mockUser = createMockUser();
 
 describe('ServerFeatureTodoController', () => {
   let controller: ServerFeatureTodoController;
@@ -34,7 +36,9 @@ describe('ServerFeatureTodoController', () => {
     jest
       .spyOn(service, 'getAll')
       .mockReturnValue(
-        Promise.resolve(Array.from({ length: 5 }).map(() => createMockTodo()))
+        Promise.resolve(
+          Array.from({ length: 5 }).map(() => createMockTodo(mockUser.id))
+        )
       );
 
     const res = await controller.getAll();
@@ -43,27 +47,27 @@ describe('ServerFeatureTodoController', () => {
   });
 
   it('should return a single todo by ID', async () => {
-    const todo = createMockTodo();
+    const todo = createMockTodo(mockUser.id);
     jest.spyOn(service, 'getOne').mockReturnValue(Promise.resolve(todo));
     expect(await controller.getOne(todo.id)).toStrictEqual(todo);
   });
 
   it('should be able to create a new todo', async () => {
-    const todo = createMockTodo();
+    const todo = createMockTodo(mockUser.id);
     jest.spyOn(service, 'create').mockReturnValue(Promise.resolve(todo));
     const res = await controller.create({ ...todo });
     expect(res).toStrictEqual(todo);
   });
 
   it('should allow upserting a new todo', async () => {
-    const todo = createMockTodo();
+    const todo = createMockTodo(mockUser.id);
     jest.spyOn(service, 'upsert').mockReturnValue(Promise.resolve(todo));
     const res = await controller.upsertOne(todo);
     expect(res).toStrictEqual(todo);
   });
 
   it('should allow updates to a single todo', async () => {
-    const todo = createMockTodo();
+    const todo = createMockTodo(mockUser.id);
     const newTitle = 'newTitle';
     jest
       .spyOn(service, 'update')

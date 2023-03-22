@@ -1,12 +1,11 @@
 ## [1.0.1](https://github.com/wgd3/full-stack-todo/compare/v1.0.0...v1.0.1) (2023-03-21)
 
-
 ### Other
 
-* added codecov token to main CI workflow ([fe6022d](https://github.com/wgd3/full-stack-todo/commit/fe6022d545899ba80c666b1dec131ebb60a81f87))
-* added e2e tests to main CI workflow ([e4dfd92](https://github.com/wgd3/full-stack-todo/commit/e4dfd92c23c432860c83a03b06c780dec8323aa7))
-* added part 7 ([206935e](https://github.com/wgd3/full-stack-todo/commit/206935edfb74cc119136eb5f70295daf2aa5bd70))
-* attempting to fix formatting commands ([4019b34](https://github.com/wgd3/full-stack-todo/commit/4019b3471af4742c6c2f8da81a5635b5020c45db))
+- added codecov token to main CI workflow ([fe6022d](https://github.com/wgd3/full-stack-todo/commit/fe6022d545899ba80c666b1dec131ebb60a81f87))
+- added e2e tests to main CI workflow ([e4dfd92](https://github.com/wgd3/full-stack-todo/commit/e4dfd92c23c432860c83a03b06c780dec8323aa7))
+- added part 7 ([206935e](https://github.com/wgd3/full-stack-todo/commit/206935edfb74cc119136eb5f70295daf2aa5bd70))
+- attempting to fix formatting commands ([4019b34](https://github.com/wgd3/full-stack-todo/commit/4019b3471af4742c6c2f8da81a5635b5020c45db))
 
 ## 1.0.0 (2023-03-20)
 
