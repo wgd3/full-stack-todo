@@ -1,9 +1,15 @@
-import { ICreateUser, IPublicUserData, ITodo } from '@fst/shared/domain';
+import {
+  ICreateUser,
+  IPublicUserData,
+  ITodo,
+  IUpdateUser,
+} from '@fst/shared/domain';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
   IsStrongPassword,
 } from 'class-validator';
@@ -64,5 +70,33 @@ export class CreateUserDto implements ICreateUser {
   })
   @IsEmail()
   @IsNotEmpty()
+  email!: string;
+}
+
+export class UpdateUserDto implements IUpdateUser {
+  @ApiProperty({
+    type: String,
+    example: 'Password1!',
+  })
+  @IsOptional()
+  @IsStrongPassword(
+    {
+      minLength: 8,
+      minNumbers: 1,
+      minUppercase: 1,
+      minSymbols: 1,
+    },
+    {
+      message: `Password is not strong enough. Must contain: 8 characters, 1 number, 1 uppercase letter, 1 symbol`,
+    }
+  )
+  password!: string;
+
+  @ApiProperty({
+    type: String,
+    example: `wallace@thefullstack.engineer`,
+  })
+  @IsEmail()
+  @IsOptional()
   email!: string;
 }

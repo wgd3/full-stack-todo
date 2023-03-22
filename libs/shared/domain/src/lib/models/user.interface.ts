@@ -8,6 +8,6 @@ export interface IUser {
 }
 
 export type ICreateUser = Pick<IUser, 'email' | 'password'>;
-export type IUpdateUser = Partial<Omit<IUser, 'id'>>;
+export type IUpdateUser = Partial<Omit<IUser, 'id' | 'todos'>>;
 export type IUpsertUser = IUser;
 export type IPublicUserData = Omit<IUser, 'password'>;
