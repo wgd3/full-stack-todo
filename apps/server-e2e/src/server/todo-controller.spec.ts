@@ -3,7 +3,7 @@ import {
   ServerFeatureTodoController,
   ServerFeatureTodoService,
 } from '@fst/server/feature-todo';
-import { MockType, repositoryMockFactory } from '@fst/server/util';
+import { MockType, repositoryMockFactory } from '@fst/server/util/testing';
 import { ITodo } from '@fst/shared/domain';
 import { createMockTodo, createMockUser } from '@fst/shared/util-testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';

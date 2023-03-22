@@ -1,5 +1,5 @@
 import { ToDoEntitySchema } from '@fst/server/data-access';
-import { repositoryMockFactory } from '@fst/server/util';
+import { repositoryMockFactory } from '@fst/server/util/testing';
 import { createMockTodo, createMockUser } from '@fst/shared/util-testing';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';

@@ -1,5 +1,5 @@
 import { ToDoEntitySchema } from '@fst/server/data-access';
-import { MockType, repositoryMockFactory } from '@fst/server/util';
+import { MockType, repositoryMockFactory } from '@fst/server/util/testing';
 import { ICreateTodo, ITodo } from '@fst/shared/domain';
 import { createMockTodo, createMockUser } from '@fst/shared/util-testing';
 import { NotFoundException } from '@nestjs/common';

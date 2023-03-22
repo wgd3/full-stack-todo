@@ -1,5 +1,5 @@
 import { UserEntitySchema } from '@fst/server/data-access';
-import { MockType, repositoryMockFactory } from '@fst/server/util';
+import { MockType, repositoryMockFactory } from '@fst/server/util/testing';
 import { IUser } from '@fst/shared/domain';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
