@@ -7,6 +7,8 @@ import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 
 import { ServerFeatureAuthModule } from '@fst/server/feature-auth';
 import { ServerFeatureHealthModule } from '@fst/server/feature-health';
+import { JwtAuthGuard } from '@fst/server/util';
+import { APP_GUARD } from '@nestjs/core';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -41,6 +43,11 @@ import { ServerFeatureHealthModule } from '@fst/server/feature-health';
     ServerFeatureAuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

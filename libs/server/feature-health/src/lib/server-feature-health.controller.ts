@@ -1,3 +1,4 @@
+import { SkipAuth } from '@fst/server/util';
 import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
@@ -17,6 +18,7 @@ export class ServerFeatureHealthController {
 
   @Get()
   @HealthCheck()
+  @SkipAuth()
   healthcheck() {
     return this.health.check([
       () => this.db.pingCheck(DATABASE_HEALTHCHECK_KEY),

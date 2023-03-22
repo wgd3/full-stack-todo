@@ -18,6 +18,7 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiOkResponse,
@@ -28,6 +29,7 @@ import { ServerFeatureTodoService } from './server-feature-todo.service';
 
 @Controller({ path: 'todos', version: '1' })
 @ApiTags('To-Do')
+@ApiBearerAuth()
 @UseFilters(new QueryErrorFilter())
 export class ServerFeatureTodoController {
   constructor(private serverFeatureTodoService: ServerFeatureTodoService) {}

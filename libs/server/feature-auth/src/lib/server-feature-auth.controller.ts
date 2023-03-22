@@ -1,4 +1,5 @@
 import { LoginRequestDto, LoginResponseDto } from '@fst/server/data-access';
+import { SkipAuth } from '@fst/server/util';
 import { ITokenResponse } from '@fst/shared/domain';
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
@@ -13,6 +14,7 @@ export class ServerFeatureAuthController {
   @ApiOkResponse({
     type: LoginResponseDto,
   })
+  @SkipAuth()
   async login(
     @Body() { email, password }: LoginRequestDto
   ): Promise<ITokenResponse> {

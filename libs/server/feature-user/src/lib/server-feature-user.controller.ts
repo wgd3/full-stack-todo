@@ -1,27 +1,36 @@
 import { CreateUserDto, UpdateUserDto } from '@fst/server/data-access';
+import { ReqUserId, SkipAuth } from '@fst/server/util';
 import { IPublicUserData } from '@fst/shared/domain';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  Logger,
+  NotFoundException,
   Param,
   ParseUUIDPipe,
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ServerFeatureUserService } from './server-feature-user.service';
 
 @Controller({ path: 'users', version: '1' })
 @ApiTags('Users')
 export class ServerFeatureUserController {
+  private readonly logger = new Logger(ServerFeatureUserController.name);
   constructor(private serverFeatureUserService: ServerFeatureUserService) {}
 
-  @Get('id')
+  @Get(':id')
+  @ApiBearerAuth()
   async getUser(
+    @ReqUserId() reqUserId: string,
     @Param('id', ParseUUIDPipe) id: string
   ): Promise<IPublicUserData> {
+    if (reqUserId !== id) {
+      throw new NotFoundException();
+    }
     const { password, ...user } = await this.serverFeatureUserService.getOne(
       id
     );
@@ -29,6 +38,7 @@ export class ServerFeatureUserController {
   }
 
   @Post('')
+  @SkipAuth()
   async createUser(@Body() userData: CreateUserDto): Promise<IPublicUserData> {
     const { id, email } = await this.serverFeatureUserService.create(userData);
     return {
@@ -38,18 +48,30 @@ export class ServerFeatureUserController {
     };
   }
 
-  @Patch('id')
+  @Patch(':id')
+  @ApiBearerAuth()
   async updateUser(
+    @ReqUserId() reqUserId: string,
     @Param('id', ParseUUIDPipe) id: string,
     @Body() userData: UpdateUserDto
   ): Promise<IPublicUserData> {
+    if (reqUserId !== id) {
+      throw new NotFoundException();
+    }
     const { password, ...user } =
       await this.serverFeatureUserService.updateUser(id, userData);
     return user;
   }
 
   @Delete('id')
-  async deleteUser(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+  @ApiBearerAuth()
+  async deleteUser(
+    @ReqUserId() reqUserId: string,
+    @Param('id', ParseUUIDPipe) id: string
+  ): Promise<void> {
+    if (reqUserId !== id) {
+      throw new NotFoundException();
+    }
     await this.serverFeatureUserService.deleteUser(id);
   }
 }
