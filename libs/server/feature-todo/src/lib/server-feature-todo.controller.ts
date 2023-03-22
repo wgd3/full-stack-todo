@@ -22,10 +22,12 @@ import {
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiTags,
 } from '@nestjs/swagger';
 import { ServerFeatureTodoService } from './server-feature-todo.service';
 
 @Controller({ path: 'todos', version: '1' })
+@ApiTags('To-Do')
 @UseFilters(new QueryErrorFilter())
 export class ServerFeatureTodoController {
   constructor(private serverFeatureTodoService: ServerFeatureTodoService) {}

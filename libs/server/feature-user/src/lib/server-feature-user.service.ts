@@ -30,8 +30,11 @@ export class ServerFeatureUserService {
 
   async create(user: ICreateUser): Promise<IUser> {
     const { email, password } = user;
-    user.password = await bcrypt.hash(password, 10);
-    const newUser = await this.userRepository.save({ email, password });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await this.userRepository.save({
+      email,
+      password: hashedPassword,
+    });
     return newUser;
   }
 }

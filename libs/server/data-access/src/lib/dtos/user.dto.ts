@@ -42,9 +42,19 @@ export class CreateUserDto implements ICreateUser {
   @ApiProperty({
     type: String,
     required: true,
-    example: 'something-something-darkside',
+    example: 'Password1!',
   })
-  @IsStrongPassword()
+  @IsStrongPassword(
+    {
+      minLength: 8,
+      minNumbers: 1,
+      minUppercase: 1,
+      minSymbols: 1,
+    },
+    {
+      message: `Password is not strong enough. Must contain: 8 characters, 1 number, 1 uppercase letter, 1 symbol`,
+    }
+  )
   password!: string;
 
   @ApiProperty({

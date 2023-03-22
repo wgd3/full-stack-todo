@@ -5,6 +5,7 @@ import * as Joi from 'joi';
 
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 
+import { ServerFeatureAuthModule } from '@fst/server/feature-auth';
 import { ServerFeatureHealthModule } from '@fst/server/feature-health';
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ServerFeatureHealthModule } from '@fst/server/feature-health';
     }),
     ServerFeatureTodoModule,
     ServerFeatureHealthModule,
+    ServerFeatureAuthModule,
   ],
   controllers: [],
   providers: [],

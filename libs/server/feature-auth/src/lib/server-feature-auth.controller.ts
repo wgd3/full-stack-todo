@@ -1,7 +1,28 @@
-import { Controller } from '@nestjs/common';
+import { LoginRequestDto, LoginResponseDto } from '@fst/server/data-access';
+import { ITokenResponse } from '@fst/shared/domain';
+import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ServerFeatureAuthService } from './server-feature-auth.service';
 
-@Controller('server-feature-auth')
+@Controller({ path: 'auth', version: '1' })
+@ApiTags('Authentication')
 export class ServerFeatureAuthController {
   constructor(private serverFeatureAuthService: ServerFeatureAuthService) {}
+
+  @Post('login')
+  @ApiOkResponse({
+    type: LoginResponseDto,
+  })
+  async login(
+    @Body() { email, password }: LoginRequestDto
+  ): Promise<ITokenResponse> {
+    const user = await this.serverFeatureAuthService.validateUser(
+      email,
+      password
+    );
+    if (!user) {
+      throw new BadRequestException(`Email or password is invalid`);
+    }
+    return await this.serverFeatureAuthService.generateAccessToken(user);
+  }
 }
