@@ -23,7 +23,7 @@ export class ServerFeatureAuthService {
     password: string
   ): Promise<IPublicUserData | null> {
     const user = await this.userService.getOneByEmail(email);
-    if (await bcrypt.compare(password, user.password)) {
+    if (user && (await bcrypt.compare(password, user.password))) {
       this.logger.debug(`User '${email}' authenticated successfully`);
       const { password, ...publicUserData } = user;
       return publicUserData;
