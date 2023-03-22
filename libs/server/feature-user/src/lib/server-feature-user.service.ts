@@ -1,5 +1,5 @@
 import { UserEntitySchema } from '@fst/server/data-access';
-import { ICreateUser, IUser } from '@fst/shared/domain';
+import { ICreateUser, IUpdateUser, IUser } from '@fst/shared/domain';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
@@ -36,5 +36,23 @@ export class ServerFeatureUserService {
       password: hashedPassword,
     });
     return newUser;
+  }
+
+  async updateUser(id: string, data: IUpdateUser): Promise<IUser> {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      throw new NotFoundException(`User could not be found`);
+    }
+    const updated = await this.userRepository.save({ id, ...data });
+    return updated;
+  }
+
+  async deleteUser(id: string): Promise<null> {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      throw new NotFoundException(`User could not be found`);
+    }
+    await this.userRepository.delete({ id });
+    return null;
   }
 }
