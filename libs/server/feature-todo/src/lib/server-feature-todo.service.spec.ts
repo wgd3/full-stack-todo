@@ -2,9 +2,10 @@ import { ToDoEntitySchema } from '@fst/server/data-access';
 import { MockType, repositoryMockFactory } from '@fst/server/util/testing';
 import { ITodo } from '@fst/shared/domain';
 import { createMockTodo, createMockUser } from '@fst/shared/util-testing';
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { seed } from '@ngneat/falso';
 import { QueryFailedError, Repository } from 'typeorm';
 import { ServerFeatureTodoService } from './server-feature-todo.service';
 
@@ -27,6 +28,10 @@ describe('ServerFeatureTodoService', () => {
 
     service = module.get(ServerFeatureTodoService);
     repoMock = module.get(getRepositoryToken(ToDoEntitySchema));
+  });
+
+  beforeEach(() => {
+    seed(Math.random().toString());
   });
 
   it('should be defined', () => {
@@ -52,7 +57,7 @@ describe('ServerFeatureTodoService', () => {
     );
     expect(repoMock.findOneBy).toHaveBeenCalledWith({
       id: todos[0].id,
-      user_id: mockUser.id,
+      user: { id: mockUser.id },
     });
   });
 
@@ -64,16 +69,21 @@ describe('ServerFeatureTodoService', () => {
       expect(err instanceof NotFoundException).toBe(true);
       expect(repoMock.findOneBy).toHaveBeenCalledWith({
         id: 'foo',
-        user_id: mockUser.id,
+        user: { id: mockUser.id },
       });
     }
   });
 
   it('should create a todo', async () => {
     const todo = createMockTodo(mockUser.id);
+    repoMock.findOneBy?.mockReturnValue(null);
+    repoMock.findOneByOrFail?.mockReturnValue(todo);
     repoMock.save?.mockReturnValue(todo);
     expect(await service.create(mockUser.id, todo)).toStrictEqual(todo);
-    expect(repoMock.save).toHaveBeenCalledWith(todo);
+    expect(repoMock.save).toHaveBeenCalledWith({
+      ...todo,
+      user: { id: mockUser.id },
+    });
   });
 
   it('should catch an error if a duplicate title is detected', async () => {
@@ -87,7 +97,7 @@ describe('ServerFeatureTodoService', () => {
     try {
       await service.create(mockUser.id, todo);
     } catch (err) {
-      expect(err).toBeInstanceOf(QueryFailedError);
+      expect(err).toBeInstanceOf(BadRequestException);
     }
   });
 
@@ -98,7 +108,7 @@ describe('ServerFeatureTodoService', () => {
     const res = await service.update(mockUser.id, todo.id, { title: newTitle });
     expect(res.title).toBe(newTitle);
     expect(repoMock.save).toHaveBeenCalledWith({
-      user_id: mockUser.id,
+      user: { id: mockUser.id },
       id: todo.id,
       title: newTitle,
     });
@@ -120,7 +130,10 @@ describe('ServerFeatureTodoService', () => {
     repoMock.findOneOrFail?.mockReturnValue({ ...todo, title: newTitle });
     const res = await service.upsert(mockUser.id, todo);
     expect(res.title).toBe(newTitle);
-    expect(repoMock.save).toHaveBeenCalledWith(todo);
+    expect(repoMock.save).toHaveBeenCalledWith({
+      ...todo,
+      user: { id: mockUser.id },
+    });
     expect(repoMock.findOneOrFail).toHaveBeenCalled();
   });
 

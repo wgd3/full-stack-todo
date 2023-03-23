@@ -28,7 +28,10 @@ export class ServerFeatureTodoService {
   }
 
   async getOne(userId: string, id: string): Promise<ITodo> {
-    const todo = await this.todoRepository.findOneBy({ id, user_id: userId });
+    const todo = await this.todoRepository.findOneBy({
+      id,
+      user: { id: userId },
+    });
     if (!todo) {
       throw new NotFoundException(`To-do could not be found!`);
     }
@@ -92,18 +95,21 @@ export class ServerFeatureTodoService {
   async upsert(userId: string, data: ITodo): Promise<ITodo> {
     await this.todoRepository.save({
       ...data,
-      user_id: userId,
+      user: { id: userId },
     });
 
     // re-query the database so that the updated record is returned
     const updated = await this.todoRepository.findOneOrFail({
-      where: { id: data.id, user_id: userId },
+      where: { id: data.id, user: { id: userId } },
     });
     return updated;
   }
 
   async delete(userId: string, id: string): Promise<void> {
-    const todo = await this.todoRepository.findOneBy({ id, user_id: userId });
+    const todo = await this.todoRepository.findOneBy({
+      id,
+      user: { id: userId },
+    });
     if (!todo) {
       throw new NotFoundException(`To-do could not be found!`);
     }
