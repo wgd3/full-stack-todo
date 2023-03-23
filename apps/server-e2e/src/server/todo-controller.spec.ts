@@ -199,9 +199,9 @@ describe('ServerFeatureTodoController E2E', () => {
           const { message } = resp.body;
           expect(
             (message as string[]).some(
-              (m) => m === 'property id must not exist'
+              (m) => m === 'property id should not exist'
             )
-          );
+          ).toBe(true);
         })
         .expect('Content-Type', /json/)
         .expect(HttpStatus.BAD_REQUEST);
@@ -223,17 +223,13 @@ describe('ServerFeatureTodoController E2E', () => {
         .send({
           title: newTodo.title,
           description: newTodo.description,
-          user: {
-            id: createdUser.id,
-          },
         })
         .expect((resp) => {
           const { message } = resp.body;
-          expect(
-            (message as string[]).some(
-              (m) => m === `Value for 'todo.title' already exists, try again`
-            )
-          );
+          // this error does not come back in the form of an array of
+          // errors since it's a database error, not a payload
+          // validation error
+          expect(message.includes('already exists')).toBe(true);
         })
         .expect('Content-Type', /json/)
         .expect(HttpStatus.BAD_REQUEST);
@@ -254,9 +250,9 @@ describe('ServerFeatureTodoController E2E', () => {
           const { message } = resp.body;
           expect(
             (message as string[]).some(
-              (m) => m === 'property completed must not exist'
+              (m) => m === 'property completed should not exist'
             )
-          );
+          ).toBe(true);
         })
         .expect('Content-Type', /json/)
         .expect(HttpStatus.BAD_REQUEST);
@@ -272,7 +268,7 @@ describe('ServerFeatureTodoController E2E', () => {
           const { message } = resp.body;
           expect(
             (message as string[]).some((m) => m === 'title must be a string')
-          );
+          ).toBe(true);
         })
         .expect('Content-Type', /json/)
         .expect(HttpStatus.BAD_REQUEST);
@@ -290,7 +286,7 @@ describe('ServerFeatureTodoController E2E', () => {
             (message as string[]).some(
               (m) => m === 'description must be a string'
             )
-          );
+          ).toBe(true);
         })
         .expect('Content-Type', /json/)
         .expect(HttpStatus.BAD_REQUEST);
@@ -306,7 +302,7 @@ describe('ServerFeatureTodoController E2E', () => {
           const { message } = resp.body;
           expect(
             (message as string[]).some((m) => m === 'title should not be empty')
-          );
+          ).toBe(true);
         })
         .expect('Content-Type', /json/)
         .expect(HttpStatus.BAD_REQUEST);
@@ -396,13 +392,14 @@ describe('ServerFeatureTodoController E2E', () => {
         .patch(`${baseUrl}${todoUrl}/${newTodo.id}`)
         .auth(access_token, { type: 'bearer' })
         .send({ id, title, description })
+
         .expect((resp) => {
           const { message } = resp.body;
           expect(
             (message as string[]).some(
-              (m) => m === 'property id must not exist'
+              (m) => m === 'property id should not exist'
             )
-          );
+          ).toBe(true);
         })
         .expect('Content-Type', /json/)
         .expect(HttpStatus.BAD_REQUEST);
@@ -423,7 +420,7 @@ describe('ServerFeatureTodoController E2E', () => {
           const { message } = resp.body;
           expect(
             (message as string[]).some((m) => m === 'title must be a string')
-          );
+          ).toBe(true);
         })
         .expect('Content-Type', /json/)
         .expect(HttpStatus.BAD_REQUEST);
@@ -446,7 +443,7 @@ describe('ServerFeatureTodoController E2E', () => {
             (message as string[]).some(
               (m) => m === 'description must be a string'
             )
-          );
+          ).toBe(true);
         })
         .expect('Content-Type', /json/)
         .expect(HttpStatus.BAD_REQUEST);
@@ -463,13 +460,14 @@ describe('ServerFeatureTodoController E2E', () => {
         .patch(`${baseUrl}${todoUrl}/${newTodo.id}`)
         .auth(access_token, { type: 'bearer' })
         .send({ completed: 123 })
+
         .expect((resp) => {
           const { message } = resp.body;
           expect(
             (message as string[]).some(
-              (m) => m === 'completed must be a boolean'
+              (m) => m === 'completed must be a boolean value'
             )
-          );
+          ).toBe(true);
         })
         .expect('Content-Type', /json/)
         .expect(HttpStatus.BAD_REQUEST);
