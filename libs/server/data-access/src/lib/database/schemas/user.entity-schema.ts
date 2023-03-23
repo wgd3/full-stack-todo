@@ -23,7 +23,6 @@ export const UserEntitySchema = new EntitySchema<IUser>({
     todos: {
       type: 'one-to-many',
       target: 'todo',
-      cascade: true,
       inverseSide: 'user',
     },
   },

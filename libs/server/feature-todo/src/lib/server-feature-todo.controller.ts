@@ -1,23 +1,25 @@
 import {
   CreateTodoDto,
+  ErrorResponseDto,
   TodoDto,
   UpdateTodoDto,
   UpsertTodoDto,
 } from '@fst/server/data-access';
-import { QueryErrorFilter, ReqUserId } from '@fst/server/util';
+import { ReqUserId } from '@fst/server/util';
 import { ITodo } from '@fst/shared/domain';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   Patch,
   Post,
   Put,
-  UseFilters,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiNoContentResponse,
@@ -30,7 +32,6 @@ import { ServerFeatureTodoService } from './server-feature-todo.service';
 @Controller({ path: 'todos', version: '1' })
 @ApiTags('To-Do')
 @ApiBearerAuth()
-@UseFilters(new QueryErrorFilter())
 export class ServerFeatureTodoController {
   constructor(private serverFeatureTodoService: ServerFeatureTodoService) {}
 
@@ -44,6 +45,7 @@ export class ServerFeatureTodoController {
     tags: ['todos'],
   })
   async getAll(@ReqUserId() userId: string): Promise<ITodo[]> {
+    console.log(`todoController#getAll`);
     return this.serverFeatureTodoService.getAll(userId);
   }
 
@@ -65,6 +67,9 @@ export class ServerFeatureTodoController {
   @Post('')
   @ApiCreatedResponse({
     type: TodoDto,
+  })
+  @ApiBadRequestResponse({
+    type: ErrorResponseDto,
   })
   @ApiOperation({
     summary: 'Creates a new to-do and returns the saved object',
@@ -108,6 +113,7 @@ export class ServerFeatureTodoController {
     @Param('id') id: string,
     @Body() data: UpdateTodoDto
   ): Promise<ITodo> {
+    Logger.debug(`Updated todo ${id}`);
     return this.serverFeatureTodoService.update(userId, id, data);
   }
 

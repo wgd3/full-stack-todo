@@ -7,14 +7,19 @@ import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 
 import { ServerFeatureAuthModule } from '@fst/server/feature-auth';
 import { ServerFeatureHealthModule } from '@fst/server/feature-health';
-import { JwtAuthGuard } from '@fst/server/util';
-import { APP_GUARD } from '@nestjs/core';
+import { DatabaseExceptionFilter, JwtAuthGuard } from '@fst/server/util';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: ['.env'],
+      ignoreEnvVars: true,
       validationSchema: Joi.object({
-        DATABASE_PATH: Joi.string().default('tmp/db.sqlite'),
+        DATABASE_PATH: Joi.string().default('tmp/development.sqlite'),
+        DATABASE_LOGGING_ENABLED: Joi.boolean().default(false),
+        ENVIRONMENT: Joi.string().default('development'),
+        NODE_ENV: Joi.string().default('development'),
       }),
     }),
     TypeOrmModule.forRootAsync({
@@ -22,17 +27,23 @@ import { APP_GUARD } from '@nestjs/core';
         const env = config.get('ENVIRONMENT') ?? 'development';
         const dbType = config.getOrThrow('DATABASE_TYPE');
         const dbName = config.getOrThrow('DATABASE_NAME');
+        const dbPath = config.getOrThrow('DATABASE_PATH');
+        const dbLogging = !!config.get('DATABASE_LOGGING_ENABLED');
         Logger.debug(`Detected environment: ${env}`);
-        Logger.debug(`Attempting connection to ${dbType} database '${dbName}'`);
+        Logger.debug(
+          `Attempting connection to ${dbType} database '${
+            dbType === 'sqlite' ? dbPath : dbName
+          }' (logging: ${dbLogging})`
+        );
         return {
           type: dbType,
           host: config.get('DATABASE_HOST'),
           username: config.get('DATABASE_USERNAME'),
           password: config.get('DATABASE_PASSWORD'),
           port: config.get('DATABASE_PORT'),
-          database: dbName,
+          database: dbType === 'sqlite' ? dbPath : dbName,
           synchronize: true,
-          logging: true,
+          logging: dbLogging,
           autoLoadEntities: true,
         } as TypeOrmModuleAsyncOptions; // HERES THE PROBLEM
       },
@@ -47,6 +58,10 @@ import { APP_GUARD } from '@nestjs/core';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: DatabaseExceptionFilter,
     },
   ],
 })
