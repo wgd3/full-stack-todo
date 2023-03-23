@@ -3,7 +3,6 @@ import { ITodo } from '@fst/shared/domain';
 import {
   BadRequestException,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -17,7 +16,6 @@ export class ServerFeatureTodoService {
   ) {}
 
   async getAll(userId: string): Promise<ITodo[]> {
-    console.log(`todoService#getAll - userId: ${userId}`);
     return await this.todoRepository.find({
       where: {
         user: {
@@ -66,9 +64,6 @@ export class ServerFeatureTodoService {
     id: string,
     data: Partial<Omit<ITodo, 'id'>>
   ): Promise<ITodo> {
-    Logger.debug(
-      `Updating todo ${id} with data:\n${JSON.stringify(data, null, 2)}`
-    );
     const todo = await this.todoRepository.findOneBy({
       id,
       user: { id: userId },

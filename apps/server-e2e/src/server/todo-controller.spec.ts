@@ -14,6 +14,7 @@ import { createMockTodo } from '@fst/shared/util-testing';
 import {
   HttpStatus,
   INestApplication,
+  Logger,
   ValidationPipe,
   VersioningType,
 } from '@nestjs/common';
@@ -87,7 +88,9 @@ describe('ServerFeatureTodoController E2E', () => {
         },
       ],
       controllers: [],
-    }).compile();
+    })
+      .setLogger(new Logger())
+      .compile();
 
     app = moduleRef.createNestApplication();
 
@@ -477,7 +480,7 @@ describe('ServerFeatureTodoController E2E', () => {
     await app.close();
   });
 
-  afterEach(async () => {
-    await todoRepo.query('DELETE FROM todo');
-  });
+  // afterEach(async () => {
+  //   await todoRepo.query('DELETE FROM todo');
+  // });
 });

@@ -12,7 +12,6 @@ import {
   Controller,
   Delete,
   Get,
-  Logger,
   Param,
   Patch,
   Post,
@@ -45,7 +44,6 @@ export class ServerFeatureTodoController {
     tags: ['todos'],
   })
   async getAll(@ReqUserId() userId: string): Promise<ITodo[]> {
-    console.log(`todoController#getAll`);
     return this.serverFeatureTodoService.getAll(userId);
   }
 
@@ -113,7 +111,6 @@ export class ServerFeatureTodoController {
     @Param('id') id: string,
     @Body() data: UpdateTodoDto
   ): Promise<ITodo> {
-    Logger.debug(`Updated todo ${id}`);
     return this.serverFeatureTodoService.update(userId, id, data);
   }
 
