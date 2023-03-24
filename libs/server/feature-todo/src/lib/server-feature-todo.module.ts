@@ -1,4 +1,4 @@
-import { ServerDataAccessTodoModule } from '@fst/server/data-access-todo';
+import { ServerDataAccessTodoModule } from '@fst/server/data-access';
 import { Module } from '@nestjs/common';
 import { ServerFeatureTodoController } from './server-feature-todo.controller';
 import { ServerFeatureTodoService } from './server-feature-todo.service';

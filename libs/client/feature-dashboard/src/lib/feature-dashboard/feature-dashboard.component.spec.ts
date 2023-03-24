@@ -1,10 +1,12 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ApiService } from '@fst/client/data-access';
-import { createMockTodo } from '@fst/shared/util-testing';
+import { createMockTodo, createMockUser } from '@fst/shared/util-testing';
 import { of } from 'rxjs';
 
 import { FeatureDashboardComponent } from './feature-dashboard.component';
+
+const mockUser = createMockUser();
 
 describe('FeatureDashboardComponent', () => {
   let component: FeatureDashboardComponent;
@@ -28,12 +30,14 @@ describe('FeatureDashboardComponent', () => {
   });
 
   it('should return a unique id for each todo', () => {
-    const todo = createMockTodo();
+    const todo = createMockTodo(mockUser.id);
     expect(component.trackTodo(0, todo)).toBe(todo.id);
   });
 
   it('should trigger a refresh of data', (done) => {
-    const todos = Array.from({ length: 5 }).map(() => createMockTodo());
+    const todos = Array.from({ length: 5 }).map(() =>
+      createMockTodo(mockUser.id)
+    );
     const spy = jest
       .spyOn(apiService, 'getAllToDoItems')
       .mockReturnValue(of(todos));
@@ -44,7 +48,7 @@ describe('FeatureDashboardComponent', () => {
   });
 
   it('should be able to toggle the completion of a todo', (done) => {
-    const todo = createMockTodo({ completed: false });
+    const todo = createMockTodo(mockUser.id, { completed: false });
     const updateSpy = jest
       .spyOn(apiService, 'updateToDo')
       .mockReturnValue(of({ ...todo, completed: true }));
@@ -60,7 +64,9 @@ describe('FeatureDashboardComponent', () => {
   });
 
   it('should be able to delete a todo', (done) => {
-    const todos = Array.from({ length: 5 }).map(() => createMockTodo());
+    const todos = Array.from({ length: 5 }).map(() =>
+      createMockTodo(mockUser.id)
+    );
     component.todos$.next(todos);
     const deleteSpy = jest
       .spyOn(apiService, 'deleteToDo')
@@ -76,7 +82,7 @@ describe('FeatureDashboardComponent', () => {
   });
 
   it('should be able to toggle the completion of a todo', (done) => {
-    const todo = createMockTodo({ completed: false });
+    const todo = createMockTodo(mockUser.id, { completed: false });
     const updateSpy = jest
       .spyOn(apiService, 'updateToDo')
       .mockReturnValue(of({ ...todo, completed: true }));

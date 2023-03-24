@@ -1,33 +1,41 @@
-import { QueryErrorFilter } from '@fst/server/util';
+import {
+  CreateTodoDto,
+  ErrorResponseDto,
+  TodoDto,
+  UpdateTodoDto,
+  UpsertTodoDto,
+} from '@fst/server/data-access';
+import { ReqUserId } from '@fst/server/util';
 import { ITodo } from '@fst/shared/domain';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  HttpCode,
+  Logger,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   Put,
-  UseFilters,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiTags,
 } from '@nestjs/swagger';
-import {
-  CreateTodoDto,
-  TodoDto,
-  UpdateTodoDto,
-  UpsertTodoDto,
-} from './dtos/todo.dto';
 import { ServerFeatureTodoService } from './server-feature-todo.service';
 
 @Controller({ path: 'todos', version: '1' })
-@UseFilters(new QueryErrorFilter())
+@ApiTags('To-Do')
+@ApiBearerAuth()
 export class ServerFeatureTodoController {
+  private readonly logger = new Logger(ServerFeatureTodoController.name);
   constructor(private serverFeatureTodoService: ServerFeatureTodoService) {}
 
   @Get('')
@@ -39,8 +47,8 @@ export class ServerFeatureTodoController {
     summary: 'Returns all to-do items',
     tags: ['todos'],
   })
-  async getAll(): Promise<ITodo[]> {
-    return this.serverFeatureTodoService.getAll();
+  async getAll(@ReqUserId() userId: string): Promise<ITodo[]> {
+    return this.serverFeatureTodoService.getAll(userId);
   }
 
   @Get(':id')
@@ -51,20 +59,29 @@ export class ServerFeatureTodoController {
     summary: 'Returns a single to-do if it exists',
     tags: ['todos'],
   })
-  async getOne(@Param('id') id: string): Promise<ITodo> {
-    return this.serverFeatureTodoService.getOne(id);
+  async getOne(
+    @ReqUserId() userId: string,
+    @Param('id') id: string
+  ): Promise<ITodo> {
+    return this.serverFeatureTodoService.getOne(userId, id);
   }
 
   @Post('')
   @ApiCreatedResponse({
     type: TodoDto,
   })
+  @ApiBadRequestResponse({
+    type: ErrorResponseDto,
+  })
   @ApiOperation({
     summary: 'Creates a new to-do and returns the saved object',
     tags: ['todos'],
   })
-  async create(@Body() data: CreateTodoDto): Promise<ITodo> {
-    return this.serverFeatureTodoService.create(data);
+  async create(
+    @ReqUserId() userId: string,
+    @Body() data: CreateTodoDto
+  ): Promise<ITodo> {
+    return this.serverFeatureTodoService.create(userId, data);
   }
 
   @Put(':id')
@@ -78,8 +95,18 @@ export class ServerFeatureTodoController {
     summary: 'Replaces all values for a single to-do',
     tags: ['todos'],
   })
-  async upsertOne(@Body() data: UpsertTodoDto): Promise<ITodo> {
-    return this.serverFeatureTodoService.upsert(data);
+  async upsertOne(
+    @ReqUserId() userId: string,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() data: UpsertTodoDto
+  ): Promise<ITodo> {
+    this.logger.debug(
+      `User ${userId.split('-')[0]} attempting to update todo ${
+        id.split('-')[0]
+      }`
+    );
+    // this.logger.debug(`Incoming payload:\n${JSON.stringify(data, null, 2)}`);
+    return this.serverFeatureTodoService.upsert(userId, id, data);
   }
 
   @Patch(':id')
@@ -91,10 +118,11 @@ export class ServerFeatureTodoController {
     tags: ['todos'],
   })
   async update(
+    @ReqUserId() userId: string,
     @Param('id') id: string,
     @Body() data: UpdateTodoDto
   ): Promise<ITodo> {
-    return this.serverFeatureTodoService.update(id, data);
+    return this.serverFeatureTodoService.update(userId, id, data);
   }
 
   @Delete(':id')
@@ -105,7 +133,11 @@ export class ServerFeatureTodoController {
     summary: 'Deletes a specific to-do item',
     tags: ['todos'],
   })
-  async delete(@Param('id') id: string): Promise<void> {
-    return this.serverFeatureTodoService.delete(id);
+  @HttpCode(204)
+  async delete(
+    @ReqUserId() userId: string,
+    @Param('id') id: string
+  ): Promise<void> {
+    return this.serverFeatureTodoService.delete(userId, id);
   }
 }
