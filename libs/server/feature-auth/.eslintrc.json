@@ -4,7 +4,14 @@
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {}
+      "rules": {
+        "@nrwl/nx/enforce-module-boundaries": [
+          "error",
+          {
+            "allow": ["@fst/server/feature-user"]
+          }
+        ]
+      }
     },
     {
       "files": ["*.ts", "*.tsx"],
