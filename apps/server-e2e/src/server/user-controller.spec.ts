@@ -57,6 +57,7 @@ describe('ServerFeatureUserController E2E', () => {
             DATABASE_LOGGING_ENABLED: Joi.boolean().default(false),
             ENVIRONMENT: Joi.string().default('test'),
             NODE_ENV: Joi.string().default('test'),
+            JWT_SECRET: Joi.string().default(randPassword({ size: 32 })),
           }),
         }),
         TypeOrmModule.forRootAsync({
