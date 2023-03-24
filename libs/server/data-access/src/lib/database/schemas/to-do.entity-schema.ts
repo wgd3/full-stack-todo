@@ -8,11 +8,12 @@ export const ToDoEntitySchema = new EntitySchema<ITodo>({
       type: 'uuid',
       primary: true,
       generated: 'uuid',
+      unique: true,
+      update: false,
     },
     title: {
       type: String,
       nullable: false,
-      unique: true,
     },
     description: {
       type: String,
@@ -32,6 +33,13 @@ export const ToDoEntitySchema = new EntitySchema<ITodo>({
         name: 'user_id',
       },
       inverseSide: 'todos',
+      nullable: false,
     },
   },
+  uniques: [
+    {
+      name: 'UNIQUE_TITLE_USER',
+      columns: ['title', 'user.id'],
+    },
+  ],
 });

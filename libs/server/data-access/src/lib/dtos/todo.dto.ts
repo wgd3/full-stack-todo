@@ -110,7 +110,6 @@ export class UpsertTodoDto implements IUpsertTodo {
   @ApiProperty({
     type: Boolean,
     required: true,
-    default: false,
   })
   @IsBoolean()
   @IsNotEmpty()

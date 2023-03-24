@@ -5,7 +5,7 @@ import { createMockTodo, createMockUser } from '@fst/shared/util-testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { seed } from '@ngneat/falso';
+import { randUuid, seed } from '@ngneat/falso';
 import { QueryFailedError, Repository } from 'typeorm';
 import { ServerFeatureTodoService } from './server-feature-todo.service';
 
@@ -82,7 +82,9 @@ describe('ServerFeatureTodoService', () => {
     expect(await service.create(mockUser.id, todo)).toStrictEqual(todo);
     expect(repoMock.save).toHaveBeenCalledWith({
       ...todo,
-      user: { id: mockUser.id },
+      user: {
+        id: mockUser.id,
+      },
     });
   });
 
@@ -124,17 +126,40 @@ describe('ServerFeatureTodoService', () => {
     }
   });
 
-  it('should upsert a todo', async () => {
+  it('should upsert a new todo', async () => {
     const todo = createMockTodo(mockUser.id);
     const newTitle = 'foo';
+    repoMock.findOne?.mockReturnValue(null);
     repoMock.findOneOrFail?.mockReturnValue({ ...todo, title: newTitle });
-    const res = await service.upsert(mockUser.id, todo);
+    const res = await service.upsert(mockUser.id, todo.id, todo);
     expect(res.title).toBe(newTitle);
     expect(repoMock.save).toHaveBeenCalledWith({
       ...todo,
       user: { id: mockUser.id },
     });
     expect(repoMock.findOneOrFail).toHaveBeenCalled();
+  });
+
+  it('should not upsert a todo of another user', async () => {
+    const todo = createMockTodo(mockUser.id);
+    const altTodo = createMockTodo(randUuid());
+    repoMock.findOne?.mockReturnValue(altTodo);
+    try {
+      await service.upsert(mockUser.id, altTodo.id, altTodo);
+    } catch (err) {
+      expect(err).toBeInstanceOf(BadRequestException);
+    }
+  });
+
+  it('should not allow ID to change during an upsert', async () => {
+    const todo = createMockTodo(mockUser.id);
+    repoMock.findOne?.mockReturnValue(todo);
+    try {
+      await service.upsert(mockUser.id, todo.id, { ...todo, id: randUuid() });
+    } catch (err) {
+      console.log(err);
+      expect(err).toBeInstanceOf(BadRequestException);
+    }
   });
 
   it('should delete a todo', async () => {

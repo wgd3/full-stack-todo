@@ -12,7 +12,10 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  Logger,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   Put,
@@ -32,6 +35,7 @@ import { ServerFeatureTodoService } from './server-feature-todo.service';
 @ApiTags('To-Do')
 @ApiBearerAuth()
 export class ServerFeatureTodoController {
+  private readonly logger = new Logger(ServerFeatureTodoController.name);
   constructor(private serverFeatureTodoService: ServerFeatureTodoService) {}
 
   @Get('')
@@ -93,9 +97,16 @@ export class ServerFeatureTodoController {
   })
   async upsertOne(
     @ReqUserId() userId: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() data: UpsertTodoDto
   ): Promise<ITodo> {
-    return this.serverFeatureTodoService.upsert(userId, data);
+    this.logger.debug(
+      `User ${userId.split('-')[0]} attempting to update todo ${
+        id.split('-')[0]
+      }`
+    );
+    // this.logger.debug(`Incoming payload:\n${JSON.stringify(data, null, 2)}`);
+    return this.serverFeatureTodoService.upsert(userId, id, data);
   }
 
   @Patch(':id')
@@ -122,6 +133,7 @@ export class ServerFeatureTodoController {
     summary: 'Deletes a specific to-do item',
     tags: ['todos'],
   })
+  @HttpCode(204)
   async delete(
     @ReqUserId() userId: string,
     @Param('id') id: string

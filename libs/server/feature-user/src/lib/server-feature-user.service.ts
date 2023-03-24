@@ -1,6 +1,10 @@
 import { UserEntitySchema } from '@fst/server/data-access';
 import { ICreateUser, IUpdateUser, IUser } from '@fst/shared/domain';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
@@ -29,6 +33,12 @@ export class ServerFeatureUserService {
   }
 
   async create(user: ICreateUser): Promise<IUser> {
+    const existing = await this.userRepository.findOne({
+      where: { email: user.email },
+    });
+    if (existing) {
+      throw new BadRequestException(`User '${user.email}' already exists!`);
+    }
     const { email, password } = user;
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await this.userRepository.save({

@@ -22,7 +22,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { randEmail, randUuid } from '@ngneat/falso';
+import { randEmail, randPassword, randUuid } from '@ngneat/falso';
 import Joi from 'joi';
 import * as request from 'supertest';
 
@@ -59,6 +59,7 @@ describe('ServerFeatureTodoController E2E', () => {
             DATABASE_LOGGING_ENABLED: Joi.boolean().default(false),
             ENVIRONMENT: Joi.string().default('test'),
             NODE_ENV: Joi.string().default('test'),
+            JWT_SECRET: Joi.string().default(randPassword({ size: 32 })),
           }),
         }),
         TypeOrmModule.forRootAsync({
@@ -146,6 +147,10 @@ describe('ServerFeatureTodoController E2E', () => {
       .then((resp) => (resp.body as ITokenResponse).access_token);
   });
 
+  // beforeEach(() => {
+  //   seed(String(Math.random));
+  // });
+
   describe('GET /todos', () => {
     it('should return an array of todo items', () => {
       return request
@@ -178,6 +183,7 @@ describe('ServerFeatureTodoController E2E', () => {
         .send({ title, description })
         .expect('Content-Type', /json/)
         .expect((resp) => {
+          Logger.debug(`POST /todos: ${JSON.stringify(resp.body, null, 2)}`);
           const newTodo = resp.body as ITodo;
           expect(newTodo.title).toEqual(title);
           expect(newTodo.description).toEqual(description);
@@ -361,7 +367,7 @@ describe('ServerFeatureTodoController E2E', () => {
 
     it("should return a 404 for a todo that doesn't belong to the user", async () => {
       const altUser = await userRepo.save({
-        email: 'foo@bar.com',
+        email: randEmail(),
         password: 'Password1!',
       });
       const altUserTodo = await todoRepo.save({
@@ -386,6 +392,9 @@ describe('ServerFeatureTodoController E2E', () => {
       const newTodo = await todoRepo.save({
         title,
         description,
+        user: {
+          id: createdUser.id,
+        },
       });
       return request
         .default(app.getHttpServer())
@@ -406,10 +415,13 @@ describe('ServerFeatureTodoController E2E', () => {
     });
 
     it('should enforce strings for title', async () => {
-      const { id, title, description } = createMockTodo(createdUser.id);
+      const { title, description } = createMockTodo(createdUser.id);
       const newTodo = await todoRepo.save({
         title,
         description,
+        user: {
+          id: createdUser.id,
+        },
       });
       return request
         .default(app.getHttpServer())
@@ -427,10 +439,13 @@ describe('ServerFeatureTodoController E2E', () => {
     });
 
     it('should enforce strings for description', async () => {
-      const { id, title, description } = createMockTodo(createdUser.id);
+      const { title, description } = createMockTodo(createdUser.id);
       const newTodo = await todoRepo.save({
         title,
         description,
+        user: {
+          id: createdUser.id,
+        },
       });
       return request
         .default(app.getHttpServer())
@@ -450,10 +465,13 @@ describe('ServerFeatureTodoController E2E', () => {
     });
 
     it('should enforce boolean for completed', async () => {
-      const { id, title, description } = createMockTodo(createdUser.id);
+      const { title, description } = createMockTodo(createdUser.id);
       const newTodo = await todoRepo.save({
         title,
         description,
+        user: {
+          id: createdUser.id,
+        },
       });
       return request
         .default(app.getHttpServer())
@@ -474,11 +492,229 @@ describe('ServerFeatureTodoController E2E', () => {
     });
   });
 
+  describe('PUT /todos', () => {
+    it('should successfully put a todo', async () => {
+      const { id, title, description, completed } = createMockTodo(
+        createdUser.id
+      );
+
+      const url = `${baseUrl}${todoUrl}/${id}`;
+      return request
+        .default(app.getHttpServer())
+        .put(url)
+        .auth(access_token, { type: 'bearer' })
+        .send({ id, title, description, completed })
+        .expect('Content-Type', /json/)
+        .expect((resp) => {
+          const newTodo = resp.body as ITodo;
+          expect(newTodo.title).toEqual(title);
+          expect(newTodo.description).toEqual(description);
+          expect(typeof newTodo.completed).toEqual('boolean');
+          expect(typeof newTodo.id).toEqual('string');
+        })
+        .expect(HttpStatus.OK);
+    });
+
+    it("should return a 400 for a todo that doesn't belong to the user", async () => {
+      // create new user
+      const altUser = await userRepo.save({
+        email: randEmail(),
+        password: 'Password1!',
+      });
+      // create todo for that user so that the UUID is already taken
+      const altUserTodo = await todoRepo.save({
+        title: 'foo',
+        description: 'bar',
+        user: {
+          id: altUser.id,
+        },
+      });
+
+      // use ID from new user's todo
+      const url = `${baseUrl}${todoUrl}/${altUserTodo.id}`;
+
+      const payload = {
+        id: altUserTodo.id,
+        title: 'foo',
+        description: 'bar',
+        completed: false,
+      };
+
+      return (
+        request
+          .default(app.getHttpServer())
+          .put(url)
+          // use the access token with our user ID instead of new user
+          .auth(access_token, { type: 'bearer' })
+          .send(payload)
+          .expect('Content-Type', /json/)
+          .expect(HttpStatus.BAD_REQUEST)
+      );
+    });
+
+    it('should prevent updating the ID of a todo', async () => {
+      const { title, description, completed } = createMockTodo(createdUser.id);
+      const newTodo = await todoRepo.save({
+        title,
+        description,
+        user: {
+          id: createdUser.id,
+        },
+      });
+      const payload = { id: randUuid(), title, description, completed };
+
+      return request
+        .default(app.getHttpServer())
+        .put(`${baseUrl}${todoUrl}/${newTodo.id}`)
+        .auth(access_token, { type: 'bearer' })
+        .send(payload)
+
+        .expect((resp) => {
+          const { message } = resp.body;
+          expect(message).toBe(`Entity is not unique`);
+        })
+        .expect('Content-Type', /json/)
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+
+    it('should enforce strings for title', async () => {
+      const { title, description } = createMockTodo(createdUser.id);
+      const newTodo = await todoRepo.save({
+        title,
+        description,
+        user: {
+          id: createdUser.id,
+        },
+      });
+      return request
+        .default(app.getHttpServer())
+        .put(`${baseUrl}${todoUrl}/${newTodo.id}`)
+        .auth(access_token, { type: 'bearer' })
+        .send({ title: 123, description })
+        .expect((resp) => {
+          const { message } = resp.body;
+          expect(
+            (message as string[]).some((m) => m === 'title must be a string')
+          ).toBe(true);
+        })
+        .expect('Content-Type', /json/)
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+
+    it('should enforce strings for description', async () => {
+      const { title, description } = createMockTodo(createdUser.id);
+      const newTodo = await todoRepo.save({
+        title,
+        description,
+        user: {
+          id: createdUser.id,
+        },
+      });
+      return request
+        .default(app.getHttpServer())
+        .put(`${baseUrl}${todoUrl}/${newTodo.id}`)
+        .auth(access_token, { type: 'bearer' })
+        .send({ title, description: false })
+        .expect((resp) => {
+          const { message } = resp.body;
+          expect(
+            (message as string[]).some(
+              (m) => m === 'description must be a string'
+            )
+          ).toBe(true);
+        })
+        .expect('Content-Type', /json/)
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+
+    it('should enforce boolean for completed', async () => {
+      const { title, description } = createMockTodo(createdUser.id);
+      const newTodo = await todoRepo.save({
+        title,
+        description,
+        user: {
+          id: createdUser.id,
+        },
+      });
+      return request
+        .default(app.getHttpServer())
+        .put(`${baseUrl}${todoUrl}/${newTodo.id}`)
+        .auth(access_token, { type: 'bearer' })
+        .send({ title, description, completed: 123 })
+        .expect((resp) => {
+          const { message } = resp.body;
+          expect(
+            (message as string[]).some(
+              (m) => m === 'completed must be a boolean value'
+            )
+          ).toBe(true);
+        })
+        .expect('Content-Type', /json/)
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+  });
+
+  describe('DELETE /todos', () => {
+    it('should delete a todo', async () => {
+      const { title, description } = createMockTodo(createdUser.id);
+      const newTodo = await todoRepo.save({
+        title,
+        description,
+        user: {
+          id: createdUser.id,
+        },
+      });
+      return request
+        .default(app.getHttpServer())
+        .delete(`${baseUrl}${todoUrl}/${newTodo.id}`)
+        .auth(access_token, { type: 'bearer' })
+        .expect(HttpStatus.NO_CONTENT);
+    });
+
+    it('should not delete a todo of another user', async () => {
+      // create new user
+      const altUser = await userRepo.save({
+        email: randEmail(),
+        password: 'Password1!',
+      });
+      // create todo for that user
+      const altUserTodo = await todoRepo.save({
+        title: 'foo',
+        description: 'bar',
+        user: {
+          id: altUser.id,
+        },
+      });
+      // use ID from new user's todo
+      const url = `${baseUrl}${todoUrl}/${altUserTodo.id}`;
+      return request
+        .default(app.getHttpServer())
+        .delete(url)
+        .auth(access_token, { type: 'bearer' })
+        .expect(HttpStatus.NOT_FOUND);
+    });
+
+    it('should require authorization', async () => {
+      const { title, description } = createMockTodo(createdUser.id);
+      const newTodo = await todoRepo.save({
+        title,
+        description,
+        user: {
+          id: createdUser.id,
+        },
+      });
+      return request
+        .default(app.getHttpServer())
+        .delete(`${baseUrl}${todoUrl}/${newTodo.id}`)
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+  });
+
   afterAll(async () => {
     await app.close();
   });
 
-  // afterEach(async () => {
-  //   await todoRepo.query('DELETE FROM todo');
-  // });
+  afterEach(async () => {
+    await todoRepo.query('DELETE FROM todo');
+  });
 });

@@ -25,6 +25,7 @@ export class DatabaseExceptionFilter implements ExceptionFilter {
     let message = 'Database exception occurred';
 
     this.logger.debug(`DB Exception caught: ${exception.constructor.name}`);
+    // this.logger.debug(exception.message);
     switch ((exception as TypeORMError).constructor) {
       case EntityNotFoundError:
         status = HttpStatus.NOT_FOUND;
@@ -41,7 +42,7 @@ export class DatabaseExceptionFilter implements ExceptionFilter {
           : `Database query failed`;
         break;
     }
-
+    // this.logger.debug(`Exception caught, returning status ${status}`);
     response.status(status).json(generateErrorResponse(error, message));
   }
 }

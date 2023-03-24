@@ -62,7 +62,7 @@ describe('ServerFeatureTodoController', () => {
   it('should allow upserting a new todo', async () => {
     const todo = createMockTodo(mockUser.id);
     jest.spyOn(service, 'upsert').mockReturnValue(Promise.resolve(todo));
-    const res = await controller.upsertOne(mockUser.id, todo);
+    const res = await controller.upsertOne(mockUser.id, todo.id, todo);
     expect(res).toStrictEqual(todo);
   });
 
