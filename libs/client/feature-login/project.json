@@ -28,6 +28,41 @@
           "libs/client/feature-login/**/*.html"
         ]
       }
+    },
+    "storybook": {
+      "executor": "@storybook/angular:start-storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "libs/client/feature-login/.storybook",
+        "browserTarget": "client-feature-login:build-storybook",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/angular:build-storybook",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/client-feature-login",
+        "configDir": "libs/client/feature-login/.storybook",
+        "browserTarget": "client-feature-login:build-storybook",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "test-storybook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "test-storybook -c libs/client/feature-login/.storybook --url=http://localhost:4400"
+      }
     }
   },
   "tags": ["type:feature", "scope:client"]
