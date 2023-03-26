@@ -1,3 +1,18 @@
+## [1.1.0](https://github.com/wgd3/full-stack-todo/compare/v1.0.1...v1.1.0) (2023-03-26)
+
+
+### Features
+
+* added user auth for part 8 ([6718566](https://github.com/wgd3/full-stack-todo/commit/6718566689b19e1e1ff233fe7e005239b2fa55bb))
+
+
+### Other
+
+* changed release commit message [skip ci] ([f3c6c3e](https://github.com/wgd3/full-stack-todo/commit/f3c6c3e18c77300027631cd938a5cc47c1702e06))
+* changing conditional syntax for main CI workflow ([1a735de](https://github.com/wgd3/full-stack-todo/commit/1a735de20003551e469eb8339d26d8dce15a7aba))
+* fixed regex in release job ([e519c98](https://github.com/wgd3/full-stack-todo/commit/e519c98d8b9ca851d6da23d975597d3ab9c4937c))
+* more syntax changes ([eb6d3ed](https://github.com/wgd3/full-stack-todo/commit/eb6d3ed919319903392c6ee1a8204d20ea64e73a))
+
 ## [1.0.1](https://github.com/wgd3/full-stack-todo/compare/v1.0.0...v1.0.1) (2023-03-21)
 
 ### Other
