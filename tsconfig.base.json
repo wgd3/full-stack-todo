@@ -19,6 +19,7 @@
       "@fst/client/feature-dashboard": [
         "libs/client/feature-dashboard/src/index.ts"
       ],
+      "@fst/client/feature-login": ["libs/client/feature-login/src/index.ts"],
       "@fst/client/ui-components/*": ["libs/client/ui-components/src/lib/*"],
       "@fst/server/data-access": ["libs/server/data-access/src/index.ts"],
       "@fst/server/feature-auth": ["libs/server/feature-auth/src/index.ts"],
