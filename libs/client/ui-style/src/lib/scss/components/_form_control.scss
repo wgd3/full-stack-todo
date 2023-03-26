@@ -23,3 +23,15 @@
     background-color: transparent;
   }
 }
+
+.input-group {
+  position: relative;
+  width: 100%;
+  margin-block-end: $space-sm;
+
+  label,
+  .label {
+    margin-block-end: $space-x-sm;
+  }
+
+}

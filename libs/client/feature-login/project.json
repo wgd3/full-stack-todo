@@ -50,7 +50,11 @@
         "outputDir": "dist/storybook/client-feature-login",
         "configDir": "libs/client/feature-login/.storybook",
         "browserTarget": "client-feature-login:build-storybook",
-        "compodoc": false
+        "compodoc": false,
+        "styles": ["apps/client/src/styles.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/client/ui-style/src/lib/scss"]
+        }
       },
       "configurations": {
         "ci": {
