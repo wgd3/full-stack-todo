@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class ApiService {
+export class TodoService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl;
 

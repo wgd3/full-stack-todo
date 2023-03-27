@@ -1,29 +1,25 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { ILoginPayload, ITokenResponse } from '@fst/shared/domain';
+import { ICreateUser, IPublicUserData, IUpdateUser } from '@fst/shared/domain';
 import { environment } from '@fst/shared/util-env';
-import { Observable, tap } from 'rxjs';
-import { JwtTokenService } from './jwt-token.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private readonly http = inject(HttpClient);
-  private readonly tokenService = inject(JwtTokenService);
-  private readonly baseUrl = environment.apiUrl;
+  private readonly baseUrl = `${environment.apiUrl}/users`;
 
-  loginUser(data: ILoginPayload): Observable<ITokenResponse> {
-    return this.http
-      .post<ITokenResponse>(`${this.baseUrl}/auth/login`, data)
-      .pipe(
-        tap(({ access_token }) => {
-          this.tokenService.setToken(access_token);
-        })
-      );
+  getUser(id: string): Observable<IPublicUserData> {
+    return this.http.get<IPublicUserData>(`${this.baseUrl}/${id}`);
   }
 
-  logoutUser() {
-    this.tokenService.clearToken();
+  updateUser(id: string, data: IUpdateUser): Observable<IPublicUserData> {
+    return this.http.patch<IPublicUserData>(`${this.baseUrl}/${id}`, data);
+  }
+
+  createUser(data: ICreateUser): Observable<IPublicUserData> {
+    return this.http.post<IPublicUserData>(this.baseUrl, data);
   }
 }

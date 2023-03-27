@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ApiService } from '@fst/client/data-access';
+import { TodoService } from '@fst/client/data-access';
 
 type LoginFormType = {
   email: FormControl<string>;
@@ -33,7 +33,7 @@ export class ClientFeatureLoginComponent {
     }),
   });
 
-  private readonly apiService = inject(ApiService);
+  private readonly apiService = inject(TodoService);
 
   submitForm() {
     if (this.loginForm.valid && this.loginForm.dirty) {

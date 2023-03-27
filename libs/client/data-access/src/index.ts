@@ -1,3 +1,3 @@
-export * from './lib/api.service';
-export * from './lib/jwt-token.service';
+export * from './lib/auth.service';
+export * from './lib/todo.service';
 export * from './lib/user.service';
