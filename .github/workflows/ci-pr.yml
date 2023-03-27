@@ -17,7 +17,7 @@ jobs:
     with:
       number-of-agents: 3
       init-commands: |
-        npx nx-cloud start-ci-run --stop-agents-after="build" --agent-count=3
+        npx nx-cloud start-ci-run --stop-agents-after="build" --agent-count=4
       parallel-commands: |
         npx nx-cloud record -- npx nx format:check
       parallel-commands-on-agents: |
@@ -31,12 +31,16 @@ jobs:
       artifacts-name: dist-and-coverage-artifacts
     secrets:
       NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
   agents:
     name: Nx Cloud - Agents
     uses: nrwl/ci/.github/workflows/nx-cloud-agents.yml@v0.11.3
     with:
       number-of-agents: 4
+    secrets:
+      NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
   codecoverage:
     runs-on: ubuntu-latest
