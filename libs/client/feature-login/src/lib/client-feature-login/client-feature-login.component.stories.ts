@@ -19,6 +19,11 @@ export default {
     `
     ),
   ],
+  argTypes: {
+    submitForm: {
+      action: 'submitForm',
+    },
+  },
 } as Meta<ClientFeatureLoginComponent>;
 
 export const Primary = {

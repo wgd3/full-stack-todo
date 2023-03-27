@@ -17,6 +17,7 @@ bootstrapApplication(AppComponent, {
     {
       provide: APP_INITIALIZER,
       useFactory: (auth: AuthService) => {
+        console.log(`[APP_INIT] Loading token from storage..`);
         auth.loadToken();
         return () => Promise.resolve();
       },

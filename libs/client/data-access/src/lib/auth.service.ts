@@ -8,7 +8,7 @@ import {
 } from '@fst/shared/domain';
 import { environment } from '@fst/shared/util-env';
 import * as jwt_decode from 'jwt-decode';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, share, take, tap } from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -28,7 +28,7 @@ export class AuthService {
    * The encoded token is stored so that it can be used by an interceptor
    * and injected as a header
    */
-  accessToken$ = this.accessToken$$.pipe();
+  accessToken$ = this.accessToken$$.pipe(share());
 
   /**
    * Data from the decoded JWT including a user's ID and email address
@@ -46,22 +46,28 @@ export class AuthService {
   }
 
   loadToken() {
-    console.log(`JwtTokenService#loadToken`);
     const token = localStorage.getItem(TOKEN_STORAGE_KEY);
-    console.log(`JwtTokenService#loadToken - token: ${token}`);
+    console.log(`[AuthService] Loaded token: ${token?.slice(0, 12)}`);
     if (token) {
       this.accessToken$$.next(token);
+      this.userData$$.next(this.decodeToken(token));
     }
   }
 
   loginUser(data: ILoginPayload): Observable<ITokenResponse> {
+    console.log(`[AuthService] Logging in`, data);
     return this.http
       .post<ITokenResponse>(`${this.baseUrl}/auth/login`, data)
       .pipe(
+        tap(() => console.log(`[AuthService] Taking 1 API response..`)),
+        take(1),
         tap(({ access_token }) => {
+          console.log(`[AuthService] User logged in successfully!`);
           this.setToken(access_token);
           this.userData$$.next(this.decodeToken(access_token));
-        })
+        }),
+        tap((resp) => console.log(`[AuthService] Sharing resp`, resp)),
+        share()
       );
   }
 
@@ -76,10 +82,21 @@ export class AuthService {
    */
   isTokenExpired(): boolean {
     const expiryTime = this.userData$$.value?.['exp'];
+    console.log(`[AuthService] Checking for token expiration...`);
     if (expiryTime) {
-      return 1000 * +expiryTime - new Date().getTime() < 5000;
+      const expireTs = 1000 * +expiryTime;
+      const now = new Date().getTime();
+      console.log(
+        `[AuthService] Time left to expiration: ${Math.round(
+          (expireTs - now) / 1000
+        )} seconds`
+      );
+      return expireTs - now <= 0;
     }
-    return false;
+    console.log(
+      `[AuthService] No expiration time found! Setting expired to true`
+    );
+    return true;
   }
 
   private decodeToken(token: string | null): IAccessTokenPayload | null {
