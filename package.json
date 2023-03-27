@@ -36,6 +36,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "joi": "^17.8.3",
+    "jwt-decode": "^3.1.2",
     "mysql2": "^3.1.2",
     "nord": "^0.2.1",
     "normalize.css": "^8.0.1",
