@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ClientFeatureLoginComponent } from './client-feature-login.component';
@@ -8,7 +9,7 @@ describe('ClientFeatureLoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ClientFeatureLoginComponent],
+      imports: [ClientFeatureLoginComponent, HttpClientTestingModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ClientFeatureLoginComponent);

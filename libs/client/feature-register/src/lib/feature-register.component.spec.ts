@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FeatureRegisterComponent } from './feature-register.component';
@@ -8,7 +9,7 @@ describe('FeatureRegisterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FeatureRegisterComponent],
+      imports: [FeatureRegisterComponent, HttpClientTestingModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FeatureRegisterComponent);
