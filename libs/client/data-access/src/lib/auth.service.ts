@@ -9,6 +9,7 @@ import {
 import { environment } from '@fst/shared/util-env';
 import * as jwt_decode from 'jwt-decode';
 import { BehaviorSubject, Observable, share, take, tap } from 'rxjs';
+import { handleApiError } from './handle-api-error-response';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -57,17 +58,15 @@ export class AuthService {
   loginUser(data: ILoginPayload): Observable<ITokenResponse> {
     console.log(`[AuthService] Logging in`, data);
     return this.http
-      .post<ITokenResponse>(`${this.baseUrl}/auth/login`, data)
+      .post<ITokenResponse>(`${this.baseUrl}/auth/login`, data, httpOptions)
       .pipe(
-        tap(() => console.log(`[AuthService] Taking 1 API response..`)),
         take(1),
         tap(({ access_token }) => {
-          console.log(`[AuthService] User logged in successfully!`);
           this.setToken(access_token);
           this.userData$$.next(this.decodeToken(access_token));
         }),
-        tap((resp) => console.log(`[AuthService] Sharing resp`, resp)),
-        share()
+        share(),
+        handleApiError
       );
   }
 

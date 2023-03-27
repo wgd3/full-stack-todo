@@ -20,6 +20,14 @@
     }
   }
 
+  &--secondary {
+    @include generate-btn($color-ui-secondary);
+
+    svg {
+      color: $color-text-default;
+    }
+  }
+
   &--danger {
     @include generate-btn($color-status-danger);
 

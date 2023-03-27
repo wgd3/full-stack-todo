@@ -1,0 +1,121 @@
+<div class="register__container">
+  <div class="register__header">
+    <h1>Create A New Account</h1>
+  </div>
+
+  <div class="register__text">
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam tempore
+      deleniti assumenda voluptate reiciendis eum dicta beatae! Dicta placeat
+      facilis pariatur dolore ipsam quaerat numquam dolores officia, esse,
+      temporibus nisi!
+    </p>
+  </div>
+
+  <div class="register__form-container">
+    <form [formGroup]="registerForm">
+      <div
+        class="input-group"
+        [class.input-group--invalid]="
+          fEmail.hasError('required') && fEmail.touched
+        "
+      >
+        <label id="email-label" for="email-input">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          autocomplete="email"
+          id="email-input"
+          aria-labelledby="email-label"
+          formControlName="email"
+        />
+        <small
+          class="validation-text validation-text--error"
+          [class.validation-text--visible]="
+            fEmail.hasError('email') && fEmail.touched
+          "
+          >Not a valid email address</small
+        >
+        <small
+          class="validation-text validation-text--error"
+          [class.validation-text--visible]="
+            fEmail.hasError('required') && fEmail.touched
+          "
+          >Email address is required</small
+        >
+      </div>
+
+      <div
+        class="input-group"
+        [class.input-group--invalid]="
+          fPassword.hasError('required') && fPassword.touched
+        "
+      >
+        <label id="password-label" for="password-input">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          autocomplete="new-password"
+          id="password-input"
+          aria-labelledby="password-label"
+          formControlName="password"
+        />
+        <small
+          class="validation-text validation-text--error"
+          [class.validation-text--visible]="
+            fPassword.hasError('required') && fPassword.touched
+          "
+          >Password is required</small
+        >
+      </div>
+
+      <div
+        class="input-group"
+        [class.input-group--invalid]="
+          fConfirmedPassword.hasError('required') && fConfirmedPassword.touched
+        "
+      >
+        <label id="confirm-password-label" for="confirm-password-input"
+          >Confirm Password</label
+        >
+        <input
+          type="password"
+          class="form-control"
+          autocomplete="new-password"
+          id="confirm-password-input"
+          aria-labelledby="confirm-password-label"
+          formControlName="confirmedPassword"
+        />
+        <small
+          class="validation-text validation-text--error"
+          [class.validation-text--visible]="
+            fConfirmedPassword.hasError('required') &&
+            fConfirmedPassword.touched
+          "
+          >Password is required</small
+        >
+        <small
+          class="validation-text validation-text--error"
+          [class.validation-text--visible]="
+            registerForm.hasError(matchingErrorKey)
+          "
+          >Passwords do not match!</small
+        >
+      </div>
+
+      <p class="error-text" *ngIf="errorMessage$ | async as err">{{ err }}</p>
+
+      <div class="register__buttons">
+        <button type="reset" class="btn btn--default">Reset</button>
+        <button
+          type="submit"
+          class="btn btn--primary"
+          [class.btn--disabled]="registerForm.invalid"
+          (click)="register()"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
