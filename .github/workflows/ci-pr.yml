@@ -21,14 +21,16 @@ jobs:
       parallel-commands: |
         npx nx-cloud record -- npx nx format:check
       parallel-commands-on-agents: |
-        NX_CLOUD_AUTH_TOKEN=${{ secrets.NX_CLOUD_AUTH_TOKEN }} NX_VERBOSE_LOGGING=true npx nx affected --target=lint --parallel=4
-        NX_CLOUD_AUTH_TOKEN=${{ secrets.NX_CLOUD_AUTH_TOKEN }} NX_VERBOSE_LOGGING=true npx nx affected --target=e2e --parallel=1 --ci
-        NX_CLOUD_AUTH_TOKEN=${{ secrets.NX_CLOUD_AUTH_TOKEN }} NX_VERBOSE_LOGGING=true npx nx affected --target=test --parallel=4 --ci --code-coverage
-        NX_CLOUD_AUTH_TOKEN=${{ secrets.NX_CLOUD_AUTH_TOKEN }} NX_VERBOSE_LOGGING=true npx nx affected --target=build --parallel=4
+        NX_VERBOSE_LOGGING=true npx nx affected --target=lint --parallel=4
+        NX_VERBOSE_LOGGING=true npx nx affected --target=e2e --parallel=1 --ci
+        NX_VERBOSE_LOGGING=true npx nx affected --target=test --parallel=4 --ci --code-coverage
+        NX_VERBOSE_LOGGING=true npx nx affected --target=build --parallel=4
       artifacts-path: |
         dist/
         coverage
       artifacts-name: dist-and-coverage-artifacts
+    secrets:
+      NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
 
   agents:
     name: Nx Cloud - Agents
