@@ -22,17 +22,29 @@ header,
     }
   }
 
-  &__navigation {
-    display: flex;
-    flex: 0 0 auto;
-    height: $header-height;
+  .nav-link {
+    display: inline-block;
+    text-align: center;
+    padding: 0.9rem 1.2rem;
+    text-decoration: none;
+    opacity: 0.65;
+    cursor: pointer;
+    transition: opacity 250ms ease-in-out;
 
-    .nav-link {
-      display: inline-block;
-      text-align: center;
-      padding: 0.9rem 1.2rem;
-      text-decoration: none;
-      opacity: 0.65;
+    &:hover {
+      opacity: 0.85;
     }
   }
+}
+
+.header__actions {
+  flex: 1 0 auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header__navigation {
+  display: flex;
+  flex: 0 0 auto;
+  height: $header-height;
 }
