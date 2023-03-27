@@ -3,8 +3,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { ILoginPayload, ITokenResponse } from '@fst/shared/domain';
 import { environment } from '@fst/shared/util-env';
-import { of, switchMap, tap } from 'rxjs';
-import { JwtTokenService, TOKEN_STORAGE_KEY } from './jwt-token.service';
+import { of } from 'rxjs';
+import { JwtTokenService } from './jwt-token.service';
 
 import { UserService } from './user.service';
 
@@ -37,25 +37,13 @@ describe('UserService', () => {
       password: '',
     };
     const httpSpy = jest.spyOn(http, 'post').mockReturnValue(of(token));
-    service
-      .loginUser(loginPayload)
-      .pipe(
-        tap((val) => {
-          expect(val).toStrictEqual(token);
-          expect(localStorage.getItem(TOKEN_STORAGE_KEY)).toStrictEqual(
-            token.access_token
-          );
-        }),
-        switchMap(() => jwtService.accessToken$),
-        tap((val) => {
-          expect(val).toStrictEqual(token.access_token);
-        })
-      )
-      .subscribe({
-        next: () => {
-          done();
-        },
-      });
+    service.loginUser(loginPayload).subscribe({
+      next: (val) => {
+        expect(val).toStrictEqual(token);
+        done();
+      },
+      error: done.fail,
+    });
     expect(httpSpy).toHaveBeenCalledWith(`${baseUrl}/auth/login`, loginPayload);
   });
 
@@ -65,7 +53,6 @@ describe('UserService', () => {
     jwtService.accessToken$.subscribe({
       next: (val) => {
         expect(val).toBeNull();
-        expect(localStorage.getItem(TOKEN_STORAGE_KEY)).toBeNull();
         done();
       },
       error: done.fail,

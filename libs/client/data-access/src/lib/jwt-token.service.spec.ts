@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { TOKEN_STORAGE_KEY } from '@fst/client/util';
 
-import { JwtTokenService, TOKEN_STORAGE_KEY } from './jwt-token.service';
+import { JwtTokenService } from './jwt-token.service';
 
 describe('UserService', () => {
   let service: JwtTokenService;

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
+import { TOKEN_STORAGE_KEY } from '@fst/client/util';
 import { BehaviorSubject } from 'rxjs';
-
-export const TOKEN_STORAGE_KEY = 'fst-access-token';
 
 @Injectable({
   providedIn: 'root',
