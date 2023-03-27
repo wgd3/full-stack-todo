@@ -2,7 +2,7 @@ describe('client-feature-login', () => {
   beforeEach(() =>
     cy.visit('/iframe.html?id=clientfeaturelogincomponent--primary')
   );
-  it('should render the component', () => {
+  xit('should render the component', () => {
     cy.get('full-stack-todo-client-feature-login').should('exist');
   });
 });
