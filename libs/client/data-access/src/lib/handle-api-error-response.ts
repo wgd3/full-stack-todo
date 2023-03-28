@@ -34,7 +34,6 @@ export function handleApiError(obs: Observable<any>) {
       } else if (err instanceof HttpErrorResponse) {
         return throwError(() => err.error);
       }
-      console.error(`Unknown error occurred`, err);
       return throwError(() => err);
     })
   );

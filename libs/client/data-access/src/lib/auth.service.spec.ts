@@ -2,6 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { TOKEN_STORAGE_KEY } from '@fst/client/util';
+import { ITokenResponse } from '@fst/shared/domain';
+import { randEmail } from '@ngneat/falso';
+import { of } from 'rxjs';
 
 import { AuthService } from './auth.service';
 
@@ -58,6 +61,47 @@ describe('AuthService', () => {
       },
       error: done.fail,
     });
+  });
+
+  it('should login a user', (done) => {
+    const resp: ITokenResponse = {
+      access_token: '',
+    };
+    const spy = jest.spyOn(http, 'post').mockReturnValue(of(resp));
+    service.loginUser({ email: randEmail(), password: '' }).subscribe({
+      next: ({ access_token }) => {
+        expect(access_token).toStrictEqual('');
+        done();
+      },
+      error: done.fail,
+    });
+  });
+
+  it('should clear storage on log out', (done) => {
+    const token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IndhbGxhY2VAdGhlZnVsbHN0YWNrLmVuZ2luZWVyIiwic3ViIjoiYmQ0ZTNmOTEtMDUxZC00NGU4LTgyMDQtZmY4YjFjYzk1OTU3IiwiaWF0IjoxNjgwMDE0MDQwLCJleHAiOjE2ODAwMTQ2NDB9.LdH-sN9IXD78P9z78a8k__70zS6FFqOenpiNrJ6eifg';
+    service.setToken(token);
+    expect(localStorage.getItem(TOKEN_STORAGE_KEY)).toStrictEqual(token);
+
+    service.logoutUser();
+    expect(localStorage.getItem(TOKEN_STORAGE_KEY)).toBeNull();
+    done();
+  });
+
+  it('should detect an expired token', (done) => {
+    const token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IndhbGxhY2VAdGhlZnVsbHN0YWNrLmVuZ2luZWVyIiwic3ViIjoiYmQ0ZTNmOTEtMDUxZC00NGU4LTgyMDQtZmY4YjFjYzk1OTU3IiwiaWF0IjoxNjgwMDE0MDQwLCJleHAiOjE2ODAwMTQ2NDB9.LdH-sN9IXD78P9z78a8k__70zS6FFqOenpiNrJ6eifg';
+    service.setToken(token);
+    expect(localStorage.getItem(TOKEN_STORAGE_KEY)).toStrictEqual(token);
+    service.loadToken();
+
+    expect(service.isTokenExpired()).toStrictEqual(true);
+    done();
+  });
+
+  it('should say a token is expired when one is not loaded', (done) => {
+    expect(service.isTokenExpired()).toStrictEqual(true);
+    done();
   });
 
   afterEach(() => {
