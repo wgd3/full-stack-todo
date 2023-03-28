@@ -1,0 +1,84 @@
+<div class="login__container">
+  <div class="login__header">
+    <h1>Log In To Full Stack To Do</h1>
+  </div>
+
+  <div class="login__text">
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam similique
+      ducimus id, adipisci eveniet cum facere enim, sint delectus voluptate
+      reprehenderit rerum fugit vitae illo! Quis cupiditate eum dignissimos
+      sint?
+    </p>
+  </div>
+
+  <div class="login__form-container">
+    <form [formGroup]="loginForm">
+      <div
+        class="input-group"
+        [class.input-group--invalid]="emailInvalidAndTouched"
+      >
+        <label class="label" for="email-input" id="email-label">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          formControlName="email"
+          autocomplete="email"
+          id="email-input"
+          aria-labelledby="email-label"
+        />
+        <small
+          class="validation-text validation-text--error"
+          [class.validation-text--visible]="
+            fEmail.hasError('email') && fEmail.touched
+          "
+          >Not a valid email address</small
+        >
+        <small
+          class="validation-text validation-text--error"
+          [class.validation-text--visible]="
+            fEmail.hasError('required') && fEmail.touched
+          "
+          >Email address is required</small
+        >
+      </div>
+
+      <div
+        class="input-group"
+        [class.input-group--invalid]="
+          fPassword.hasError('required') && fPassword.touched
+        "
+      >
+        <label class="label" for="password-input" id="password-label"
+          >Password</label
+        >
+        <input
+          type="password"
+          class="form-control"
+          formControlName="password"
+          autocomplete="current-password"
+          id="password-input"
+          aria-labelledby="password-label"
+        />
+        <small
+          class="validation-text validation-text--error"
+          [class.validation-text--visible]="
+            fPassword.hasError('required') && fPassword.touched
+          "
+          >Password is required</small
+        >
+      </div>
+
+      <p class="error-text" *ngIf="errorMessage$ | async as err">{{ err }}</p>
+
+      <button
+        type="submit"
+        class="btn btn--primary"
+        [class.btn--disabled]="loginForm.invalid"
+        (click)="submitForm()"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
+</div>

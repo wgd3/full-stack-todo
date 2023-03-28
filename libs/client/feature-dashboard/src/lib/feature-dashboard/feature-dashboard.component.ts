@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { ApiService } from '@fst/client/data-access';
+import { TodoService } from '@fst/client/data-access';
 import { ToDoComponent } from '@fst/client/ui-components/to-do';
 import { ITodo } from '@fst/shared/domain';
 import { BehaviorSubject, take } from 'rxjs';
@@ -13,7 +13,7 @@ import { BehaviorSubject, take } from 'rxjs';
   styleUrls: ['./feature-dashboard.component.scss'],
 })
 export class FeatureDashboardComponent implements OnInit {
-  private readonly apiService = inject(ApiService);
+  private readonly apiService = inject(TodoService);
 
   todos$ = new BehaviorSubject<ITodo[]>([]);
 
@@ -50,9 +50,9 @@ export class FeatureDashboardComponent implements OnInit {
       });
   }
 
-  editTodo(todo: ITodo) {
+  editTodo({ id, title, description, completed }: ITodo) {
     this.apiService
-      .updateToDo(todo.id, todo)
+      .updateToDo(id, { title, description, completed })
       .pipe(take(1))
       .subscribe(() => {
         this.refreshItems();

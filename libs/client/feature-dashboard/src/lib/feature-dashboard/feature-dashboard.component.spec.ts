@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ApiService } from '@fst/client/data-access';
+import { TodoService } from '@fst/client/data-access';
 import { createMockTodo, createMockUser } from '@fst/shared/util-testing';
 import { of } from 'rxjs';
 
@@ -10,18 +10,18 @@ const mockUser = createMockUser();
 
 describe('FeatureDashboardComponent', () => {
   let component: FeatureDashboardComponent;
-  let apiService: ApiService;
+  let todoService: TodoService;
   let fixture: ComponentFixture<FeatureDashboardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [FeatureDashboardComponent, HttpClientTestingModule],
-      providers: [ApiService],
+      providers: [TodoService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FeatureDashboardComponent);
     component = fixture.componentInstance;
-    apiService = TestBed.inject(ApiService);
+    todoService = TestBed.inject(TodoService);
     fixture.detectChanges();
   });
 
@@ -39,7 +39,7 @@ describe('FeatureDashboardComponent', () => {
       createMockTodo(mockUser.id)
     );
     const spy = jest
-      .spyOn(apiService, 'getAllToDoItems')
+      .spyOn(todoService, 'getAllToDoItems')
       .mockReturnValue(of(todos));
     component.refreshItems();
     expect(spy).toHaveBeenCalled();
@@ -50,10 +50,10 @@ describe('FeatureDashboardComponent', () => {
   it('should be able to toggle the completion of a todo', (done) => {
     const todo = createMockTodo(mockUser.id, { completed: false });
     const updateSpy = jest
-      .spyOn(apiService, 'updateToDo')
+      .spyOn(todoService, 'updateToDo')
       .mockReturnValue(of({ ...todo, completed: true }));
     const refreshSpy = jest
-      .spyOn(apiService, 'getAllToDoItems')
+      .spyOn(todoService, 'getAllToDoItems')
       .mockReturnValue(of([{ ...todo, completed: true }]));
     component.toggleComplete(todo);
     expect(refreshSpy).toHaveBeenCalled();
@@ -69,10 +69,10 @@ describe('FeatureDashboardComponent', () => {
     );
     component.todos$.next(todos);
     const deleteSpy = jest
-      .spyOn(apiService, 'deleteToDo')
+      .spyOn(todoService, 'deleteToDo')
       .mockReturnValue(of(null));
     const refreshSpy = jest
-      .spyOn(apiService, 'getAllToDoItems')
+      .spyOn(todoService, 'getAllToDoItems')
       .mockReturnValue(of([...todos.slice(1)]));
     component.deleteTodo(todos[0]);
     expect(deleteSpy).toHaveBeenCalled();
@@ -84,10 +84,10 @@ describe('FeatureDashboardComponent', () => {
   it('should be able to toggle the completion of a todo', (done) => {
     const todo = createMockTodo(mockUser.id, { completed: false });
     const updateSpy = jest
-      .spyOn(apiService, 'updateToDo')
+      .spyOn(todoService, 'updateToDo')
       .mockReturnValue(of({ ...todo, completed: true }));
     const refreshSpy = jest
-      .spyOn(apiService, 'getAllToDoItems')
+      .spyOn(todoService, 'getAllToDoItems')
       .mockReturnValue(of([{ ...todo, completed: true }]));
     component.editTodo(todo);
     expect(refreshSpy).toHaveBeenCalled();

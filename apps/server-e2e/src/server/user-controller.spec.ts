@@ -313,4 +313,8 @@ describe('ServerFeatureUserController E2E', () => {
   //     `delete from user where email != '${createdUser.email}'`
   //   );
   // });
+
+  afterAll(async () => {
+    await app.close();
+  });
 });

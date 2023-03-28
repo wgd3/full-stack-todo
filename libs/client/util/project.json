@@ -1,0 +1,16 @@
+{
+  "name": "client--util",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/client/util/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/client/util/**/*.ts"]
+      }
+    }
+  },
+  "tags": ["type:util", "scope:client"]
+}

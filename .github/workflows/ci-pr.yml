@@ -2,7 +2,10 @@ name: Pull Request CI
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+  NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  NX_BRANCH: ${{ github.event.number }}
+  NX_RUN_GROUP: ${{ github.run_id }}
 
 # workflow for pull requests
 on: pull_request
@@ -18,20 +21,27 @@ jobs:
       parallel-commands: |
         npx nx-cloud record -- npx nx format:check
       parallel-commands-on-agents: |
-        npx nx affected --target=lint --parallel=4
-        npx nx affected --target=e2e --parallel=4 --ci
-        npx nx affected --target=test --parallel=4 --ci --code-coverage
-        npx nx affected --target=build --parallel=4
+        npx nx affected --target=lint --parallel=3
+        npx nx affected --target=stylelint --parallel=3
+        npx nx affected --target=e2e --parallel=1 --ci
+        npx nx affected --target=test --parallel=3 --ci --code-coverage
+        npx nx affected --target=build --parallel=3
       artifacts-path: |
         dist/
         coverage
       artifacts-name: dist-and-coverage-artifacts
+    secrets:
+      NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
   agents:
     name: Nx Cloud - Agents
     uses: nrwl/ci/.github/workflows/nx-cloud-agents.yml@v0.11.3
     with:
-      number-of-agents: 4
+      number-of-agents: 3
+    secrets:
+      NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
   codecoverage:
     runs-on: ubuntu-latest

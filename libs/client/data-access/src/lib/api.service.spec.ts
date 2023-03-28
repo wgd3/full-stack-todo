@@ -5,19 +5,19 @@ import { ITodo } from '@fst/shared/domain';
 import { createMockTodo, createMockUser } from '@fst/shared/util-testing';
 import { of } from 'rxjs';
 
-import { ApiService } from './api.service';
+import { TodoService } from './todo.service';
 
 const mockUser = createMockUser();
 
 describe('ApiService', () => {
-  let service: ApiService;
+  let service: TodoService;
   let http: HttpClient;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
-    service = TestBed.inject(ApiService);
+    service = TestBed.inject(TodoService);
     http = TestBed.inject(HttpClient);
   });
 
