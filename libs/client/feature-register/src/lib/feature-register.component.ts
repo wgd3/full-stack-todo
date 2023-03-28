@@ -9,6 +9,12 @@ import {
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '@fst/client/data-access';
+import {
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_MIN_NUMBER,
+  PASSWORD_MIN_SYMBOL,
+  PASSWORD_MIN_UPPERCASE,
+} from '@fst/shared/domain';
 import { BehaviorSubject, take } from 'rxjs';
 import {
   MatchingPasswords,
@@ -21,6 +27,10 @@ type RegisterFormType = {
   confirmedPassword: FormControl<string>;
 };
 
+const passwordRegexp = new RegExp(
+  /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,}).*/
+);
+
 @Component({
   selector: 'full-stack-todo-feature-register',
   standalone: true,
@@ -31,6 +41,12 @@ type RegisterFormType = {
 })
 export class FeatureRegisterComponent {
   readonly matchingErrorKey = MATCHING_ERROR_KEY;
+  readonly passwordReqs = {
+    PASSWORD_MIN_LENGTH,
+    PASSWORD_MIN_NUMBER,
+    PASSWORD_MIN_UPPERCASE,
+    PASSWORD_MIN_SYMBOL,
+  };
   private readonly userService = inject(UserService);
   private readonly router = inject(Router);
 
@@ -42,7 +58,11 @@ export class FeatureRegisterComponent {
       }),
       password: new FormControl<string>('', {
         nonNullable: true,
-        validators: [Validators.required],
+        validators: [
+          Validators.required,
+          Validators.minLength(PASSWORD_MIN_LENGTH),
+          Validators.pattern(passwordRegexp),
+        ],
       }),
       confirmedPassword: new FormControl<string>('', {
         nonNullable: true,

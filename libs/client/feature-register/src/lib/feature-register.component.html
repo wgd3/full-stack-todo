@@ -67,6 +67,28 @@
           "
           >Password is required</small
         >
+        <small
+          class="validation-text validation-text--error"
+          [class.validation-text--visible]="
+            fPassword.hasError('minlength') && fPassword.touched
+          "
+          >Password must have a minimum length of
+          {{ passwordReqs.PASSWORD_MIN_LENGTH }} characters</small
+        >
+        <small
+          class="validation-text validation-text--error"
+          [class.validation-text--visible]="
+            fPassword.hasError('pattern') && fPassword.touched
+          "
+          >Password must have at least
+          {{ passwordReqs.PASSWORD_MIN_UPPERCASE }} uppercase character{{
+            passwordReqs.PASSWORD_MIN_UPPERCASE > 1 ? 's' : ''
+          }}, {{ passwordReqs.PASSWORD_MIN_NUMBER }} number{{
+            passwordReqs.PASSWORD_MIN_NUMBER > 1 ? 's' : ''
+          }}, and {{ passwordReqs.PASSWORD_MIN_SYMBOL }} special character{{
+            passwordReqs.PASSWORD_MIN_SYMBOL > 1 ? 's' : ''
+          }}</small
+        >
       </div>
 
       <div

@@ -3,6 +3,10 @@ import {
   IPublicUserData,
   ITodo,
   IUpdateUser,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_MIN_NUMBER,
+  PASSWORD_MIN_SYMBOL,
+  PASSWORD_MIN_UPPERCASE,
 } from '@fst/shared/domain';
 import { ApiProperty } from '@nestjs/swagger';
 import {
@@ -52,10 +56,10 @@ export class CreateUserDto implements ICreateUser {
   })
   @IsStrongPassword(
     {
-      minLength: 8,
-      minNumbers: 1,
-      minUppercase: 1,
-      minSymbols: 1,
+      minLength: PASSWORD_MIN_LENGTH,
+      minNumbers: PASSWORD_MIN_NUMBER,
+      minUppercase: PASSWORD_MIN_UPPERCASE,
+      minSymbols: PASSWORD_MIN_SYMBOL,
     },
     {
       message: `Password is not strong enough. Must contain: 8 characters, 1 number, 1 uppercase letter, 1 symbol`,
