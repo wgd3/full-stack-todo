@@ -3,14 +3,20 @@ name: Tag CI
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
-# This file builds docker images whenever a new tag is published
+# This file builds docker images whenever a new tag is pushed, or one is created
+# automatically
 on:
   push:
     tags:
       - '*'
+  create:
 
 jobs:
   docker-build:
+    # the 'create' trigger applies to all refs, so this limits it
+    # to just new tags
+    # https://github.com/actions/runner/issues/1007#issuecomment-808904408
+    if: startsWith(github.ref, 'refs/tags')
     name: Docker Build
     runs-on: ubuntu-latest
     env:
