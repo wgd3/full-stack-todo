@@ -3,7 +3,7 @@
   border: 1px solid $base-color;
 
   &:hover {
-    background-color: darken($color: $base-color, $amount: 10%);
+    background-color: color.adjust($color: $base-color, $lightness: -10%);
     cursor: pointer;
   }
 }

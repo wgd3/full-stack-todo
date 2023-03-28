@@ -3,7 +3,7 @@ a {
   text-decoration: underline;
 
   &:hover {
-    color: darken($color: $nord7, $amount: 10%);
+    color: color.adjust($color: $nord7, $lightness: -10%);
   }
 
   &:active {

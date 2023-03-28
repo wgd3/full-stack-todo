@@ -17,14 +17,15 @@ jobs:
     with:
       number-of-agents: 3
       init-commands: |
-        npx nx-cloud start-ci-run --stop-agents-after="build" --agent-count=4
+        npx nx-cloud start-ci-run --stop-agents-after="build" --agent-count=3
       parallel-commands: |
         npx nx-cloud record -- npx nx format:check
       parallel-commands-on-agents: |
-        NX_VERBOSE_LOGGING=true npx nx affected --target=lint --parallel=4
-        NX_VERBOSE_LOGGING=true npx nx affected --target=e2e --parallel=1 --ci
-        NX_VERBOSE_LOGGING=true npx nx affected --target=test --parallel=4 --ci --code-coverage
-        NX_VERBOSE_LOGGING=true npx nx affected --target=build --parallel=4
+        npx nx affected --target=lint --parallel=3
+        npx nx affected --target=stylelint --parallel=3
+        npx nx affected --target=e2e --parallel=1 --ci
+        npx nx affected --target=test --parallel=3 --ci --code-coverage
+        npx nx affected --target=build --parallel=3
       artifacts-path: |
         dist/
         coverage
@@ -37,7 +38,7 @@ jobs:
     name: Nx Cloud - Agents
     uses: nrwl/ci/.github/workflows/nx-cloud-agents.yml@v0.11.3
     with:
-      number-of-agents: 4
+      number-of-agents: 3
     secrets:
       NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
       NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
