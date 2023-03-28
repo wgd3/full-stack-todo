@@ -1,3 +1,16 @@
+## [1.2.0](https://github.com/wgd3/full-stack-todo/compare/v1.1.0...v1.2.0) (2023-03-28)
+
+
+### Features
+
+* added user registration/JWT support in UI ([3542be6](https://github.com/wgd3/full-stack-todo/commit/3542be6bd3f9024636eafa387d11e56d4340415c))
+
+
+### Other
+
+* added nx cloud support to main CI workflow ([93964e8](https://github.com/wgd3/full-stack-todo/commit/93964e8b7a083960d690a05fb02bf2303735dfbd))
+* removed format check from main CI workflow ([ba54248](https://github.com/wgd3/full-stack-todo/commit/ba542484ab857d4e4fcb20994a6fa8a7501f344b))
+
 ## [1.1.0](https://github.com/wgd3/full-stack-todo/compare/v1.0.1...v1.1.0) (2023-03-26)
 
 
