@@ -15,26 +15,33 @@ jobs:
     name: Nx Cloud - Main Job
     uses: nrwl/ci/.github/workflows/nx-cloud-main.yml@v0.11.3
     with:
-      number-of-agents: 4
+      number-of-agents: 3
       init-commands: |
-        npx nx-cloud start-ci-run --stop-agents-after="build" --agent-count=4
-      # parallel-commands: |
-      #   npx nx-cloud record -- npx nx format:check
+        npx nx-cloud start-ci-run --stop-agents-after="build" --agent-count=3
+      parallel-commands: |
+        npx nx-cloud record -- npx nx format:check
       parallel-commands-on-agents: |
-        npx nx run-many --target=lint --all --parallel=4
-        npx nx run-many --target=e2e --all --ci --parallel=4
-        npx nx run-many --target=test --all --parallel=4 --ci --code-coverage
-        npx nx run-many --target=build --all --parallel=4
+        npx nx run-many --target=lint --all --parallel=3
+        npx nx run-many --target=stylelint --all --parallel=3
+        npx nx run-many --target=e2e --all --ci --parallel=1
+        npx nx run-many --target=test --all --parallel=3 --ci --code-coverage
+        npx nx run-many --target=build --all --parallel=3
       artifacts-path: |
         dist/
         coverage
       artifacts-name: dist-and-coverage-artifacts
+    secrets:
+      NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
   agents:
     name: Nx Cloud - Agents
     uses: nrwl/ci/.github/workflows/nx-cloud-agents.yml@v0.11.3
     with:
-      number-of-agents: 4
+      number-of-agents: 3
+    secrets:
+      NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
   codecoverage:
     runs-on: ubuntu-latest
@@ -54,8 +61,8 @@ jobs:
           directory: ./coverage/coverage
           flags: unittests # optional
           name: codecov-umbrella # optional
-          fail_ci_if_error: true # optional (default = false)
-          verbose: true # optional (default = false)
+          fail_ci_if_error: false # optional (default = false)
+          verbose: false # optional (default = false)
 
   release:
     name: Release
