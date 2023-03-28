@@ -1,3 +1,16 @@
+## [1.3.0](https://github.com/wgd3/full-stack-todo/compare/v1.2.0...v1.3.0) (2023-03-28)
+
+
+### Features
+
+* **client:** added log-in link to banner when signed out ([40e4520](https://github.com/wgd3/full-stack-todo/commit/40e45203dd82d2f318c089d1f38a948a131ba44d))
+* **shared-domain:** added shared password requirement settings ([d05e57d](https://github.com/wgd3/full-stack-todo/commit/d05e57d9047e5c8f4a7bf321fd9ce332ce22e435))
+
+
+### Other
+
+* updated trigger for new tags [ci skip] ([f58021f](https://github.com/wgd3/full-stack-todo/commit/f58021f47f66653c2010b33b021e7831a2660e81))
+
 ## [1.2.0](https://github.com/wgd3/full-stack-todo/compare/v1.1.0...v1.2.0) (2023-03-28)
 
 
