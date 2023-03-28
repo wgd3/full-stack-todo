@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 @mixin generate-btn($base-color) {
   background-color: $base-color;
   border: 1px solid $base-color;
