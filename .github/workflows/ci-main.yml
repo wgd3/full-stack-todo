@@ -18,8 +18,8 @@ jobs:
       number-of-agents: 3
       init-commands: |
         npx nx-cloud start-ci-run --stop-agents-after="build" --agent-count=3
-      parallel-commands: |
-        npx nx-cloud record -- npx nx format:check
+      # parallel-commands: |
+      #   npx nx-cloud record -- npx nx format:check
       parallel-commands-on-agents: |
         npx nx run-many --target=lint --all --parallel=3
         npx nx run-many --target=stylelint --all --parallel=3
