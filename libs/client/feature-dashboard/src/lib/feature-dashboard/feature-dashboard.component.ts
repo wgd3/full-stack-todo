@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faSquarePlus } from '@fortawesome/free-regular-svg-icons';
 import { TodoService } from '@fst/client/data-access';
 import { ToDoComponent } from '@fst/client/ui-components/to-do';
 import { ITodo } from '@fst/shared/domain';
@@ -16,6 +17,8 @@ export class FeatureDashboardComponent implements OnInit {
   private readonly apiService = inject(TodoService);
 
   todos$ = new BehaviorSubject<ITodo[]>([]);
+
+  faSquarePlus = faSquarePlus;
 
   trackTodo(idx: number, todo: ITodo) {
     return todo.id;

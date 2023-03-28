@@ -6,7 +6,7 @@
 .page {
   display: grid;
   grid-template-rows: repeat(2, 1fr);
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(30rem, 1fr));
   grid-template-areas: incomplete complete;
   column-gap: 1rem;
   row-gap: 1rem;
@@ -40,27 +40,22 @@
   grid-column-end: 3;
 }
 
-.todo {
-  width: 30rem;
-  padding: 8px;
-  box-shadow: 4px 4px 8px 0px;
-  border: 1px solid #000000;
-  font-family: Arial, Helvetica, sans-serif;
 
-  &__title {
-    margin-block-start: 0;
-  }
+.add-todo {
+  height: 8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
-  &__id {
-    color: #a5a5a5;
-  }
+.btn-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-  &__completed-value {
-    &--false {
-      color: red;
-    }
-    &--true {
-      color: green;
-    }
+  span {
+    margin-block-start: 0.5rem;
   }
 }
