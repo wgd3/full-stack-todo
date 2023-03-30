@@ -12,14 +12,16 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faCircle as faCircleOutline,
+  faFloppyDisk,
   faTrashCan,
 } from '@fortawesome/free-regular-svg-icons';
 import { faCheck, faPencil } from '@fortawesome/free-solid-svg-icons';
-import { ITodo } from '@fst/shared/domain';
+import { ICreateTodo, ITodo } from '@fst/shared/domain';
 import { EditableModule } from '@ngneat/edit-in-place';
 
 /**
@@ -50,30 +52,41 @@ export class ToDoComponent implements OnInit {
   @Output() toggleComplete = new EventEmitter<ITodo>();
   @Output() updateTodo = new EventEmitter<ITodo>();
   @Output() deleteTodo = new EventEmitter<ITodo>();
+  @Output() createTodo = new EventEmitter<ICreateTodo>();
 
   faCheck = faCheck;
   faCircleOutline = faCircleOutline;
   faPencil = faPencil;
   faTrashCan = faTrashCan;
+  faFloppyDisk = faFloppyDisk;
 
   todoForm!: FormGroup<TodoFormType>;
 
   ngOnInit(): void {
-    if (this.todo) {
-      this.todoForm = new FormGroup({
-        title: new FormControl(this.todo.title, { nonNullable: true }),
-        description: new FormControl(this.todo.description, {
+    this.todoForm = new FormGroup({
+      title: new FormControl(this.todo?.title || 'New To-Do', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.minLength(6)],
+      }),
+      description: new FormControl(
+        this.todo?.description || 'To-do Description',
+        {
           nonNullable: true,
-        }),
-      });
-    }
+          validators: [Validators.required, Validators.minLength(6)],
+        }
+      ),
+    });
   }
 
   saveEdit() {
-    this.triggerUpdate({
-      ...this.todo,
-      ...this.todoForm.value,
-    });
+    if (this.todoForm.valid && this.todoForm.dirty) {
+      this.triggerUpdate({
+        ...this.todo,
+        ...this.todoForm.value,
+      });
+    } else {
+      console.log(`Form invalid, not saving`);
+    }
   }
 
   cancelEdit() {
@@ -103,5 +116,11 @@ export class ToDoComponent implements OnInit {
    */
   triggerDelete() {
     this.deleteTodo.emit(this.todo);
+  }
+
+  triggerCreate() {
+    if (this.todoForm.valid && this.todoForm.dirty) {
+      this.createTodo.emit(this.todoForm.getRawValue());
+    }
   }
 }

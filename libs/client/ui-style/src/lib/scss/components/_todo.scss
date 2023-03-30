@@ -4,7 +4,7 @@ $todo-border-radius: 8px;
 .todo {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   width: 100%;
-  height: 100%;
+  height: 10rem;
   border: 1px solid $color-ui-border;
   border-radius: $todo-border-radius;
   padding: $space-sm;
@@ -20,12 +20,14 @@ $todo-border-radius: 8px;
 
   .todo__title {
     margin-block-end: 0;
+    font-weight: bold;
   }
 }
 
 .todo__body {
   p {
     margin: 0;
+    overflow-y: scroll;
   }
 }
 
@@ -56,7 +58,12 @@ $todo-border-radius: 8px;
 }
 
 .todo__actions {
-  > * + * {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  > .btn + .btn {
     margin-inline-start: $space-sm;
   }
 }

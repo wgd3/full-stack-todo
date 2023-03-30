@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EditableModule } from '@ngneat/edit-in-place';
 import { randBoolean, randProduct } from '@ngneat/falso';
@@ -29,7 +30,7 @@ export default {
   component: ToDoComponent,
   decorators: [
     moduleMetadata({
-      imports: [FontAwesomeModule, EditableModule],
+      imports: [FontAwesomeModule, EditableModule, CommonModule],
     }),
     componentWrapperDecorator(
       (s) => `
@@ -47,14 +48,26 @@ export default {
     triggerToggleComplete: {
       action: 'toggleComplete',
     },
+    triggerCreate: {
+      action: 'create',
+    },
   },
 } as Meta<ToDoComponent>;
 
-export const Primary = {
+export const WithContent = {
   render: (args: ToDoComponent) => ({
     props: args,
   }),
   args: {
     todo: randTodo(),
+  },
+};
+
+export const NoInput = {
+  render: (args: ToDoComponent) => ({
+    props: args,
+  }),
+  args: {
+    todo: undefined,
   },
 };

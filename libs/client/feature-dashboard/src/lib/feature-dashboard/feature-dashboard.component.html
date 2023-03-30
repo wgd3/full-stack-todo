@@ -3,6 +3,18 @@
     <div class="page" *ngIf="todos$ | async as todos">
       <div class="incomplete-column">
         <h1>Incomplete</h1>
+        <div class="todo add-todo" *ngIf="!addingTodo">
+          <div class="todo__body">
+            <button class="btn btn--default" (click)="triggerEmptyTodo()">
+              <fa-icon [icon]="faPlusSquare" [size]="'3x'"></fa-icon>
+            </button>
+          </div>
+        </div>
+        <fst-todo
+          *ngIf="addingTodo"
+          (createTodo)="createTodo($event)"
+          (deleteTodo)="triggerEmptyTodo()"
+        ></fst-todo>
         <ng-container *ngFor="let todo of todos; trackBy: trackTodo">
           <fst-todo
             [todo]="todo"

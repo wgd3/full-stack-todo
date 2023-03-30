@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faPlusSquare } from '@fortawesome/free-regular-svg-icons';
 import { TodoService } from '@fst/client/data-access';
 import { ToDoComponent } from '@fst/client/ui-components/to-do';
-import { ITodo } from '@fst/shared/domain';
+import { ICreateTodo, ITodo } from '@fst/shared/domain';
 import { BehaviorSubject, take } from 'rxjs';
 @Component({
   selector: 'full-stack-todo-feature-dashboard',
@@ -17,12 +18,20 @@ export class FeatureDashboardComponent implements OnInit {
 
   todos$ = new BehaviorSubject<ITodo[]>([]);
 
+  faPlusSquare = faPlusSquare;
+
+  addingTodo = false;
+
   trackTodo(idx: number, todo: ITodo) {
     return todo.id;
   }
 
   ngOnInit(): void {
     this.refreshItems();
+  }
+
+  triggerEmptyTodo() {
+    this.addingTodo = !this.addingTodo;
   }
 
   refreshItems() {
@@ -56,6 +65,18 @@ export class FeatureDashboardComponent implements OnInit {
       .pipe(take(1))
       .subscribe(() => {
         this.refreshItems();
+      });
+  }
+
+  createTodo(data: ICreateTodo) {
+    this.apiService
+      .createToDo(data)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.refreshItems();
+          this.addingTodo = false;
+        },
       });
   }
 }

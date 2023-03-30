@@ -1,5 +1,5 @@
 describe('To-Do Component', () => {
-  beforeEach(() => cy.visit('/iframe.html?id=todocomponent--primary'));
+  beforeEach(() => cy.visit('/iframe.html?id=todocomponent--with-content'));
   it('should render the component', () => {
     cy.get('fst-todo').should('exist');
   });
@@ -21,5 +21,27 @@ describe('To-Do Component', () => {
     cy.get('.todo__title').dblclick();
     cy.get('@dblclick').should('have.been.calledOnce');
     cy.get('.form-control.h4').should('exist');
+  });
+});
+
+describe('TodoComponent Without Content', () => {
+  beforeEach(() => cy.visit('/iframe.html?id=todocomponent--no-input'));
+  it('should show an input and textarea element', () => {
+    cy.get('#input-form-control-empty').should('exist');
+    cy.get('#textarea-form-control-empty').should('exist');
+  });
+
+  it('should have a delete button', () => {
+    cy.get('#btn-delete').should('exist');
+  });
+
+  it('should have a save button', () => {
+    cy.get('#btn-save').should('exist');
+  });
+
+  it('should emit data on save', () => {
+    cy.storyAction('click');
+    cy.get('#btn-save').click();
+    cy.get('@click').should('have.been.called');
   });
 });

@@ -1,64 +1,107 @@
-<div class="todo" *ngIf="todo" [formGroup]="todoForm">
+<div class="todo" [formGroup]="todoForm">
   <div class="todo__header">
-    <button
-      class="btn btn--sm todo__completed"
-      [class.todo__completed--true]="todo.completed"
-      (click)="triggerToggleComplete()"
-    >
-      <fa-stack>
-        <fa-icon [icon]="faCircleOutline" stackItemSize="2x"></fa-icon>
-        <fa-icon
-          [icon]="faCheck"
-          stackItemSize="1x"
-          *ngIf="todo.completed"
-        ></fa-icon>
-      </fa-stack>
-    </button>
+    <ng-container *ngIf="!todo; else notEmpty">
+      <input
+        class="form-control h4"
+        id="input-form-control-empty"
+        formControlName="title"
+      />
+    </ng-container>
 
-    <editable
-      (save)="saveEdit()"
-      (cancel)="cancelEdit()"
-      openBindingEvent="dblclick"
-    >
-      <ng-template viewMode
-        ><h4 class="todo__title">{{ todo.title }}</h4></ng-template
+    <ng-template #notEmpty>
+      <editable
+        (save)="saveEdit()"
+        (cancel)="cancelEdit()"
+        openBindingEvent="dblclick"
+        #editableTitle
+        style="flex: 1"
       >
-      <ng-template editMode>
-        <input
-          class="form-control h4"
-          formControlName="title"
-          editableOnEnter
-          editableOnEscape
-        />
-      </ng-template>
-    </editable>
+        <ng-template viewMode
+          ><h3 class="todo__title">{{ todo?.title }}</h3></ng-template
+        >
+        <ng-template editMode>
+          <input
+            id="input-form-control-populated"
+            class="form-control h4"
+            formControlName="title"
+            editableOnEnter
+            editableOnEscape
+          />
+        </ng-template>
+      </editable>
+    </ng-template>
   </div>
 
   <div class="todo__body">
-    <editable
-      (save)="saveEdit()"
-      (cancel)="cancelEdit()"
-      openBindingEvent="dblclick"
-    >
-      <ng-template viewMode>
-        <p class="todo__description">{{ todo.description }}</p>
-      </ng-template>
+    <ng-container *ngIf="!todo; else notEmptyDesc">
+      <textarea
+        id="textarea-form-control-empty"
+        class="form-control"
+        formControlName="description"
+      ></textarea>
+    </ng-container>
 
-      <ng-template editMode>
-        <textarea
-          editableOnEnter
-          editableOnEscape
-          class="form-control"
-          formControlName="description"
-        ></textarea>
-      </ng-template>
-    </editable>
+    <ng-template #notEmptyDesc>
+      <editable
+        (save)="saveEdit()"
+        (cancel)="cancelEdit()"
+        openBindingEvent="dblclick"
+        #editableDescription
+      >
+        <ng-template viewMode>
+          <p class="todo__description">{{ todo?.description }}</p>
+        </ng-template>
+
+        <ng-template editMode>
+          <textarea
+            id="textarea-form-control-populated"
+            editableOnEnter
+            editableOnEscape
+            class="form-control"
+            formControlName="description"
+          ></textarea>
+        </ng-template>
+      </editable>
+    </ng-template>
   </div>
 
   <div class="todo__footer">
     <div class="todo__actions">
-      <button class="btn btn--danger btn--sm" (click)="triggerDelete()">
+      <button
+        id="btn-delete"
+        class="btn btn--danger btn--sm"
+        [class.btn--disabled]="todo && todoForm.invalid"
+        (click)="triggerDelete()"
+      >
         <fa-icon [icon]="faTrashCan"></fa-icon>
+      </button>
+
+      <button
+        *ngIf="!todo"
+        id="btn-save"
+        class="btn btn--secondary btn--sm"
+        [class.btn--disabled]="todoForm.invalid"
+        (click)="triggerCreate()"
+      >
+        <fa-icon [icon]="faFloppyDisk"></fa-icon>
+      </button>
+
+      <button
+        id="btn-complete"
+        class="btn btn--sm todo__completed"
+        [class.todo__completed--true]="todo.completed"
+        [class.btn--disabled]="!todo"
+        (click)="triggerToggleComplete()"
+        *ngIf="todo"
+      >
+        <fa-stack>
+          <fa-icon [icon]="faCircleOutline" stackItemSize="2x"></fa-icon>
+          <fa-icon
+            [icon]="faCheck"
+            stackItemSize="1x"
+            *ngIf="todo?.completed"
+          ></fa-icon>
+        </fa-stack>
       </button>
     </div>
   </div>

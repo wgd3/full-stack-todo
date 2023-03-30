@@ -48,6 +48,9 @@ describe('ToDoComponent', () => {
 
     component.todo = todo;
     component.ngOnInit();
+
+    // form will only save if data has changed
+    component.todoForm.markAsDirty();
     component.saveEdit();
   });
 
@@ -88,5 +91,28 @@ describe('ToDoComponent', () => {
     component.todo = todo;
     component.ngOnInit();
     component.triggerDelete();
+  });
+
+  it('should not save an invalid form', () => {
+    const consoleSpy = jest.spyOn(console, 'log');
+    const todo = createMockTodo(mockUser.id);
+    component.todo = todo;
+    component.ngOnInit();
+    component.todoForm.controls.title.setValue('foo');
+    component.saveEdit();
+    expect(consoleSpy).toHaveBeenCalled();
+  });
+
+  it('should trigger a save for a new todo', (done) => {
+    const { title, description } = createMockTodo(mockUser.id);
+    component.ngOnInit();
+    component.todoForm.setValue({ title, description });
+    component.todoForm.markAsDirty();
+    component.createTodo.subscribe((data) => {
+      expect(data.title).toStrictEqual(title);
+      done();
+    });
+
+    component.triggerCreate();
   });
 });
