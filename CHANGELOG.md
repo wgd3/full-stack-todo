@@ -1,3 +1,10 @@
+## [1.4.0](https://github.com/wgd3/full-stack-todo/compare/v1.3.0...v1.4.0) (2023-03-30)
+
+
+### Features
+
+* **client-feature-dashboard:** added ability to create todo from dashboard ([1fb00c9](https://github.com/wgd3/full-stack-todo/commit/1fb00c93e602eb196a707ddfb86b7c48142cdc2e))
+
 ## [1.3.0](https://github.com/wgd3/full-stack-todo/compare/v1.2.0...v1.3.0) (2023-03-28)
 
 
