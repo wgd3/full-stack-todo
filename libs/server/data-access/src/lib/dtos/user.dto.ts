@@ -3,6 +3,7 @@ import {
   IPublicUserData,
   ITodo,
   IUpdateUser,
+  PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
   PASSWORD_MIN_NUMBER,
   PASSWORD_MIN_SYMBOL,
@@ -16,6 +17,7 @@ import {
   IsOptional,
   IsString,
   IsStrongPassword,
+  MaxLength,
 } from 'class-validator';
 import { TodoDto } from './todo.dto';
 
@@ -62,9 +64,10 @@ export class CreateUserDto implements ICreateUser {
       minSymbols: PASSWORD_MIN_SYMBOL,
     },
     {
-      message: `Password is not strong enough. Must contain: 8 characters, 1 number, 1 uppercase letter, 1 symbol`,
+      message: `Password is not strong enough. Must contain: ${PASSWORD_MIN_LENGTH}-${PASSWORD_MAX_LENGTH} characters, 1 number, 1 uppercase letter, 1 symbol`,
     }
   )
+  @MaxLength(PASSWORD_MAX_LENGTH)
   password!: string;
 
   @ApiProperty({

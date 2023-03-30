@@ -78,6 +78,14 @@
         <small
           class="validation-text validation-text--error"
           [class.validation-text--visible]="
+            fPassword.hasError('maxlength') && fPassword.touched
+          "
+          >Password must have a maximum length of
+          {{ passwordReqs.PASSWORD_MAX_LENGTH }} characters</small
+        >
+        <small
+          class="validation-text validation-text--error"
+          [class.validation-text--visible]="
             fPassword.hasError('pattern') && fPassword.touched
           "
           >Password must have at least

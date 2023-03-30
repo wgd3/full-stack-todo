@@ -10,6 +10,7 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '@fst/client/data-access';
 import {
+  PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
   PASSWORD_MIN_NUMBER,
   PASSWORD_MIN_SYMBOL,
@@ -28,7 +29,7 @@ type RegisterFormType = {
 };
 
 const passwordRegexp = new RegExp(
-  /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,}).*/
+  `^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]){${PASSWORD_MIN_LENGTH}, ${PASSWORD_MAX_LENGTH}}$`
 );
 
 @Component({
@@ -43,6 +44,7 @@ export class FeatureRegisterComponent {
   readonly matchingErrorKey = MATCHING_ERROR_KEY;
   readonly passwordReqs = {
     PASSWORD_MIN_LENGTH,
+    PASSWORD_MAX_LENGTH,
     PASSWORD_MIN_NUMBER,
     PASSWORD_MIN_UPPERCASE,
     PASSWORD_MIN_SYMBOL,
@@ -61,6 +63,7 @@ export class FeatureRegisterComponent {
         validators: [
           Validators.required,
           Validators.minLength(PASSWORD_MIN_LENGTH),
+          Validators.maxLength(PASSWORD_MAX_LENGTH),
           Validators.pattern(passwordRegexp),
         ],
       }),
