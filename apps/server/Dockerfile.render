@@ -29,9 +29,9 @@ COPY --chown=node:node . .
 
 RUN apk add --no-cache tree
 
-RUN npx nx run server:build:render && tree -I 'node_modules'
+RUN npx nx run server:build:render && tree -I 'node_modules' dist
 
-COPY ./dist/apps/server/package*.json ./
+COPY ./dist/apps/server/package.json ./package.json
 
 ENV NODE_ENV production
 
