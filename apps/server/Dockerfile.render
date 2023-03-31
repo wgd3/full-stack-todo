@@ -1,14 +1,14 @@
 ######################################################
 # deps image, install all needed packages
 ######################################################
-FROM docker.io/node:lts-alpine AS deps
+FROM docker.io/node:16-alpine AS deps
 
 WORKDIR /app
 
 # copy repository's root package.json
 COPY --chown=node:node package*.json ./
 
-RUN CYPRESS_INSTALL_BINARY=0 npm ci
+RUN CYPRESS_INSTALL_BINARY=0 npm ci --force
 
 COPY --chown=node:node . .
 
@@ -17,7 +17,7 @@ USER node
 ######################################################
 # builder image, build application
 ######################################################
-FROM docker.io/node:lts-alpine AS builder
+FROM docker.io/node:16-alpine AS builder
 
 WORKDIR /app
 
@@ -27,7 +27,9 @@ COPY --chown=node:node --from=deps /app/node_modules ./node_modules
 
 COPY --chown=node:node . .
 
-RUN npx nx run server:build:render 
+RUN apk add --no-cache tree
+
+RUN npx nx run server:build:render && tree -I 'node_modules'
 
 COPY ./dist/apps/server/package*.json ./
 
@@ -44,7 +46,7 @@ USER node
 ##################################
 # final prod image
 ##################################
-FROM docker.io/node:lts-alpine AS production
+FROM docker.io/node:16-alpine AS production
 
 LABEL org.opencontainers.image.title="full-stack-todo nestjs server"
 LABEL org.opencontainers.image.url="https://github.com/wgd3/full-stack-todo"
