@@ -1,3 +1,16 @@
+## [1.4.2](https://github.com/wgd3/full-stack-todo/compare/v1.4.1...v1.4.2) (2023-03-31)
+
+
+### Bug Fixes
+
+* **client-feature-register:** fixed password regex ([9c7c878](https://github.com/wgd3/full-stack-todo/commit/9c7c878f2d4c08509d143a5ded0d4e1426570611))
+
+
+### Other
+
+* debugging render dockerfile [skip ci] ([7357e03](https://github.com/wgd3/full-stack-todo/commit/7357e03650eefecdb7ca6ab8e6026889eb1000bd))
+* fixed deployment issues for render dockerfiles ([6597dbf](https://github.com/wgd3/full-stack-todo/commit/6597dbfee37843ad124796c57598dd02ffcb5ed3))
+
 ## [1.4.1](https://github.com/wgd3/full-stack-todo/compare/v1.4.0...v1.4.1) (2023-03-31)
 
 
