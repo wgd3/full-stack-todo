@@ -1,3 +1,16 @@
+## [1.4.1](https://github.com/wgd3/full-stack-todo/compare/v1.4.0...v1.4.1) (2023-03-31)
+
+
+### Bug Fixes
+
+* **client-feature-register:** updated regex and parameterized password max length ([ffbe3c6](https://github.com/wgd3/full-stack-todo/commit/ffbe3c61e69c5d3b1bf0cb27461147fb41b9c097)), closes [#6](https://github.com/wgd3/full-stack-todo/issues/6)
+
+
+### Other
+
+* updated dockerfiles for server ([2cd1acb](https://github.com/wgd3/full-stack-todo/commit/2cd1acbcf84176c47649c88749a21fbf5c92621c))
+* updated README [ci skip] ([7d7764a](https://github.com/wgd3/full-stack-todo/commit/7d7764a74f1d80f18df6447fbba0f8af18c58420))
+
 ## [1.4.0](https://github.com/wgd3/full-stack-todo/compare/v1.3.0...v1.4.0) (2023-03-30)
 
 
