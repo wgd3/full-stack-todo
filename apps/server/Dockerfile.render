@@ -1,56 +1,89 @@
-FROM node:latest AS build-stage
+######################################################
+# deps image, install all needed packages
+######################################################
+FROM docker.io/node:lts-alpine AS deps
 
 WORKDIR /app
 
-COPY package*.json /app/
+# copy repository's root package.json
+COPY --chown=node:node package*.json ./
 
-RUN npm install --ci
+RUN CYPRESS_INSTALL_BINARY=0 npm ci
 
-COPY ./ /app/
+COPY --chown=node:node . .
+
+USER node
+
+######################################################
+# builder image, build application
+######################################################
+FROM docker.io/node:lts-alpine AS builder
+
+WORKDIR /app
+
+COPY --chown=node:node package*.json ./
+
+COPY --chown=node:node --from=deps /app/node_modules ./node_modules
+
+COPY --chown=node:node . .
 
 RUN npx nx run server:build:render 
 
-FROM docker.io/node:lts-alpine
+COPY ./dist/apps/server/package*.json ./
 
-ENV HOST=0.0.0.0
-ENV PORT=3333
+ENV NODE_ENV production
+
+# install packages from the package.json generated during build
+RUN npm i 
+
+# install packages not normally detected at app build time
+RUN npm install reflect-metadata tslib rxjs sqlite3 mysql2 pg
+
+USER node
+
+##################################
+# final prod image
+##################################
+FROM docker.io/node:lts-alpine AS production
+
+LABEL org.opencontainers.image.title="full-stack-todo nestjs server"
+LABEL org.opencontainers.image.url="https://github.com/wgd3/full-stack-todo"
+LABEL org.opencontainers.image.source=https://github.com/wgd3/full-stack-todo
+LABEL org.opencontainers.image.description="NestJS REST API for the Full Stack To-Do demo application"
+LABEL org.opencontainers.image.licenses=MIT
+
+RUN apk add --no-cache dumb-init libc6-compat
 
 ARG DB_HOST
 ARG DB_PORT
 ARG DB_USERNAME
 ARG DB_PASSWORD
 ARG DB_NAME
-ARG DB_TYPE=postgres
+ARG DB_TYPE=sqlite
+ARG DB_PATH=fst.sqlite
 ARG ENV=render
+ARG JWT_SECRET
 
+ENV HOST=0.0.0.0
+ENV PORT=3333
 ENV DATABASE_HOST=${DB_HOST}
 ENV DATABASE_PORT=${DB_PORT}
 ENV DATABASE_USERNAME=${DB_USERNAME}
 ENV DATABASE_PASSWORD=${DB_PASSWORD}
 ENV DATABASE_NAME=${DB_NAME}
 ENV DATABASE_TYPE=${DB_TYPE}
+ENV DATABASE_PATH=${DB_PATH}
 ENV ENVIRONMENT=${ENV}
+ENV NODE_ENV production
+ENV JWT_SECRET=${JWT_SECRET}
 
 EXPOSE ${PORT}
 
-RUN addgroup --system server && \
-    adduser --system -G server server
-
-USER server
-
 WORKDIR /app
 
-COPY --from=build-stage /app/dist/apps/server /app
-RUN chown -R server:server .
+COPY --chown=node:node --from=builder /app/node_modules ./node_modules
 
-# install extracted packages from build
-RUN npm i --ci --omit=dev
+COPY --chown=node:node --from=builder /app/dist/apps/server ./server
 
-# install extra stuff
-RUN npm install reflect-metadata tslib rxjs sqlite3 mysql2 pg
 
-# You can remove this install step if you build with `--bundle` option.
-# The bundled output will include external dependencies.
-# RUN npm --prefix server --omit=dev -f install
-
-CMD [ "node", "main.js" ]
+CMD [ "dumb-init", "node", "server/main.js" ]

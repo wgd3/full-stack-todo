@@ -42,7 +42,7 @@ This repository contains the code base that corresponds to a series of blog post
 
 ## Demo
 
-As part of the [Deployment Blog Post](https://thefullstack.engineer/full-stack-development-series-part-6-application-deployment-and-ci-cd/) I added a small overview on deploying this application stack to Render.io. Both the UI and the REST API docs can be found here:
+As part of the [Deployment Blog Post](https://thefullstack.engineer/full-stack-development-series-part-6-application-deployment-and-ci-cd/) I added a small overview on deploying this application stack to Render. Both the UI and the REST API docs can be found here:
 
 | Application |                                             |
 | ----------- | ------------------------------------------- |
