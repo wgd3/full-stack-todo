@@ -1,76 +1,65 @@
 ## [1.4.2](https://github.com/wgd3/full-stack-todo/compare/v1.4.1...v1.4.2) (2023-03-31)
 
-
 ### Bug Fixes
 
-* **client-feature-register:** fixed password regex ([9c7c878](https://github.com/wgd3/full-stack-todo/commit/9c7c878f2d4c08509d143a5ded0d4e1426570611))
-
+- **client-feature-register:** fixed password regex ([9c7c878](https://github.com/wgd3/full-stack-todo/commit/9c7c878f2d4c08509d143a5ded0d4e1426570611))
 
 ### Other
 
-* debugging render dockerfile [skip ci] ([7357e03](https://github.com/wgd3/full-stack-todo/commit/7357e03650eefecdb7ca6ab8e6026889eb1000bd))
-* fixed deployment issues for render dockerfiles ([6597dbf](https://github.com/wgd3/full-stack-todo/commit/6597dbfee37843ad124796c57598dd02ffcb5ed3))
+- debugging render dockerfile [skip ci] ([7357e03](https://github.com/wgd3/full-stack-todo/commit/7357e03650eefecdb7ca6ab8e6026889eb1000bd))
+- fixed deployment issues for render dockerfiles ([6597dbf](https://github.com/wgd3/full-stack-todo/commit/6597dbfee37843ad124796c57598dd02ffcb5ed3))
 
 ## [1.4.1](https://github.com/wgd3/full-stack-todo/compare/v1.4.0...v1.4.1) (2023-03-31)
 
-
 ### Bug Fixes
 
-* **client-feature-register:** updated regex and parameterized password max length ([ffbe3c6](https://github.com/wgd3/full-stack-todo/commit/ffbe3c61e69c5d3b1bf0cb27461147fb41b9c097)), closes [#6](https://github.com/wgd3/full-stack-todo/issues/6)
-
+- **client-feature-register:** updated regex and parameterized password max length ([ffbe3c6](https://github.com/wgd3/full-stack-todo/commit/ffbe3c61e69c5d3b1bf0cb27461147fb41b9c097)), closes [#6](https://github.com/wgd3/full-stack-todo/issues/6)
 
 ### Other
 
-* updated dockerfiles for server ([2cd1acb](https://github.com/wgd3/full-stack-todo/commit/2cd1acbcf84176c47649c88749a21fbf5c92621c))
-* updated README [ci skip] ([7d7764a](https://github.com/wgd3/full-stack-todo/commit/7d7764a74f1d80f18df6447fbba0f8af18c58420))
+- updated dockerfiles for server ([2cd1acb](https://github.com/wgd3/full-stack-todo/commit/2cd1acbcf84176c47649c88749a21fbf5c92621c))
+- updated README [ci skip] ([7d7764a](https://github.com/wgd3/full-stack-todo/commit/7d7764a74f1d80f18df6447fbba0f8af18c58420))
 
 ## [1.4.0](https://github.com/wgd3/full-stack-todo/compare/v1.3.0...v1.4.0) (2023-03-30)
 
-
 ### Features
 
-* **client-feature-dashboard:** added ability to create todo from dashboard ([1fb00c9](https://github.com/wgd3/full-stack-todo/commit/1fb00c93e602eb196a707ddfb86b7c48142cdc2e))
+- **client-feature-dashboard:** added ability to create todo from dashboard ([1fb00c9](https://github.com/wgd3/full-stack-todo/commit/1fb00c93e602eb196a707ddfb86b7c48142cdc2e))
 
 ## [1.3.0](https://github.com/wgd3/full-stack-todo/compare/v1.2.0...v1.3.0) (2023-03-28)
 
-
 ### Features
 
-* **client:** added log-in link to banner when signed out ([40e4520](https://github.com/wgd3/full-stack-todo/commit/40e45203dd82d2f318c089d1f38a948a131ba44d))
-* **shared-domain:** added shared password requirement settings ([d05e57d](https://github.com/wgd3/full-stack-todo/commit/d05e57d9047e5c8f4a7bf321fd9ce332ce22e435))
-
+- **client:** added log-in link to banner when signed out ([40e4520](https://github.com/wgd3/full-stack-todo/commit/40e45203dd82d2f318c089d1f38a948a131ba44d))
+- **shared-domain:** added shared password requirement settings ([d05e57d](https://github.com/wgd3/full-stack-todo/commit/d05e57d9047e5c8f4a7bf321fd9ce332ce22e435))
 
 ### Other
 
-* updated trigger for new tags [ci skip] ([f58021f](https://github.com/wgd3/full-stack-todo/commit/f58021f47f66653c2010b33b021e7831a2660e81))
+- updated trigger for new tags [ci skip] ([f58021f](https://github.com/wgd3/full-stack-todo/commit/f58021f47f66653c2010b33b021e7831a2660e81))
 
 ## [1.2.0](https://github.com/wgd3/full-stack-todo/compare/v1.1.0...v1.2.0) (2023-03-28)
 
-
 ### Features
 
-* added user registration/JWT support in UI ([3542be6](https://github.com/wgd3/full-stack-todo/commit/3542be6bd3f9024636eafa387d11e56d4340415c))
-
+- added user registration/JWT support in UI ([3542be6](https://github.com/wgd3/full-stack-todo/commit/3542be6bd3f9024636eafa387d11e56d4340415c))
 
 ### Other
 
-* added nx cloud support to main CI workflow ([93964e8](https://github.com/wgd3/full-stack-todo/commit/93964e8b7a083960d690a05fb02bf2303735dfbd))
-* removed format check from main CI workflow ([ba54248](https://github.com/wgd3/full-stack-todo/commit/ba542484ab857d4e4fcb20994a6fa8a7501f344b))
+- added nx cloud support to main CI workflow ([93964e8](https://github.com/wgd3/full-stack-todo/commit/93964e8b7a083960d690a05fb02bf2303735dfbd))
+- removed format check from main CI workflow ([ba54248](https://github.com/wgd3/full-stack-todo/commit/ba542484ab857d4e4fcb20994a6fa8a7501f344b))
 
 ## [1.1.0](https://github.com/wgd3/full-stack-todo/compare/v1.0.1...v1.1.0) (2023-03-26)
 
-
 ### Features
 
-* added user auth for part 8 ([6718566](https://github.com/wgd3/full-stack-todo/commit/6718566689b19e1e1ff233fe7e005239b2fa55bb))
-
+- added user auth for part 8 ([6718566](https://github.com/wgd3/full-stack-todo/commit/6718566689b19e1e1ff233fe7e005239b2fa55bb))
 
 ### Other
 
-* changed release commit message [skip ci] ([f3c6c3e](https://github.com/wgd3/full-stack-todo/commit/f3c6c3e18c77300027631cd938a5cc47c1702e06))
-* changing conditional syntax for main CI workflow ([1a735de](https://github.com/wgd3/full-stack-todo/commit/1a735de20003551e469eb8339d26d8dce15a7aba))
-* fixed regex in release job ([e519c98](https://github.com/wgd3/full-stack-todo/commit/e519c98d8b9ca851d6da23d975597d3ab9c4937c))
-* more syntax changes ([eb6d3ed](https://github.com/wgd3/full-stack-todo/commit/eb6d3ed919319903392c6ee1a8204d20ea64e73a))
+- changed release commit message [skip ci] ([f3c6c3e](https://github.com/wgd3/full-stack-todo/commit/f3c6c3e18c77300027631cd938a5cc47c1702e06))
+- changing conditional syntax for main CI workflow ([1a735de](https://github.com/wgd3/full-stack-todo/commit/1a735de20003551e469eb8339d26d8dce15a7aba))
+- fixed regex in release job ([e519c98](https://github.com/wgd3/full-stack-todo/commit/e519c98d8b9ca851d6da23d975597d3ab9c4937c))
+- more syntax changes ([eb6d3ed](https://github.com/wgd3/full-stack-todo/commit/eb6d3ed919319903392c6ee1a8204d20ea64e73a))
 
 ## [1.0.1](https://github.com/wgd3/full-stack-todo/compare/v1.0.0...v1.0.1) (2023-03-21)
 

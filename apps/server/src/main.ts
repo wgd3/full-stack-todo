@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import { CONFIG_PORT } from '@fst/server/util';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
@@ -23,7 +24,7 @@ async function bootstrap() {
     })
   );
   const configService = app.get(ConfigService);
-  const port = configService.get('PORT') || 3333;
+  const port = configService.get(CONFIG_PORT);
 
   // set up versioning
   app.enableVersioning({

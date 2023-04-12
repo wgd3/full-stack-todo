@@ -128,7 +128,7 @@ export class ServerFeatureTodoService {
       relations: ['user'],
     });
 
-    // todo with requested UUID exists, but belongs to another user
+    // requested UUID exists, but belongs to another user
     if (existingTodo && existingTodo.user?.id !== userId) {
       // 404 isn't the right exception, as by definition any UPSERT operation
       // should create an entity when it's missing
