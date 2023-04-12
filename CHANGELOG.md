@@ -1,3 +1,10 @@
+## [1.5.0](https://github.com/wgd3/full-stack-todo/compare/v1.4.2...v1.5.0) (2023-04-12)
+
+
+### Features
+
+* **server:** refactored most config-related code to individual files ([61add6e](https://github.com/wgd3/full-stack-todo/commit/61add6e0dd8c1bec4be1542132059b1b33a40e69))
+
 ## [1.4.2](https://github.com/wgd3/full-stack-todo/compare/v1.4.1...v1.4.2) (2023-03-31)
 
 ### Bug Fixes
