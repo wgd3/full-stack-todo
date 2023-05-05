@@ -1,0 +1,61 @@
+---
+# Area
+- name: area/apps
+  color: '72ccf3'
+  description: >-
+    Changes made in the apps directory
+- name: area/libs
+  color: '72ccf3'
+  description: >-
+    Changes made in the libs directory
+- name: area/k8s
+  color: '72ccf3'
+  description: >-
+    Changes made in the kubernetes directory
+# Scopes
+- name: scope/server
+  color: '44b87c'
+- name: scope/client
+  color: '44b87c'
+- name: scope/shared
+  color: '44b87c'
+# Library Type
+- name: type/feature
+  color: '6344b8'
+- name: type/data-access
+  color: '6344b8'
+- name: type/util
+  color: '6344b8'
+- name: type/domain
+  color: '6344b8'
+- name: type/ui
+  color: '6344b8'
+# Renovate
+- name: renovate/github-action
+  color: 'ffc300'
+- name: renovate/github-release
+  color: 'ffc300'
+# Semantic Type
+- name: type/patch
+  color: 'FFEC19'
+- name: type/minor
+  color: 'FF9800'
+- name: type/major
+  color: 'F6412D'
+- name: type/break
+  color: 'F6412D'
+# Uncategorized
+- name: bug
+  color: 'ee0701'
+- name: do-not-merge
+  color: 'ee0701'
+- name: docs
+  color: 'F4D1B7'
+- name: enhancement
+  color: '84b6eb'
+- name: broken-links
+  color: '7B55D7'
+- name: question
+  color: 'cc317c'
+- name: community
+  color: '0e8a16'
