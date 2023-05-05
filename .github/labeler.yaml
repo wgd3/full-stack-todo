@@ -1,0 +1,27 @@
+---
+area/apps:
+  - 'apps/**/*'
+area/libs:
+  - 'libs/**/*'
+area/k8s:
+  - 'k8s/**/*'
+scope/server:
+  - apps/server/**/*
+  - apps/server-e2e/**/*
+  - libs/server/**/*
+scope/client:
+  - apps/client/**/*
+  - apps/client-e2e/**/*
+  - libs/client/**/*
+scope/shared:
+  - libs/shared/**/*
+type/feature:
+  - libs/**/feature-*/*
+type/data-access:
+  - libs/**/data-access-*/*
+type/util:
+  - libs/**/util*/*
+type/domain:
+  - libs/**/domain*/*
+type/ui:
+  - libs/**/ui-*/*
