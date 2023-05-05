@@ -110,7 +110,7 @@
     "jest-environment-jsdom": "29.4.3",
     "jest-environment-node": "^29.4.1",
     "jest-mock": "^29.5.0",
-    "jest-preset-angular": "13.0.0",
+    "jest-preset-angular": "13.0.1",
     "lint-staged": "^13.2.0",
     "nx": "15.8.7",
     "nx-stylelint": "^15.0.0",
