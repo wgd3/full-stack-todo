@@ -89,7 +89,7 @@
     "@storybook/angular": "^7.0.0-rc.5",
     "@storybook/core-common": "^6.5.15",
     "@storybook/core-server": "^7.0.0-rc.5",
-    "@storybook/test-runner": "^0.7.2",
+    "@storybook/test-runner": "^0.10.0",
     "@types/bcrypt": "^5.0.0",
     "@types/jest": "29.4.0",
     "@types/node": "18.7.1",
