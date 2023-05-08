@@ -3,7 +3,9 @@
     <span class="header__title">Full Stack To-Do</span>
   </div>
   <div class="header__navigation">
-    <a href="#" class="nav-link" [routerLink]="['/']">Home</a>
+    <a href="#" class="nav-link" [routerLink]="['/']"
+      >Home ({{ incompleteTodoCount$ | async }})</a
+    >
   </div>
   <div class="header__actions">
     <ng-container *ngIf="user$ | async as user; else login">
