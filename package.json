@@ -95,7 +95,7 @@
     "cypress": "12.11.0",
     "cz-conventional-changelog": "^3.3.0",
     "cz-customizable": "^7.0.0",
-    "eslint": "~8.15.0",
+    "eslint": "~8.40.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-cypress": "^2.10.3",
     "eslint-plugin-storybook": "^0.6.12",
