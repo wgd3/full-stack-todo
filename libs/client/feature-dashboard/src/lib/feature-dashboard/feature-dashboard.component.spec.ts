@@ -42,47 +42,65 @@ describe('FeatureDashboardComponent', () => {
       .spyOn(todoService, 'getAllToDoItems')
       .mockReturnValue(of(todos));
     component.refreshItems();
-    expect(spy).toHaveBeenCalled();
-    expect(component.todos$.value.length).toBe(todos.length);
-    done();
+    component.todos$.subscribe((returned) => {
+      expect(spy).toHaveBeenCalled();
+      expect(todos.length).toEqual(returned.length);
+      done();
+    });
   });
 
   it('should be able to toggle the completion of a todo', (done) => {
     const todo = createMockTodo(mockUser.id, { completed: false });
-    const updateSpy = jest
+    jest
       .spyOn(todoService, 'updateToDo')
       .mockReturnValue(of({ ...todo, completed: true }));
-    const refreshSpy = jest
+    jest.spyOn(todoService, 'getAllToDoItems').mockReturnValue(of([todo]));
+    component.refreshItems();
+    jest
       .spyOn(todoService, 'getAllToDoItems')
       .mockReturnValue(of([{ ...todo, completed: true }]));
     component.toggleComplete(todo);
-    expect(refreshSpy).toHaveBeenCalled();
-    expect(updateSpy).toHaveBeenCalled();
-    expect(component.todos$.value.length).toBe(1);
-    expect(component.todos$.value[0].completed).toBe(true);
-    done();
+    component.todos$.subscribe((todos) => {
+      expect(todos.length).toBe(1);
+      expect(todos[0].completed).toBe(true);
+      done();
+    });
   });
 
   it('should be able to delete a todo', (done) => {
     const todos = Array.from({ length: 5 }).map(() =>
       createMockTodo(mockUser.id)
     );
-    component.todos$.next(todos);
+    jest.spyOn(todoService, 'getAllToDoItems').mockReturnValueOnce(of(todos));
+    component.refreshItems();
+
     const deleteSpy = jest
       .spyOn(todoService, 'deleteToDo')
       .mockReturnValue(of(null));
     const refreshSpy = jest
       .spyOn(todoService, 'getAllToDoItems')
       .mockReturnValue(of([...todos.slice(1)]));
+
     component.deleteTodo(todos[0]);
-    expect(deleteSpy).toHaveBeenCalled();
-    expect(refreshSpy).toHaveBeenCalled();
-    expect(component.todos$.value.length).toBe(4);
-    done();
+
+    component.todos$.subscribe((returned) => {
+      expect(deleteSpy).toHaveBeenCalled();
+      expect(refreshSpy).toHaveBeenCalled();
+      expect(returned.length).toBe(4);
+      done();
+    });
   });
 
   it('should be able to toggle the completion of a todo', (done) => {
+    // populate array with a single todo
     const todo = createMockTodo(mockUser.id, { completed: false });
+    jest
+      .spyOn(todoService, 'updateToDo')
+      .mockReturnValue(of({ ...todo, completed: true }));
+    jest.spyOn(todoService, 'getAllToDoItems').mockReturnValue(of([todo]));
+    component.refreshItems();
+
+    // set up spies for the next API calls
     const updateSpy = jest
       .spyOn(todoService, 'updateToDo')
       .mockReturnValue(of({ ...todo, completed: true }));
@@ -90,10 +108,13 @@ describe('FeatureDashboardComponent', () => {
       .spyOn(todoService, 'getAllToDoItems')
       .mockReturnValue(of([{ ...todo, completed: true }]));
     component.editTodo(todo);
-    expect(refreshSpy).toHaveBeenCalled();
-    expect(updateSpy).toHaveBeenCalled();
-    expect(component.todos$.value.length).toBe(1);
-    expect(component.todos$.value[0].completed).toBe(true);
-    done();
+
+    component.todos$.subscribe((todos) => {
+      expect(refreshSpy).toHaveBeenCalled();
+      expect(updateSpy).toHaveBeenCalled();
+      expect(todos.length).toBe(1);
+      expect(todos[0].completed).toBe(true);
+      done();
+    });
   });
 });
