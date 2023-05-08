@@ -1,5 +1,5 @@
 {
-  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  $schema: 'https: //docs.renovatebot.com/renovate-schema.json',
   extends: [
     'config:base',
     'docker:enableMajor',
@@ -10,6 +10,11 @@
     ':automergeDigest',
     ':automergeBranch',
     'helpers:pinGitHubActionDigests',
+    'monorepo:nrwl',
+    'monorepo:nest',
+    'monorepo:angular',
+    'group:fortawesome',
+    'group:monorepos',
   ],
   dependencyDashboard: true,
   dependencyDashboardTitle: 'Renovate Dashboard 🤖',
@@ -19,21 +24,5 @@
   'pre-commit': {
     enabled: true,
   },
-  'helm-values': {
-    fileMatch: ['k3s_v2/.+\\.ya?ml$'],
-  },
-  kubernetes: {
-    fileMatch: ['ansible/.+\\.ya?ml.j2$', 'k3s_v2/.+\\.ya?ml$'],
-  },
-  regexManagers: [
-    {
-      description: 'Process various other dependencies',
-      fileMatch: ['ansible/.+\\.ya?ml$', 'k3s_v2/.+\\.ya?ml$'],
-      matchStrings: [
-        'datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\n.*?"(?<currentValue>.*)"\n',
-      ],
-      datasourceTemplate: '{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}',
-      versioningTemplate: '{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}',
-    },
-  ],
+  regexManagers: [],
 }

@@ -25,3 +25,7 @@ type/domain:
   - libs/**/domain*/*
 type/ui:
   - libs/**/ui-*/*
+dep-updates:
+  - package.json
+  - package-lock.json
+  - .nvmrc
