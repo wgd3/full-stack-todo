@@ -60,6 +60,9 @@ services:
       - POSTGRES_USER=${DATABASE_USERNAME}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - POSTGRES_DB=${DATABASE_NAME}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./tmp/pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ['CMD-SHELL', "su -c 'pg_isready -U postgres' postgres"]
       interval: 30s
