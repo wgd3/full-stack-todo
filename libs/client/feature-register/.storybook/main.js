@@ -5,8 +5,10 @@ const config = {
     name: '@storybook/angular',
     options: {},
   },
+  docs: {
+    autodocs: true,
+  },
 };
-
 export default config;
 
 // To customize your webpack configuration you can use the webpackFinal field.
