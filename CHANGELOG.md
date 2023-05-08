@@ -1,3 +1,19 @@
+## [1.5.2](https://github.com/wgd3/full-stack-todo/compare/v1.5.1...v1.5.2) (2023-05-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency axios to v1.4.0 ([#30](https://github.com/wgd3/full-stack-todo/issues/30)) ([d4a42d5](https://github.com/wgd3/full-stack-todo/commit/d4a42d5671ad6ba9df80cdc5910fdbb76a4cdfd3))
+* **deps:** update dependency rxjs to ~7.8.0 ([#38](https://github.com/wgd3/full-stack-todo/issues/38)) ([4bc42f5](https://github.com/wgd3/full-stack-todo/commit/4bc42f5545d065fd357e4d9a226a45204d0110d7))
+
+
+### Other
+
+* **deps:** update dependency husky to v8 ([#32](https://github.com/wgd3/full-stack-todo/issues/32)) ([1e2c6ec](https://github.com/wgd3/full-stack-todo/commit/1e2c6ec7e2a1a3c5512b0c4afb4fbf6d8e77091f))
+* **deps:** update dependency stylelint-config-standard to v33 ([#33](https://github.com/wgd3/full-stack-todo/issues/33)) ([9729c22](https://github.com/wgd3/full-stack-todo/commit/9729c22ddd11f11e83da8ad5b6f71f086c35d5db))
+* **deps:** update dependency stylelint-config-standard to v33 ([#33](https://github.com/wgd3/full-stack-todo/issues/33)) ([d7a1303](https://github.com/wgd3/full-stack-todo/commit/d7a130360b9c7be6b06e24690a756782c0588d83))
+* **deps:** update dependency stylelint-config-standard to v33 ([#33](https://github.com/wgd3/full-stack-todo/issues/33)) ([9cfa3e7](https://github.com/wgd3/full-stack-todo/commit/9cfa3e78787473bf33de6070bc81cdaef27f7eef))
+
 ## [1.5.1](https://github.com/wgd3/full-stack-todo/compare/v1.5.0...v1.5.1) (2023-05-08)
 
 
