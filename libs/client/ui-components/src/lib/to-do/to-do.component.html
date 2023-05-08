@@ -14,7 +14,7 @@
         (cancel)="cancelEdit()"
         openBindingEvent="dblclick"
         #editableTitle
-        style="flex: 1"
+        style="flex: 1; display: flex"
       >
         <ng-template viewMode
           ><h3 class="todo__title">{{ todo?.title }}</h3></ng-template
@@ -49,7 +49,7 @@
         #editableDescription
       >
         <ng-template viewMode>
-          <p class="todo__description">{{ todo?.description }}</p>
+          <p class="todo__description truncate">{{ todo?.description }}</p>
         </ng-template>
 
         <ng-template editMode>

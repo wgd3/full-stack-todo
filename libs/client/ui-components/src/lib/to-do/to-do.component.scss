@@ -1,0 +1,62 @@
+/**
+This code was copy/pasted from https://css-tricks.com/line-clampin/
+*/
+
+.truncate {
+  display: -webkit-box;
+  -webkit-line-clamp: var(--line-clamp, 3);
+  -webkit-box-orient: vertical;
+  word-break: var(--word-break, 'none');
+  overflow: hidden;
+  hyphens: auto;
+  text-align: var(--align, left);
+
+  // Automatically use "word-break: break-all" for single-lines
+  // (https://css-tricks.com/css-switch-case-conditions)
+  --is-single-line: 1 - Clamp(0, Calc(var(--line-clamp) - 1), var(--line-clamp));
+  --delay: Calc(-1s * (var(--is-single-line, 1) - 1));
+  animation: states 1s var(--delay) paused;
+
+  @keyframes states {
+    0% {
+      word-break: break-all;
+    }
+  }
+}
+
+.truncate {
+  font-size: var(--font-size, 1em);
+  //   width: var(--width, 50%);
+  //   text-shadow: 1px 3px 0 rgba(black, 0.3);
+  position: relative;
+  background: inherit;
+
+  &:hover {
+    outline: 2px dotted #ffffff99;
+  }
+
+  // fade text's last word, if clamped ()
+  &::after {
+    content: '';
+    width: 0;
+    height: 2ch;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    //background: linear-gradient(90deg, transparent, var(--bg));
+    background: inherit; // it's easier to work with inheritance
+    mask-image: linear-gradient(to left, black, transparent);
+    transition: 0.2s;
+  }
+
+  &.clamped {
+    &::after {
+      width: 3em;
+    }
+  }
+
+  > span {
+    text-decoration: underline;
+  }
+}

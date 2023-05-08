@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EditableModule } from '@ngneat/edit-in-place';
-import { randBoolean, randProduct } from '@ngneat/falso';
+import { randBoolean, randProduct, randText } from '@ngneat/falso';
 import {
-  componentWrapperDecorator,
   Meta,
+  componentWrapperDecorator,
   moduleMetadata,
 } from '@storybook/angular';
 import { ToDoComponent } from './to-do.component';
@@ -69,5 +69,29 @@ export const NoInput = {
   }),
   args: {
     todo: undefined,
+  },
+};
+
+export const LongDescription = {
+  render: (args: ToDoComponent) => ({
+    props: args,
+  }),
+  args: {
+    todo: {
+      ...randTodo(),
+      description: randText({ charCount: 350 }),
+    },
+  },
+};
+
+export const LongTitle = {
+  render: (args: ToDoComponent) => ({
+    props: args,
+  }),
+  args: {
+    todo: {
+      ...randTodo(),
+      title: randText({ charCount: 100 }),
+    },
   },
 };

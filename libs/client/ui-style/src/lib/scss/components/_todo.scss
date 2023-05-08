@@ -19,8 +19,14 @@ $todo-border-radius: 8px;
   justify-content: flex-start;
 
   .todo__title {
+    flex: 1;
+    width: 0;
     margin-block-end: 0;
     font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 2.2rem; // 2x the line height of <h3>
   }
 }
 
@@ -28,6 +34,8 @@ $todo-border-radius: 8px;
   p {
     margin: 0;
     overflow-y: scroll;
+
+    // max-height: calc(3 * $line-height-base);
   }
 }
 
