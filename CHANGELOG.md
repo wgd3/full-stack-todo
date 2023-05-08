@@ -1,3 +1,28 @@
+## [1.5.1](https://github.com/wgd3/full-stack-todo/compare/v1.5.0...v1.5.1) (2023-05-08)
+
+
+### Other
+
+* **deps:** update angular-cli monorepo to v15.2.8 ([#9](https://github.com/wgd3/full-stack-todo/issues/9)) ([81ef52d](https://github.com/wgd3/full-stack-todo/commit/81ef52d1c4ea29e98bbcfdc3eea4d2c9f53b9a16))
+* **deps:** update dependency @types/jest to v29.5.1 ([#21](https://github.com/wgd3/full-stack-todo/issues/21)) ([688b12a](https://github.com/wgd3/full-stack-todo/commit/688b12ad841533673fef46c9e8f5871b6e4e30af))
+* **deps:** update dependency @types/node to v18.16.5 ([#16](https://github.com/wgd3/full-stack-todo/issues/16)) ([5158fe8](https://github.com/wgd3/full-stack-todo/commit/5158fe8edad93e9afedae40f7ff0accfb1670369))
+* **deps:** update dependency eslint to ~8.40.0 ([#17](https://github.com/wgd3/full-stack-todo/issues/17)) ([60804fd](https://github.com/wgd3/full-stack-todo/commit/60804fdc622ccbaf41fb5b20c7ac5385024cc5f1))
+* **deps:** update dependency eslint-config-prettier to v8.8.0 ([#18](https://github.com/wgd3/full-stack-todo/issues/18)) ([88f835a](https://github.com/wgd3/full-stack-todo/commit/88f835ae088e1bacc86a682b4ccde6093ef2df41))
+* **deps:** update dependency eslint-plugin-cypress to v2.13.3 ([#27](https://github.com/wgd3/full-stack-todo/issues/27)) ([e3e4ec5](https://github.com/wgd3/full-stack-todo/commit/e3e4ec55da021c4bdd2cb0ac7f66b79ff2879fe8))
+* **deps:** update dependency jest-preset-angular to v13.0.1 ([#10](https://github.com/wgd3/full-stack-todo/issues/10)) ([833ee7c](https://github.com/wgd3/full-stack-todo/commit/833ee7c71e3e72237dfd92cc3256308a54bbbdaa))
+* **deps:** update dependency prettier to v2.8.8 ([#26](https://github.com/wgd3/full-stack-todo/issues/26)) ([a8c5d3b](https://github.com/wgd3/full-stack-todo/commit/a8c5d3bb10c77d708a2d06bda066ac5693548d26))
+* **deps:** update dependency stylelint to v15.6.1 ([#28](https://github.com/wgd3/full-stack-todo/issues/28)) ([395dfcc](https://github.com/wgd3/full-stack-todo/commit/395dfccd25197aa8cbf9d6deaa52654e13365c65))
+* **deps:** update nrwl/ci action to v0.13.0 ([#24](https://github.com/wgd3/full-stack-todo/issues/24)) ([e0e6c04](https://github.com/wgd3/full-stack-todo/commit/e0e6c04aa2f1f18173a5c7bb8449b4042da04b0a))
+* **deps:** update swaggerapi/swagger-ui docker tag to v3.52.5 ([#25](https://github.com/wgd3/full-stack-todo/issues/25)) ([06315e1](https://github.com/wgd3/full-stack-todo/commit/06315e16873616aa6cda63b113bb673380782bb9))
+* **repo:** updated fortawesome and commitlint deps ([1e0bd0f](https://github.com/wgd3/full-stack-todo/commit/1e0bd0f510faf6b249a503be36949d784e0b7ada))
+* **repo:** updated labeler and renovate configs ([a1577fd](https://github.com/wgd3/full-stack-todo/commit/a1577fd6f2bd7e0f01ce6b05fd949279d7176b1d))
+* **repo:** upgraded nx, angular, and other deps ([7ee8ce4](https://github.com/wgd3/full-stack-todo/commit/7ee8ce4d60e437a80328eb41dbbb67a48684f7c2))
+
+
+### Style
+
+* **client-ui-components:** fixed text overflow for title and description ([7278d75](https://github.com/wgd3/full-stack-todo/commit/7278d75243384ff2ba81ac3ab7134b44b00a4967))
+
 ## [1.5.0](https://github.com/wgd3/full-stack-todo/compare/v1.4.2...v1.5.0) (2023-04-12)
 
 
