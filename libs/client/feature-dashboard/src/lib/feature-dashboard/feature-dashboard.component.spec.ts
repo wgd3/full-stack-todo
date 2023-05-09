@@ -1,10 +1,11 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TodoService } from '@fst/client/data-access';
+import { TODO_FACADE_PROVIDER, TodoService } from '@fst/client/data-access';
 import { createMockTodo, createMockUser } from '@fst/shared/util-testing';
 import { of } from 'rxjs';
 
 import { fromTodos, todoEffects } from '@fst/client/state/ngrx';
+import { TodoNgRxFacade } from '@fst/client/state/ngrx/todo.facade';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { FeatureDashboardComponent } from './feature-dashboard.component';
@@ -26,7 +27,13 @@ describe('FeatureDashboardComponent', () => {
         StoreModule.forRoot({ [TODOS_FEATURE_KEY]: todosReducer }),
         EffectsModule.forRoot(todoEffects),
       ],
-      providers: [TodoService],
+      providers: [
+        TodoService,
+        {
+          provide: TODO_FACADE_PROVIDER,
+          useClass: TodoNgRxFacade,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FeatureDashboardComponent);

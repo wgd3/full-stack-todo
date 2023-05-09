@@ -4,8 +4,13 @@ import {
   provideRouter,
   withEnabledBlockingInitialNavigation,
 } from '@angular/router';
-import { AuthService, jwtInterceptor } from '@fst/client/data-access';
+import {
+  AuthService,
+  TODO_FACADE_PROVIDER,
+  jwtInterceptor,
+} from '@fst/client/data-access';
 import { ElfTodosEffects } from '@fst/client/state/elf/todo.effects';
+import { TodoElfFacade } from '@fst/client/state/elf/todo.facade';
 import { fromTodos, todoEffects } from '@fst/client/state/ngrx';
 import {
   provideEffectsManager,
@@ -38,5 +43,10 @@ export const appConfig: ApplicationConfig = {
     /** Elf and NgNeat Effects-related providers */
     provideEffectsManager(),
     provideElfEffects(ElfTodosEffects),
+    {
+      provide: TODO_FACADE_PROVIDER,
+      // useClass: TodoNgRxFacade,
+      useClass: TodoElfFacade,
+    },
   ],
 };

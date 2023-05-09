@@ -7,13 +7,13 @@ import { createMockTodo } from '@fst/shared/util-testing';
 import { EffectsModule } from '@ngrx/effects';
 import { Store, StoreModule } from '@ngrx/store';
 import { combineLatest, of, tap } from 'rxjs';
-import { todoEffects } from './state/ngrx';
-import { TODOS_FEATURE_KEY, todosReducer } from './state/ngrx/todos.reducer';
-import { TodoFacade } from './todo.facade';
-import { TodoService } from './todo.service';
+import { todoEffects } from '.';
+import { TodoService } from '../../todo.service';
+import { TodoNgRxFacade } from './todo.facade';
+import { TODOS_FEATURE_KEY, todosReducer } from './todos.reducer';
 
-describe('TodoFacadeService', () => {
-  let facade: TodoFacade;
+describe('TodoNgRxFacadeService', () => {
+  let facade: TodoNgRxFacade;
   let store: Store;
   let todoService: TodoService;
 
@@ -23,7 +23,7 @@ describe('TodoFacadeService', () => {
         StoreModule.forFeature(TODOS_FEATURE_KEY, todosReducer),
         EffectsModule.forFeature([todoEffects]),
       ],
-      providers: [TodoFacade],
+      providers: [TodoNgRxFacade],
     })
     class CustomFeatureModule {}
 
@@ -40,7 +40,7 @@ describe('TodoFacadeService', () => {
     TestBed.configureTestingModule({
       imports: [RootModule],
     });
-    facade = TestBed.inject(TodoFacade);
+    facade = TestBed.inject(TodoNgRxFacade);
     todoService = TestBed.inject(TodoService);
     store = TestBed.inject(Store);
   });
@@ -50,8 +50,8 @@ describe('TodoFacadeService', () => {
   });
 
   it('should start without having loaded any data', (done) => {
-    combineLatest([facade.todos$, facade.loaded$]).subscribe({
-      next: ([todos, loaded]) => {
+    combineLatest({ todos: facade.todos$, loaded: facade.loaded$ }).subscribe({
+      next: ({ todos, loaded }) => {
         expect(todos.length).toEqual(0);
         expect(loaded).toBe(false);
 
@@ -70,7 +70,7 @@ describe('TodoFacadeService', () => {
     facade.loadTodos();
 
     combineLatest([facade.todos$, facade.loaded$]).subscribe({
-      next: ([todos, loaded]) => {
+      next: ([todos, loaded]: [ITodo[], boolean]) => {
         expect(todos.length).toEqual(rv.length);
         expect(loaded).toBe(true);
 
