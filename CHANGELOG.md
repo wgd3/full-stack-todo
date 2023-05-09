@@ -1,3 +1,17 @@
+## [1.5.4](https://github.com/wgd3/full-stack-todo/compare/v1.5.3...v1.5.4) (2023-05-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency mysql2 to v3.3.0 ([#31](https://github.com/wgd3/full-stack-todo/issues/31)) ([93e9534](https://github.com/wgd3/full-stack-todo/commit/93e95346ad399824d9af47cd6e7ee283a66cc03d))
+
+
+### Other
+
+* **deps:** update dependency @types/node to v18.16.6 ([#39](https://github.com/wgd3/full-stack-todo/issues/39)) ([50b2237](https://github.com/wgd3/full-stack-todo/commit/50b2237bf04f622a954ba522fc89e5fd39dc559a))
+* **deps:** update node.js to v20 ([#35](https://github.com/wgd3/full-stack-todo/issues/35)) ([352bce7](https://github.com/wgd3/full-stack-todo/commit/352bce7b6597725c27cab331125a8635e034a5e4))
+* **deps:** update typescript-eslint monorepo to v5.59.5 ([#37](https://github.com/wgd3/full-stack-todo/issues/37)) ([c274ebf](https://github.com/wgd3/full-stack-todo/commit/c274ebf26f3c220d79aefc90580b7615b6c313f9))
+
 ## [1.5.3](https://github.com/wgd3/full-stack-todo/compare/v1.5.2...v1.5.3) (2023-05-09)
 
 
