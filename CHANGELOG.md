@@ -1,3 +1,11 @@
+## [1.6.1](https://github.com/wgd3/full-stack-todo/compare/v1.6.0...v1.6.1) (2023-05-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @nx/angular to v16.1.3 ([#43](https://github.com/wgd3/full-stack-todo/issues/43)) ([c87c9b7](https://github.com/wgd3/full-stack-todo/commit/c87c9b7a56603eec383288736e3b964b5b8ddf35))
+* **deps:** update ngrx monorepo to v16.0.0 ([#44](https://github.com/wgd3/full-stack-todo/issues/44)) ([9a19638](https://github.com/wgd3/full-stack-todo/commit/9a196381665c5cd6dbe80c03fccd87eb856bb995))
+
 ## [1.6.0](https://github.com/wgd3/full-stack-todo/compare/v1.5.4...v1.6.0) (2023-05-09)
 
 
