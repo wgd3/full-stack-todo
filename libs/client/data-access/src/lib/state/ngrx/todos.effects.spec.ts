@@ -1,39 +1,43 @@
-import { TestBed } from '@angular/core/testing';
-import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
-import { provideMockStore } from '@ngrx/store/testing';
-import { hot } from 'jasmine-marbles';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
+import { TodoService } from '../../todo.service';
 import * as TodosActions from './todos.actions';
-import { TodoEffects } from './todos.effects';
+import * as todoEffects from './todos.effects';
 
 describe('TodosEffects', () => {
   let actions: Observable<Action>;
-  let effects: TodoEffects;
+  // let effects: todoEffects;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [],
-      providers: [
-        TodoEffects,
-        provideMockActions(() => actions),
-        provideMockStore(),
-      ],
-    });
+    // TestBed.configureTestingModule({
+    //   imports: [],
+    //   providers: [
+    //     todoEffects,
+    //     provideMockActions(() => actions),
+    //     provideMockStore(),
+    //   ],
+    // });
 
-    effects = TestBed.inject(TodoEffects);
+    // effects = TestBed.inject(todoEffects);
+    const todoServiceMock = {
+      getAllToDoItems: () => of([]),
+    };
+    const actionMock$ = of(TodosActions.initTodos());
   });
 
   describe('init$', () => {
     it('should work', () => {
-      actions = hot('-a-|', { a: TodosActions.initTodos() });
+      const todoServiceMock = {
+        getAllToDoItems: () => of([]),
+      } as any as TodoService;
+      const actionMock$ = of(TodosActions.initTodos());
 
-      const expected = hot('-a-|', {
-        a: TodosActions.loadTodosSuccess({ todos: [] }),
-      });
-
-      expect(effects.init$).toBeObservable(expected);
+      todoEffects
+        .loadTodos(actionMock$, todoServiceMock)
+        .subscribe((action) => {
+          expect(action).toEqual(TodosActions.loadTodosSuccess({ todos: [] }));
+        });
     });
   });
 });

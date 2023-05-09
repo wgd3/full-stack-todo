@@ -10,20 +10,22 @@ import * as TodosSelectors from './todos.selectors';
 describe('Todos Selectors', () => {
   const ERROR_MSG = 'No Error Available';
   const getTodosId = (it: TodoEntity) => it.id;
+  const todoListMock = [
+    createMockTodo(''),
+    createMockTodo(''),
+    createMockTodo(''),
+  ];
 
   let state: TodosPartialState;
 
   beforeEach(() => {
     state = {
-      todos: todosAdapter.setAll(
-        [createMockTodo(''), createMockTodo(''), createMockTodo('')],
-        {
-          ...initialTodosState,
-          selectedId: 'PRODUCT-BBB',
-          error: ERROR_MSG,
-          loaded: true,
-        }
-      ),
+      todos: todosAdapter.setAll(todoListMock, {
+        ...initialTodosState,
+        selectedId: todoListMock[0].id,
+        error: ERROR_MSG,
+        loaded: true,
+      }),
     };
   });
 
@@ -33,14 +35,14 @@ describe('Todos Selectors', () => {
       const selId = getTodosId(results[1]);
 
       expect(results.length).toBe(3);
-      expect(selId).toBe('PRODUCT-BBB');
+      expect(selId).toBe(todoListMock[1].id);
     });
 
     it('selectEntity() should return the selected Entity', () => {
       const result = TodosSelectors.selectEntity(state) as TodoEntity;
       const selId = getTodosId(result);
 
-      expect(selId).toBe('PRODUCT-BBB');
+      expect(selId).toBe(todoListMock[0].id);
     });
 
     it('selectTodosLoaded() should return the current "loaded" status', () => {
