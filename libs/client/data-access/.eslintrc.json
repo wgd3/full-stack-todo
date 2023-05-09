@@ -31,6 +31,13 @@
       "files": ["*.html"],
       "extends": ["plugin:@nx/angular-template"],
       "rules": {}
+    },
+    {
+      "files": ["*.ts"],
+      "parserOptions": {
+        "project": ["libs/client/data-access/tsconfig.*?.json"]
+      },
+      "extends": ["plugin:@ngrx/recommended-requiring-type-checking"]
     }
   ]
 }

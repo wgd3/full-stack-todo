@@ -20,11 +20,12 @@ This repository contains the code base that corresponds to a series of blog post
 
 ### Frontend - `client`
 
-- Angular 15
+- Angular 16
 - User registration/login
 - Stateless UI
 - Storybook integration for component development
 - Custom Design Library
+- Modular State Management (toggled via `InjectionTokens`)
 
 ### Testing
 
@@ -38,7 +39,7 @@ This repository contains the code base that corresponds to a series of blog post
 - Kubernetes manifests for cluster deployment
 - Dockerfiles for standalone and `docker-compose` support
 - GitHub Actions used for all testing, building, and releasing
-- Nx monorepo used for clean directory structure and Nx Cloud for distributed CI tasks
+- Nx v16 monorepo used for clean directory structure and Nx Cloud for distributed CI tasks
 
 ## Demo
 

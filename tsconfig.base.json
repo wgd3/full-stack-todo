@@ -23,6 +23,7 @@
       "@fst/client/feature-register": [
         "libs/client/feature-register/src/index.ts"
       ],
+      "@fst/client/state/*": ["libs/client/data-access/src/lib/state/*"],
       "@fst/client/ui-components/*": ["libs/client/ui-components/src/lib/*"],
       "@fst/client/util": ["libs/client/util/src/index.ts"],
       "@fst/server/data-access": ["libs/server/data-access/src/index.ts"],

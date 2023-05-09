@@ -1,0 +1,20 @@
+<header class="header">
+  <div class="header__application">
+    <span class="header__title">Full Stack To-Do</span>
+  </div>
+  <div class="header__navigation">
+    <a href="#" class="nav-link" [routerLink]="['/']"
+      >Home ({{ incompleteTodoCount$ | async }})</a
+    >
+  </div>
+  <div class="header__actions">
+    <ng-container *ngIf="user$ | async as user; else login">
+      <span class="nav-link">Hello, {{ user.email }}!</span>
+      <span class="nav-link" (click)="logout()">Log Out</span>
+    </ng-container>
+    <ng-template #login>
+      <a href="#" class="nav-link" [routerLink]="['/register']">Sign Up</a>
+      <a href="#" class="nav-link" [routerLink]="['/login']">Login</a>
+    </ng-template>
+  </div>
+</header>

@@ -24,6 +24,7 @@ export class TypeormConfigService implements TypeOrmOptionsFactory {
       database: dbConfig.type === 'sqlite' ? dbConfig.path : dbConfig.name,
       synchronize: dbConfig.synchronize,
       logging: dbConfig.logging,
+      autoLoadEntities: true,
     };
   }
 }
