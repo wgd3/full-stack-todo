@@ -25,4 +25,31 @@
     enabled: true,
   },
   regexManagers: [],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
+    },
+     {
+      "matchConfidence": ["high", "very high"],
+      "groupName": "high merge confidence"
+    },
+    {
+      "matchPackagePatterns": ["^@nx"],
+      "groupName": "Nx Monorepo"
+    },
+    {
+      "matchPackagePatterns": ["^@angular"],
+      "groupName": "Angular Framework"
+    }
+    {
+      "matchPackagePatterns": ["^@nestjs"],
+      "groupName": "NestJS Framework"
+    },
+    {
+      "matchPackagePatterns": ["^@ngrx"],
+      "groupName": "NgRx Framework"
+    }
+  ]
 }
