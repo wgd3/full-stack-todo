@@ -1,3 +1,15 @@
+## [1.6.0](https://github.com/wgd3/full-stack-todo/compare/v1.5.4...v1.6.0) (2023-05-09)
+
+
+### Features
+
+* **client:** added state management support ([ea75f4b](https://github.com/wgd3/full-stack-todo/commit/ea75f4b21b9af5aa23c72b6d10e36c6590335796))
+
+
+### Other
+
+* **repo:** added package rules to renovate ([dc5c9be](https://github.com/wgd3/full-stack-todo/commit/dc5c9bea8955338ff0826c3ea6888fcfdff1e933))
+
 ## [1.5.4](https://github.com/wgd3/full-stack-todo/compare/v1.5.3...v1.5.4) (2023-05-09)
 
 
