@@ -1,33 +1,63 @@
 import { TestBed } from '@angular/core/testing';
 
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { NgModule } from '@angular/core';
 import { ITodo } from '@fst/shared/domain';
 import { createMockTodo } from '@fst/shared/util-testing';
-import { of } from 'rxjs';
+import { EffectsModule } from '@ngrx/effects';
+import { Store, StoreModule } from '@ngrx/store';
+import { combineLatest, of, tap } from 'rxjs';
+import { todoEffects } from './state/ngrx';
+import { TODOS_FEATURE_KEY, todosReducer } from './state/ngrx/todos.reducer';
 import { TodoFacade } from './todo.facade';
 import { TodoService } from './todo.service';
 
 describe('TodoFacadeService', () => {
   let facade: TodoFacade;
+  let store: Store;
   let todoService: TodoService;
 
   beforeEach(() => {
+    @NgModule({
+      imports: [
+        StoreModule.forFeature(TODOS_FEATURE_KEY, todosReducer),
+        EffectsModule.forFeature([todoEffects]),
+      ],
+      providers: [TodoFacade],
+    })
+    class CustomFeatureModule {}
+
+    @NgModule({
+      imports: [
+        HttpClientTestingModule,
+        StoreModule.forRoot({}),
+        EffectsModule.forRoot([]),
+        CustomFeatureModule,
+      ],
+    })
+    class RootModule {}
+
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [TodoService],
+      imports: [RootModule],
     });
     facade = TestBed.inject(TodoFacade);
     todoService = TestBed.inject(TodoService);
+    store = TestBed.inject(Store);
   });
 
   it('should be created', () => {
     expect(facade).toBeTruthy();
   });
 
-  it('should start with an empty data source', (done) => {
-    facade.todos$.subscribe((todos) => {
-      expect(todos.length).toEqual(0);
-      done();
+  it('should start without having loaded any data', (done) => {
+    combineLatest([facade.todos$, facade.loaded$]).subscribe({
+      next: ([todos, loaded]) => {
+        expect(todos.length).toEqual(0);
+        expect(loaded).toBe(false);
+
+        done();
+      },
+      error: () => done.fail,
     });
   });
 
@@ -36,10 +66,17 @@ describe('TodoFacadeService', () => {
       ...createMockTodo(''),
     }));
     jest.spyOn(todoService, 'getAllToDoItems').mockReturnValue(of(rv));
+
     facade.loadTodos();
-    facade.todos$.subscribe((todos) => {
-      expect(todos.length).toEqual(5);
-      done();
+
+    combineLatest([facade.todos$, facade.loaded$]).subscribe({
+      next: ([todos, loaded]) => {
+        expect(todos.length).toEqual(rv.length);
+        expect(loaded).toBe(true);
+
+        done();
+      },
+      error: () => done.fail,
     });
   });
 
@@ -58,11 +95,17 @@ describe('TodoFacadeService', () => {
       const updated = { ...data[0], title: 'test' };
       jest.spyOn(todoService, 'updateToDo').mockReturnValue(of(updated));
       facade.updateTodo(original.id, updated);
-      facade.todos$.subscribe((todos) => {
-        expect(todos.some((td) => td.title === 'test')).toEqual(true);
-        expect(todos.length).toEqual(data.length);
-        done();
-      });
+      facade.todos$
+        .pipe(
+          tap((todos) =>
+            console.log(`got new todos data: ${JSON.stringify(todos)}`)
+          )
+        )
+        .subscribe((todos) => {
+          expect(todos.some((td) => td.title === 'test')).toEqual(true);
+          expect(todos.length).toEqual(data.length);
+          done();
+        });
     });
 
     it('should create a todo', (done) => {

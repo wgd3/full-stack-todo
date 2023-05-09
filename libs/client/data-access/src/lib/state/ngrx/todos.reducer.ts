@@ -1,5 +1,11 @@
 import { EntityAdapter, EntityState, createEntityAdapter } from '@ngrx/entity';
-import { Action, createReducer, on } from '@ngrx/store';
+import {
+  Action,
+  ActionCreator,
+  ReducerTypes,
+  createReducer,
+  on,
+} from '@ngrx/store';
 
 import * as TodosActions from './todos.actions';
 import { TodoEntity } from './todos.models';
@@ -24,17 +30,44 @@ export const initialTodosState: TodosState = todosAdapter.getInitialState({
   loaded: false,
 });
 
+const crudSuccessOns: ReducerTypes<TodosState, ActionCreator[]>[] = [
+  on(
+    TodosActions.createTodo.createSuccess,
+    (state, { todo }): TodosState => todosAdapter.addOne(todo, { ...state })
+  ),
+  on(
+    TodosActions.updateTodo.updateSuccess,
+    (state, { update }): TodosState =>
+      todosAdapter.updateOne(update, { ...state })
+  ),
+  on(
+    TodosActions.deleteTodo.deleteSuccess,
+    (state, { todoId }): TodosState =>
+      todosAdapter.removeOne(todoId, { ...state })
+  ),
+  on(
+    TodosActions.loadTodosSuccess,
+    (state, { todos }): TodosState =>
+      todosAdapter.setAll(todos, { ...state, loaded: true })
+  ),
+];
+
 const reducer = createReducer(
   initialTodosState,
-  on(TodosActions.initTodos, (state) => ({
-    ...state,
-    loaded: false,
-    error: null,
-  })),
-  on(TodosActions.loadTodosSuccess, (state, { todos }) =>
-    todosAdapter.setAll(todos, { ...state, loaded: true })
+  on(
+    TodosActions.initTodos,
+    (state): TodosState => ({
+      ...state,
+      loaded: false,
+      error: null,
+    })
   ),
-  on(TodosActions.loadTodosFailure, (state, { error }) => ({ ...state, error }))
+  on(
+    TodosActions.loadTodosFailure,
+    TodosActions.createTodo.createFailure,
+    (state, { error }): TodosState => ({ ...state, error })
+  ),
+  ...crudSuccessOns
 );
 
 export function todosReducer(state: TodosState | undefined, action: Action) {

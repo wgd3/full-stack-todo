@@ -55,7 +55,8 @@
     "sqlite3": "^5.1.6",
     "tslib": "^2.3.1",
     "typeorm": "^0.3.15",
-    "zone.js": "0.13.0"
+    "zone.js": "0.13.0",
+    "@ngrx/store-devtools": "^16.0.0-rc.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "16.0.0",
@@ -77,7 +78,7 @@
     "@ngneat/falso": "^6.4.0",
     "@ngrx/eslint-plugin": "^15.4.0",
     "@ngrx/schematics": "16.0.0-rc.1",
-    "@ngrx/store-devtools": "16.0.0-rc.1",
+    "@ngrx/store-devtools": "^16.0.0-rc.1",
     "@nx-tools/container-metadata": "^4.0.3",
     "@nx-tools/nx-container": "^4.0.3",
     "@nx/cypress": "16.1.3",

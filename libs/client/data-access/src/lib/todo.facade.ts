@@ -1,52 +1,31 @@
 import { Injectable, inject } from '@angular/core';
-import { ICreateTodo, ITodo, IUpdateTodo } from '@fst/shared/domain';
-import { BehaviorSubject } from 'rxjs';
-import { TodoService } from './todo.service';
+import { ICreateTodo, IUpdateTodo } from '@fst/shared/domain';
+import { Store } from '@ngrx/store';
+import { TodoActions, TodoSelectors } from './state/ngrx';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodoFacade {
-  private readonly todoService = inject(TodoService);
+  private readonly store = inject(Store);
 
-  private todos$$ = new BehaviorSubject<ITodo[]>([]);
-  todos$ = this.todos$$.asObservable();
+  todos$ = this.store.select(TodoSelectors.selectAllTodos);
+  loaded$ = this.store.select(TodoSelectors.selectTodosLoaded);
+  error$ = this.store.select(TodoSelectors.selectTodosError);
 
   loadTodos() {
-    this.todoService.getAllToDoItems().subscribe({
-      next: (todos) => {
-        this.todos$$.next(todos);
-      },
-    });
+    this.store.dispatch(TodoActions.initTodos());
   }
 
-  updateTodo(todoId: string, todoData: IUpdateTodo) {
-    this.todoService.updateToDo(todoId, todoData).subscribe({
-      next: (todo) => {
-        const current = this.todos$$.value;
-        // update the single to-do in place instead of
-        // requesting _all_ todos again
-        this.todos$$.next([
-          ...current.map((td) => (td.id === todo.id ? todo : td)),
-        ]);
-      },
-    });
+  updateTodo(todoId: string, data: IUpdateTodo) {
+    this.store.dispatch(TodoActions.updateTodo.update({ todoId, data }));
   }
 
-  createTodo(todoData: ICreateTodo) {
-    this.todoService.createToDo(todoData).subscribe({
-      next: (todo) => {
-        // insert new todo to the current array
-        this.todos$$.next([...this.todos$$.value, todo]);
-      },
-    });
+  createTodo(data: ICreateTodo) {
+    this.store.dispatch(TodoActions.createTodo.create({ data }));
   }
 
-  deleteTodo(id: string) {
-    this.todoService.deleteToDo(id).subscribe({
-      next: () => {
-        this.todos$$.next([...this.todos$$.value.filter((td) => td.id !== id)]);
-      },
-    });
+  deleteTodo(todoId: string) {
+    this.store.dispatch(TodoActions.deleteTodo.delete({ todoId }));
   }
 }

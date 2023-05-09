@@ -84,5 +84,6 @@ export class FeatureDashboardComponent implements OnInit {
     //     },
     //   });
     this.todoFacade.createTodo(data);
+    this.addingTodo = false;
   }
 }
