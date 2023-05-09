@@ -1,7 +1,7 @@
 ######################################################
 # deps image, install all needed packages
 ######################################################
-FROM docker.io/node:16-alpine AS deps
+FROM docker.io/node:20-alpine AS deps
 
 WORKDIR /app
 
@@ -17,7 +17,7 @@ USER node
 ######################################################
 # builder image, build application
 ######################################################
-FROM docker.io/node:16-alpine AS builder
+FROM docker.io/node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -46,7 +46,7 @@ USER node
 ##################################
 # final prod image
 ##################################
-FROM docker.io/node:16-alpine AS production
+FROM docker.io/node:20-alpine AS production
 
 LABEL org.opencontainers.image.title="full-stack-todo nestjs server"
 LABEL org.opencontainers.image.url="https://github.com/wgd3/full-stack-todo"
