@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/wgd3/full-stack-todo/compare/v1.5.2...v1.5.3) (2023-05-09)
+
+
+### Bug Fixes
+
+* **deps:** update nrwl monorepo to v16.1.3 ([#40](https://github.com/wgd3/full-stack-todo/issues/40)) ([070b41a](https://github.com/wgd3/full-stack-todo/commit/070b41a11bafea2abad7aaae1a24610f74e63131))
+
 ## [1.5.2](https://github.com/wgd3/full-stack-todo/compare/v1.5.1...v1.5.2) (2023-05-08)
 
 
