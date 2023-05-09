@@ -5,11 +5,17 @@ import {
   withEnabledBlockingInitialNavigation,
 } from '@angular/router';
 import { AuthService, jwtInterceptor } from '@fst/client/data-access';
+import { ElfTodosEffects } from '@fst/client/state/elf/todo.effects';
 import { fromTodos, todoEffects } from '@fst/client/state/ngrx';
+import {
+  provideEffectsManager,
+  provideEffects as provideElfEffects,
+} from '@ngneat/effects-ng';
 import { provideEffects } from '@ngrx/effects';
 import { provideState, provideStore } from '@ngrx/store';
-import { appRoutes } from './app.routes';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { appRoutes } from './app.routes';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideEffects(todoEffects),
@@ -29,5 +35,8 @@ export const appConfig: ApplicationConfig = {
       multi: true,
     },
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    /** Elf and NgNeat Effects-related providers */
+    provideEffectsManager(),
+    provideElfEffects(ElfTodosEffects),
   ],
 };
