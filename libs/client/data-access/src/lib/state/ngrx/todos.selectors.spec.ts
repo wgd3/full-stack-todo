@@ -1,30 +1,22 @@
-import { TodosEntity } from './todos.models';
+import { createMockTodo } from '@fst/shared/util-testing';
+import { TodoEntity } from './todos.models';
 import {
-  todosAdapter,
   TodosPartialState,
   initialTodosState,
+  todosAdapter,
 } from './todos.reducer';
 import * as TodosSelectors from './todos.selectors';
 
 describe('Todos Selectors', () => {
   const ERROR_MSG = 'No Error Available';
-  const getTodosId = (it: TodosEntity) => it.id;
-  const createTodosEntity = (id: string, name = '') =>
-    ({
-      id,
-      name: name || `name-${id}`,
-    } as TodosEntity);
+  const getTodosId = (it: TodoEntity) => it.id;
 
   let state: TodosPartialState;
 
   beforeEach(() => {
     state = {
       todos: todosAdapter.setAll(
-        [
-          createTodosEntity('PRODUCT-AAA'),
-          createTodosEntity('PRODUCT-BBB'),
-          createTodosEntity('PRODUCT-CCC'),
-        ],
+        [createMockTodo(''), createMockTodo(''), createMockTodo('')],
         {
           ...initialTodosState,
           selectedId: 'PRODUCT-BBB',
@@ -45,7 +37,7 @@ describe('Todos Selectors', () => {
     });
 
     it('selectEntity() should return the selected Entity', () => {
-      const result = TodosSelectors.selectEntity(state) as TodosEntity;
+      const result = TodosSelectors.selectEntity(state) as TodoEntity;
       const selId = getTodosId(result);
 
       expect(selId).toBe('PRODUCT-BBB');
