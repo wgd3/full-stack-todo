@@ -1,3 +1,16 @@
+## [1.6.2](https://github.com/wgd3/full-stack-todo/compare/v1.6.1...v1.6.2) (2023-05-10)
+
+
+### Bug Fixes
+
+* **deps:** update nrwl monorepo to v16.1.4 ([#46](https://github.com/wgd3/full-stack-todo/issues/46)) ([7112ed5](https://github.com/wgd3/full-stack-todo/commit/7112ed5ac781a745cdb99ec057483e210f842dac))
+
+
+### Other
+
+* **deps:** update dependency cypress to v12.12.0 ([#47](https://github.com/wgd3/full-stack-todo/issues/47)) ([b520547](https://github.com/wgd3/full-stack-todo/commit/b52054746533de9da0124f5152a0a21b1e1cfd02))
+* **deps:** update storybook monorepo to v7.0.10 ([#41](https://github.com/wgd3/full-stack-todo/issues/41)) ([d0b4513](https://github.com/wgd3/full-stack-todo/commit/d0b4513f87298bb75746c6d3791d3dd81393f8ba))
+
 ## [1.6.1](https://github.com/wgd3/full-stack-todo/compare/v1.6.0...v1.6.1) (2023-05-09)
 
 
