@@ -87,7 +87,7 @@
     "@nestjs/schematics": "9.1.0",
     "@nestjs/testing": "9.4.0",
     "@ngneat/falso": "^6.4.0",
-    "@ngrx/eslint-plugin": "^15.4.0",
+    "@ngrx/eslint-plugin": "^16.0.0",
     "@ngrx/schematics": "16.0.0",
     "@ngrx/store-devtools": "^16.0.0-rc.1",
     "@nx-tools/container-metadata": "^4.0.3",
