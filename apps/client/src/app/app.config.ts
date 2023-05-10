@@ -10,8 +10,8 @@ import {
   jwtInterceptor,
 } from '@fst/client/data-access';
 import { ElfTodosEffects } from '@fst/client/state/elf/todo.effects';
-import { TodoElfFacade } from '@fst/client/state/elf/todo.facade';
 import { fromTodos, todoEffects } from '@fst/client/state/ngrx';
+import { TodoNgRxFacade } from '@fst/client/state/ngrx/todo.facade';
 import {
   provideEffectsManager,
   provideEffects as provideElfEffects,
@@ -45,8 +45,9 @@ export const appConfig: ApplicationConfig = {
     provideElfEffects(ElfTodosEffects),
     {
       provide: TODO_FACADE_PROVIDER,
-      // useClass: TodoNgRxFacade,
-      useClass: TodoElfFacade,
+      useClass: TodoNgRxFacade,
+      // useClass: TodoElfFacade,
+      // useClass: TodoRxjsFacade,
     },
   ],
 };
