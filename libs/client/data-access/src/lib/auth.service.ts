@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { TOKEN_STORAGE_KEY } from '@fst/client/util';
 import {
   IAccessTokenPayload,
@@ -55,10 +55,14 @@ export class AuthService {
     }
   }
 
-  loginUser(data: ILoginPayload): Observable<ITokenResponse> {
+  loginUserByEmail(data: ILoginPayload): Observable<ITokenResponse> {
     console.log(`[AuthService] Logging in`, data);
     return this.http
-      .post<ITokenResponse>(`${this.baseUrl}/auth/login`, data, httpOptions)
+      .post<ITokenResponse>(
+        `${this.baseUrl}/auth/email/login`,
+        data,
+        httpOptions
+      )
       .pipe(
         take(1),
         tap(({ access_token }) => {

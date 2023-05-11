@@ -48,6 +48,7 @@
     "@ngrx/store": "16.0.0",
     "@ngrx/store-devtools": "^16.0.0-rc.1",
     "@nx/angular": "16.1.4",
+    "angular-oauth2-oidc": "^15.0.1",
     "axios": "^1.0.0",
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",

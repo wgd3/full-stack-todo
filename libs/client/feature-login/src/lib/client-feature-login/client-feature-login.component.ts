@@ -10,6 +10,8 @@ import {
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService, TodoService } from '@fst/client/data-access';
+import { NullValidationHandler, OAuthService } from 'angular-oauth2-oidc';
+
 import { BehaviorSubject } from 'rxjs';
 
 type LoginFormType = {
@@ -25,6 +27,7 @@ type LoginFormType = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClientFeatureLoginComponent {
+  private readonly oauthService = inject(OAuthService);
   private readonly authService = inject(AuthService);
   private router = inject(Router);
 
@@ -63,7 +66,7 @@ export class ClientFeatureLoginComponent {
       this.errorMessage$.next(null);
       const { email, password } = this.loginForm.getRawValue();
       this.authService
-        .loginUser({ email, password })
+        .loginUserByEmail({ email, password })
         .pipe
         // take(1)
         ()
@@ -84,5 +87,64 @@ export class ClientFeatureLoginComponent {
           },
         });
     }
+  }
+
+  public logInWithGoogle() {
+    // this.oauthService.loadDiscoveryDocumentAndTryLogin().then((_) => {
+    //   this.router.navigate(['/']);
+    // });
+    // this.oauthService.loadDiscoveryDocumentAndTryLogin().then((_) => {
+    //   if (
+    //     !this.oauthService.hasValidIdToken() ||
+    //     !this.oauthService.hasValidAccessToken()
+    //   ) {
+    //     // this.oauthService.initImplicitFlow();
+    //     this.oauthService.initLoginFlow();
+    //   }
+    // });
+
+    this.oauthService.loadDiscoveryDocument().then(() => {
+      console.log(`OIDC trying to login with implicit flow`);
+      this.oauthService.tryLoginImplicitFlow().then(() => {
+        console.log(`OIDC made it past loginImplicit flow`);
+        if (!this.oauthService.hasValidAccessToken()) {
+          console.log(
+            `OIDC No valid access token found, initiating login flow`
+          );
+          this.oauthService.initLoginFlow();
+          const token = this.oauthService.getAccessToken();
+          console.log(`OIDC token:`, token);
+        } else {
+          console.log(`OIDC valid access token foundm getting user profile`);
+          this.oauthService.loadUserProfile().then((userProfile) => {
+            // this.userProfileSubject.next(userProfile as UserInfo)
+            console.log(`got user profile`, userProfile);
+          });
+        }
+      });
+    });
+
+    this.oauthService.events.subscribe((e) => {
+      // tslint:disable-next-line:no-console
+      console.debug('oauth/oidc event', e);
+    });
+
+    // const token = this.oauthService.getAccessToken();
+    // console.log(`Got token: ${token}`);
+
+    // this.oauthService
+    //   .loadUserProfile()
+    //   .then((up) => {
+    //     console.log(up);
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
+  }
+
+  private configureWithoutDiscovery() {
+    // this.oauthService.configure(noDiscoveryAuthConfig);
+    this.oauthService.tokenValidationHandler = new NullValidationHandler();
+    this.oauthService.tryLogin();
   }
 }
