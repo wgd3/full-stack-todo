@@ -6,7 +6,7 @@ import { ITodo } from '@fst/shared/domain';
 import { createMockTodo } from '@fst/shared/util-testing';
 import { EffectsModule } from '@ngrx/effects';
 import { Store, StoreModule } from '@ngrx/store';
-import { combineLatest, of, tap } from 'rxjs';
+import { combineLatest, of } from 'rxjs';
 import { todoEffects } from '.';
 import { TodoService } from '../../todo.service';
 import { TodoNgRxFacade } from './todo.facade';
@@ -95,17 +95,11 @@ describe('TodoNgRxFacadeService', () => {
       const updated = { ...data[0], title: 'test' };
       jest.spyOn(todoService, 'updateToDo').mockReturnValue(of(updated));
       facade.updateTodo(original.id, updated);
-      facade.todos$
-        .pipe(
-          tap((todos) =>
-            console.log(`got new todos data: ${JSON.stringify(todos)}`)
-          )
-        )
-        .subscribe((todos) => {
-          expect(todos.some((td) => td.title === 'test')).toEqual(true);
-          expect(todos.length).toEqual(data.length);
-          done();
-        });
+      facade.todos$.subscribe((todos) => {
+        expect(todos.some((td) => td.title === 'test')).toEqual(true);
+        expect(todos.length).toEqual(data.length);
+        done();
+      });
     });
 
     it('should create a todo', (done) => {

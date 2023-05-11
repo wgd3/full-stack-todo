@@ -54,17 +54,12 @@ const crudSuccessOns: ReducerTypes<TodosState, ActionCreator[]>[] = [
 
 const reducer = createReducer(
   initialTodosState,
-  on(
-    TodosActions.initTodos,
-    (state): TodosState => ({
-      ...state,
-      loaded: false,
-      error: null,
-    })
-  ),
+  on(TodosActions.initTodos, (state): TodosState => initialTodosState),
   on(
     TodosActions.loadTodosFailure,
     TodosActions.createTodo.createFailure,
+    TodosActions.updateTodo.updateFailure,
+    TodosActions.deleteTodo.deleteFailure,
     (state, { error }): TodosState => ({ ...state, error })
   ),
   ...crudSuccessOns
