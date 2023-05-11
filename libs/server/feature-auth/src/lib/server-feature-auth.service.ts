@@ -3,8 +3,9 @@ import {
   IAccessTokenPayload,
   IPublicUserData,
   ITokenResponse,
+  IUser,
 } from '@fst/shared/domain';
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
@@ -31,6 +32,25 @@ export class ServerFeatureAuthService {
       return publicUserData;
     }
     return null;
+  }
+
+  async validateGoogleUser(data: IAccessTokenPayload): Promise<ITokenResponse> {
+    let user: IUser;
+
+    const userByEmail = await this.userService.getOneByEmail(data.email);
+
+    if (userByEmail) {
+      user = userByEmail;
+    } else {
+      user = await this.userService.create({
+        email: data.email,
+        password: 'Password1!',
+      });
+      user = await this.userService.getOne(user.id);
+    }
+
+    const token = await this.jwtService.signAsync(data);
+    return { access_token: token };
   }
 
   async generateAccessToken(user: IPublicUserData): Promise<ITokenResponse> {

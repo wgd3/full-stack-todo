@@ -11,7 +11,7 @@ import {
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ServerFeatureAuthService } from './server-feature-auth.service';
 
-@Controller({ path: 'auth', version: '1' })
+@Controller({ path: 'auth/email', version: '1' })
 @ApiTags('Authentication')
 export class ServerFeatureAuthController {
   constructor(private serverFeatureAuthService: ServerFeatureAuthService) {}

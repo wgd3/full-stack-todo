@@ -6,9 +6,9 @@
 import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { CONFIG_PORT } from '@fst/server/util';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
@@ -25,6 +25,7 @@ async function bootstrap() {
   );
   const configService = app.get(ConfigService);
   const port = configService.get(CONFIG_PORT);
+  Logger.log(`Listening on port ${port}`);
 
   // set up versioning
   app.enableVersioning({
@@ -36,6 +37,7 @@ async function bootstrap() {
   app.enableCors({
     origin: '*',
   });
+  Logger.log(`Enabled all origins for CORS`);
 
   // handle swagger
   const config = new DocumentBuilder()
@@ -47,6 +49,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/v1', app, document, {
     jsonDocumentUrl: 'api/v1/swagger.json',
   });
+  Logger.log(`Swagger initialized`);
 
   await app.listen(port);
   Logger.log(
