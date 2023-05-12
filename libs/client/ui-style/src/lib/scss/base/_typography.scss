@@ -6,7 +6,7 @@ html {
   letter-spacing: $letter-spacing;
   font-family: $font-family-sans-serif;
 
-  @media only screen and (min-width: 1280px) {
+  @media only screen and (min-width >= 1280px) {
     font-size: $font-size-base;
   }
 }
