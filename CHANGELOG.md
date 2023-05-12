@@ -1,3 +1,32 @@
+## [1.7.0](https://github.com/wgd3/full-stack-todo/compare/v1.6.2...v1.7.0) (2023-05-12)
+
+
+### Features
+
+* **client-data-access:** added basic rxjs facade option ([4808015](https://github.com/wgd3/full-stack-todo/commit/4808015658b23c7d0340b118accb97d08d72c0fa))
+
+
+### Bug Fixes
+
+* **deps:** update angular monorepo to v16.0.1 ([#12](https://github.com/wgd3/full-stack-todo/issues/12)) ([3b440ce](https://github.com/wgd3/full-stack-todo/commit/3b440cea4c683c8c3daf830eba7c88cf8bc0cb2e))
+* **deps:** update dependency typeorm to v0.3.16 ([#42](https://github.com/wgd3/full-stack-todo/issues/42)) ([31a2ff4](https://github.com/wgd3/full-stack-todo/commit/31a2ff42cf3705b7e8424e01c911aa054e30bafc))
+
+
+### Other
+
+* **deps:** update angular-cli monorepo to v16.0.1 ([#49](https://github.com/wgd3/full-stack-todo/issues/49)) ([4a4829f](https://github.com/wgd3/full-stack-todo/commit/4a4829f131bf6f19e1441a15e55cb3a0251dd9ad))
+* **deps:** update dependency @ngrx/eslint-plugin to v16 ([#45](https://github.com/wgd3/full-stack-todo/issues/45)) ([5eee40e](https://github.com/wgd3/full-stack-todo/commit/5eee40e10bb704716f7d42a04ffc5b4a7dc6ef06))
+* **deps:** update dependency @types/node to v18.16.7 ([#48](https://github.com/wgd3/full-stack-todo/issues/48)) ([335fa6d](https://github.com/wgd3/full-stack-todo/commit/335fa6d56697c594e8bdafa7a82cc88ba996d699))
+* **deps:** update dependency stylelint-config-standard-scss to v9 ([#34](https://github.com/wgd3/full-stack-todo/issues/34)) ([7a33a35](https://github.com/wgd3/full-stack-todo/commit/7a33a35e6fc40f7f2fcada34920299a80ca0d946))
+
+
+* **client-data-access:** updated ngrx tests ([cf14f7e](https://github.com/wgd3/full-stack-todo/commit/cf14f7e9935cb39ff682eaa2e3dcd030bb921c10))
+
+
+### Style
+
+* **client-ui-style:** fixed media feature range notation ([91b3554](https://github.com/wgd3/full-stack-todo/commit/91b355463300d092728fb810dafbd192e6163670))
+
 ## [1.6.2](https://github.com/wgd3/full-stack-todo/compare/v1.6.1...v1.6.2) (2023-05-10)
 
 
