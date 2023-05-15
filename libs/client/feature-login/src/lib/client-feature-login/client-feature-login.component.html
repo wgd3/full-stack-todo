@@ -84,9 +84,26 @@
     </div>
 
     <div class="login__social-container">
-      <button class="btn btn--primary" (click)="logInWithGoogle()">
-        Log In With Google
-      </button>
+      <asl-google-signin-button type="standard" size="large" type="standard">
+        <div
+          id="g_id_onload"
+          data-client_id="1082517220825-693bq09as195vkni3uvhkaun3qdn79tr.apps.googleusercontent.com"
+          data-context="signin"
+          data-ux_mode="redirect"
+          data-login_uri="http://localhost:4200/login/google"
+          data-auto_prompt="false"
+        ></div>
+
+        <div
+          class="g_id_signin"
+          data-type="standard"
+          data-shape="rectangular"
+          data-theme="outline"
+          data-text="signin_with"
+          data-size="large"
+          data-logo_alignment="left"
+        ></div>
+      </asl-google-signin-button>
     </div>
   </div>
 </div>

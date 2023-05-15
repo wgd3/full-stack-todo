@@ -16,7 +16,7 @@ import {
   UnprocessableEntityException,
   forwardRef,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -80,15 +80,23 @@ export class ServerFeatureAuthService {
     if (user) {
       // user has already registered, see if email needs to be updated
       if (data.email && !userByEmail) {
+        this.logger.debug(
+          `Found existing user with different email - updating email`
+        );
         user.email = data.email;
         await this.userService.updateUser(data.id, { email: data.email });
       }
     } else if (userByEmail) {
       // user was not found by socialId, but has registered with
       // this email already
+      this.logger.debug(
+        `User registered with email previously, assigning that account to current user`
+      );
       user = userByEmail;
     } else {
       // create new user!
+      this.logger.debug(`Creating new user for ${data.email}`);
+      // this.logger.debug(JSON.stringify(data, null, 2));
       user = await this.userService.create({
         email: data.email ?? null,
         familyName: data.familyName ?? null,
@@ -123,14 +131,11 @@ export class ServerFeatureAuthService {
   }
 
   async generateAccessToken(
-    payload: IAccessTokenPayload
+    payload: IAccessTokenPayload,
+    opts?: JwtSignOptions
   ): Promise<ITokenResponse> {
-    // const payload: IAccessTokenPayload = {
-    //   email: user.email,
-    //   sub: user.id,
-    // };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.signAsync(payload, opts),
     };
   }
 }

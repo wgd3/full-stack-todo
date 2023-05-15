@@ -1,10 +1,12 @@
+import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { TOKEN_STORAGE_KEY } from '@fst/client/util';
+import { AUTH_PROVIDER_TYPE, TOKEN_STORAGE_KEY } from '@fst/client/util';
 import {
   IAccessTokenPayload,
   ILoginPayload,
   ITokenResponse,
+  SocialProviderEnum,
 } from '@fst/shared/domain';
 import { environment } from '@fst/shared/util-env';
 import * as jwt_decode from 'jwt-decode';
@@ -19,6 +21,7 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly socialAuthService = inject(SocialAuthService);
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl;
 
@@ -36,14 +39,16 @@ export class AuthService {
    */
   userData$ = this.userData$$.pipe();
 
-  setToken(val: string) {
+  setToken(provider: SocialProviderEnum, val: string) {
     this.accessToken$$.next(val);
     localStorage.setItem(TOKEN_STORAGE_KEY, val);
+    localStorage.setItem(AUTH_PROVIDER_TYPE, provider);
   }
 
   clearToken() {
     this.accessToken$$.next(null);
     localStorage.removeItem(TOKEN_STORAGE_KEY);
+    localStorage.removeItem(AUTH_PROVIDER_TYPE);
   }
 
   loadToken() {
@@ -66,10 +71,28 @@ export class AuthService {
       .pipe(
         take(1),
         tap(({ access_token }) => {
-          this.setToken(access_token);
+          this.setToken(SocialProviderEnum.email, access_token);
           this.userData$$.next(this.decodeToken(access_token));
         }),
         share(),
+        handleApiError
+      );
+  }
+
+  loginGoogleUser(idToken: string): Observable<ITokenResponse> {
+    console.log(`[AuthService] Logging in with google`);
+    return this.http
+      .post<ITokenResponse>(
+        `${this.baseUrl}/auth/google/login`,
+        { idToken },
+        httpOptions
+      )
+      .pipe(
+        take(1),
+        tap(({ access_token }) => {
+          this.setToken(SocialProviderEnum.google, access_token);
+          this.userData$$.next(this.decodeToken(access_token));
+        }),
         handleApiError
       );
   }

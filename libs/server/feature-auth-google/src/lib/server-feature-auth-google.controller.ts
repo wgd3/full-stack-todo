@@ -20,7 +20,10 @@ export class ServerFeatureAuthGoogleController {
   })
   @SkipAuth()
   async login(@Body() payload: { idToken: string }): Promise<ITokenResponse> {
-    Logger.debug(`Attempting to log in user from Google OAuth`);
+    Logger.debug(
+      `Attempting to log in user from Google OAuth`,
+      ServerFeatureAuthGoogleController.name
+    );
     const data = await this.serverFeatureAuthGoogleService.getProfile({
       idToken: payload.idToken,
     });
