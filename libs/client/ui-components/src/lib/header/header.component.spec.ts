@@ -1,4 +1,5 @@
 /* eslint-disable @nx/enforce-module-boundaries */
+import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
@@ -8,7 +9,6 @@ import { fromTodos } from '@fst/client/state/ngrx';
 import { TodoNgRxFacade } from '@fst/client/state/ngrx/todo.facade';
 import { StoreModule } from '@ngrx/store';
 import { HeaderComponent } from './header.component';
-
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
@@ -28,6 +28,10 @@ describe('HeaderComponent', () => {
         {
           provide: TODO_FACADE_PROVIDER,
           useClass: TodoNgRxFacade,
+        },
+        {
+          provide: SocialAuthService,
+          useValue: {},
         },
       ],
     }).compileComponents();

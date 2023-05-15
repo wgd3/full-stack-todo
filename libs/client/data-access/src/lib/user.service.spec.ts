@@ -31,6 +31,11 @@ describe('UserService', () => {
       id: randUuid(),
       email: randEmail(),
       todos: [],
+      familyName: null,
+      givenName: null,
+      profilePicture: null,
+      socialProvider: null,
+      socialId: null,
     };
     const spy = jest.spyOn(http, 'get').mockReturnValue(of(resp));
     service.getUser(resp.id).subscribe({
@@ -48,6 +53,11 @@ describe('UserService', () => {
       id: randUuid(),
       email: randEmail(),
       todos: [],
+      familyName: null,
+      givenName: null,
+      profilePicture: null,
+      socialProvider: null,
+      socialId: null,
     };
     const spy = jest.spyOn(http, 'patch').mockReturnValue(of(resp));
     service.updateUser(resp.id, { email: resp.email }).subscribe({
@@ -67,10 +77,20 @@ describe('UserService', () => {
       id: randUuid(),
       email: randEmail(),
       todos: [],
+      familyName: null,
+      givenName: null,
+      profilePicture: null,
+      socialProvider: null,
+      socialId: null,
     };
     const payload: ICreateUser = {
       email: randEmail(),
       password: randPassword(),
+      familyName: null,
+      givenName: null,
+      profilePicture: null,
+      socialProvider: null,
+      socialId: null,
     };
     const spy = jest.spyOn(http, 'post').mockReturnValue(of(resp));
     service.createUser(payload).subscribe({

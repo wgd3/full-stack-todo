@@ -1,4 +1,3 @@
-import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { AUTH_PROVIDER_TYPE, TOKEN_STORAGE_KEY } from '@fst/client/util';
@@ -21,7 +20,7 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly socialAuthService = inject(SocialAuthService);
+  // private readonly socialAuthService = inject(SocialAuthService);
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl;
 
