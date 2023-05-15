@@ -2,7 +2,7 @@ import { UserEntitySchema } from '@fst/server/data-access';
 import { MockType, repositoryMockFactory } from '@fst/server/util/testing';
 import { IPublicUserData, IUser } from '@fst/shared/domain';
 import { createMockUser } from '@fst/shared/util-testing';
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { randEmail } from '@ngneat/falso';
@@ -78,7 +78,7 @@ describe('ServerFeatureUserService', () => {
         profilePicture: null,
       });
     } catch (err) {
-      expect(err).toBeInstanceOf(QueryFailedError);
+      expect(err).toBeInstanceOf(BadRequestException);
     }
   });
 

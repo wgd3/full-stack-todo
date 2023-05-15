@@ -36,9 +36,7 @@ describe('ServerFeatureUserController', () => {
 
   it('should create a user', async () => {
     const user = createMockUser();
-    const publicUser: IPublicUserData = {
-      ...user,
-    };
+    const { password, ...publicUser } = user;
     jest.spyOn(service, 'create').mockReturnValue(Promise.resolve(user));
     const res = await controller.createUser({
       email: user.email ?? '',
