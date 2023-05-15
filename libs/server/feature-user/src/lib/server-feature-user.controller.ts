@@ -39,7 +39,10 @@ export class ServerFeatureUserController {
   @Post('')
   @SkipAuth()
   async createUser(@Body() userData: CreateUserDto): Promise<IPublicUserData> {
-    const user = await this.serverFeatureUserService.create(userData);
+    // TODO revisit when considering changes to serialization
+    const { password, ...user } = await this.serverFeatureUserService.create(
+      userData
+    );
     return user;
   }
 

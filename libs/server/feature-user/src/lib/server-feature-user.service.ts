@@ -1,9 +1,19 @@
 import { UserEntitySchema } from '@fst/server/data-access';
-import { ICreateUser, IUpdateUser, IUser } from '@fst/shared/domain';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  IApiErrorResponse,
+  ICreateUser,
+  IUpdateUser,
+  IUser,
+} from '@fst/shared/domain';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { FindOneOptions, Repository } from 'typeorm';
+import { FindOneOptions, QueryFailedError, Repository } from 'typeorm';
 
 @Injectable()
 export class ServerFeatureUserService {
@@ -41,8 +51,20 @@ export class ServerFeatureUserService {
     if (user.password) {
       user.password = await bcrypt.hash(user.password, 10);
     }
-    const newUser = await this.userRepository.save(user);
-    return newUser;
+    try {
+      const newUser = await this.userRepository.save(user);
+      return newUser;
+    } catch (err) {
+      if (err instanceof QueryFailedError) {
+        throw new BadRequestException({
+          message: `User with email ${user.email} already exists!`,
+        } as IApiErrorResponse);
+      }
+      throw new InternalServerErrorException({
+        message: `An unknown error occurred while creating a new user`,
+        error: err,
+      } as IApiErrorResponse);
+    }
   }
 
   async updateUser(id: string, data: IUpdateUser): Promise<IUser> {
