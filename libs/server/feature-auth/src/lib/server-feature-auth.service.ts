@@ -33,7 +33,17 @@ export class ServerFeatureAuthService {
     email,
     password,
   }: ILoginPayload): Promise<ITokenResponse> {
-    const user = await this.userService.getOneByEmailOrFail(email);
+    let user: IUser | undefined;
+
+    try {
+      user = await this.userService.getOneByEmailOrFail(email);
+    } catch (err) {
+      throw new BadRequestException({
+        message: `Email or password is incorrect, try again`,
+      } as IApiErrorResponse);
+    }
+    // const user = await this.userService.getOneByEmailOrFail(email);
+
     if (user.socialProvider !== 'email') {
       throw new BadRequestException({
         message: `User registered via a social platform, please use that instead`,
@@ -42,8 +52,9 @@ export class ServerFeatureAuthService {
 
     // we've detected if the user registered via email, which requires a password
     const validPassword = await bcrypt.compare(
-      user.password as string,
-      password
+      password,
+      user.password as string
+      // password
     );
     if (!validPassword) {
       throw new BadRequestException({

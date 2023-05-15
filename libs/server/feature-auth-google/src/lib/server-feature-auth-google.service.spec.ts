@@ -1,3 +1,4 @@
+import { ConfigModule } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { ServerFeatureAuthGoogleService } from './server-feature-auth-google.service';
 
@@ -6,6 +7,7 @@ describe('ServerFeatureAuthGoogleService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [ConfigModule],
       providers: [ServerFeatureAuthGoogleService],
     }).compile();
 
