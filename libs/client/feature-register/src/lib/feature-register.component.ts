@@ -15,11 +15,12 @@ import {
   PASSWORD_MIN_NUMBER,
   PASSWORD_MIN_SYMBOL,
   PASSWORD_MIN_UPPERCASE,
+  SocialProviderEnum,
 } from '@fst/shared/domain';
 import { BehaviorSubject, take } from 'rxjs';
 import {
-  MatchingPasswords,
   MATCHING_ERROR_KEY,
+  MatchingPasswords,
 } from './matching-passwords.validator';
 
 type RegisterFormType = {
@@ -96,7 +97,15 @@ export class FeatureRegisterComponent {
     if (this.registerForm.valid && this.registerForm.dirty) {
       const { email, password } = this.registerForm.getRawValue();
       this.userService
-        .createUser({ email, password })
+        .createUser({
+          email,
+          password,
+          familyName: null,
+          givenName: null,
+          profilePicture: null,
+          socialProvider: SocialProviderEnum.email,
+          socialId: null,
+        })
         .pipe(take(1))
         .subscribe({
           next: (user) => {

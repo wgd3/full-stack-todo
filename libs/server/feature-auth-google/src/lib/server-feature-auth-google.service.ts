@@ -1,4 +1,4 @@
-import { IAccessTokenPayload, IApiErrorResponse } from '@fst/shared/domain';
+import { IApiErrorResponse, ISocialUserData } from '@fst/shared/domain';
 import {
   Injectable,
   Logger,
@@ -17,7 +17,7 @@ export class ServerFeatureAuthGoogleService {
     );
   }
 
-  async getProfile(payload: { idToken: string }): Promise<IAccessTokenPayload> {
+  async getProfile(payload: { idToken: string }): Promise<ISocialUserData> {
     Logger.debug(`Getting login ticket..`);
     const loginTicket = await this.google.verifyIdToken({
       idToken: payload.idToken,
@@ -34,9 +34,10 @@ export class ServerFeatureAuthGoogleService {
     }
 
     return {
-      sub: userData.sub,
+      id: userData.sub,
       email: userData.email ?? '',
-      firstName: userData.given_name,
+      givenName: userData.given_name ?? null,
+      familyName: userData.family_name ?? null,
     };
   }
 }

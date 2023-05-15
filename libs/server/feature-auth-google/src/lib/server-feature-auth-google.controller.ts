@@ -3,7 +3,7 @@ import { ServerFeatureAuthGoogleService } from './server-feature-auth-google.ser
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { ServerFeatureAuthService } from '@fst/server/feature-auth';
 import { SkipAuth } from '@fst/server/util';
-import { ITokenResponse } from '@fst/shared/domain';
+import { ITokenResponse, SocialProviderEnum } from '@fst/shared/domain';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 @Controller({ path: 'auth/google', version: '1' })
@@ -21,9 +21,12 @@ export class ServerFeatureAuthGoogleController {
   @SkipAuth()
   async login(@Body() payload: { idToken: string }): Promise<ITokenResponse> {
     Logger.debug(`Attempting to log in user from Google OAuth`);
-    const profile = await this.serverFeatureAuthGoogleService.getProfile({
+    const data = await this.serverFeatureAuthGoogleService.getProfile({
       idToken: payload.idToken,
     });
-    return this.serverFeatureAuthService.validateGoogleUser(profile);
+    return this.serverFeatureAuthService.validateSocialUser(
+      SocialProviderEnum.google,
+      data
+    );
   }
 }

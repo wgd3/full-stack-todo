@@ -1,4 +1,4 @@
-import { IUser } from '@fst/shared/domain';
+import { IUser, SocialProviderEnum } from '@fst/shared/domain';
 import { EntitySchema } from 'typeorm';
 
 export const UserEntitySchema = new EntitySchema<IUser>({
@@ -11,12 +11,33 @@ export const UserEntitySchema = new EntitySchema<IUser>({
     },
     email: {
       type: String,
-      nullable: false,
+      nullable: true,
       unique: true,
     },
     password: {
       type: String,
-      nullable: false,
+      nullable: true,
+    },
+    socialProvider: {
+      type: String,
+      nullable: true,
+      enum: SocialProviderEnum,
+    },
+    socialId: {
+      type: String,
+      nullable: true,
+    },
+    givenName: {
+      type: String,
+      nullable: true,
+    },
+    familyName: {
+      type: String,
+      nullable: true,
+    },
+    profilePicture: {
+      type: String,
+      nullable: true,
     },
   },
   relations: {
