@@ -8,6 +8,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const expired = authService.isTokenExpired();
   console.log(`[AuthGuard] token expired: ${expired}`);
   if (expired) {
+    authService.logoutUser();
     router.navigate([`/login`], { queryParams: { returnUrl: state.url } });
     return false;
   }

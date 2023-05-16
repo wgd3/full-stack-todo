@@ -10,6 +10,7 @@ import {
   ITokenResponse,
   IUser,
 } from '@fst/shared/domain';
+import { createMockUser } from '@fst/shared/util-testing';
 import {
   HttpStatus,
   INestApplication,
@@ -20,8 +21,8 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
-import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { randEmail, randPassword, randUser } from '@ngneat/falso';
+import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
+import { randEmail, randPassword } from '@ngneat/falso';
 import Joi from 'joi';
 import * as request from 'supertest';
 import { Repository } from 'typeorm';
@@ -30,10 +31,11 @@ describe('ServerFeatureUserController E2E', () => {
   const baseUrl = `/api/v1`;
   const todoUrl = `/todos`;
   const userUrl = `/users`;
-  const authUrl = `/auth`;
+  const authUrl = `/auth/email`;
 
   const USER_EMAIL = randEmail();
   const USER_UNHASHED_PASSWORD = `Password1!`;
+  const MOCK_USER = createMockUser({ email: USER_EMAIL });
 
   let app: INestApplication;
   let todoRepo: Repository<ITodo>;
@@ -125,7 +127,15 @@ describe('ServerFeatureUserController E2E', () => {
       .default(app.getHttpServer())
       .post(`${baseUrl}${userUrl}`)
       .set('Content-type', 'application/json')
-      .send({ email: USER_EMAIL, password: USER_UNHASHED_PASSWORD })
+      .send({
+        email: USER_EMAIL,
+        password: USER_UNHASHED_PASSWORD,
+        socialProvider: MOCK_USER.socialProvider,
+        socialId: MOCK_USER.socialId,
+        givenName: MOCK_USER.givenName,
+        familyName: MOCK_USER.familyName,
+        profilePicture: MOCK_USER.profilePicture,
+      })
       .expect(201)
       .expect('Content-Type', /json/)
       .then((res) => {
@@ -240,14 +250,17 @@ describe('ServerFeatureUserController E2E', () => {
 
   describe('POST /users', () => {
     it('should create a new user', () => {
-      const { email: randEmail } = randUser();
+      const { id, todos, ...user } = createMockUser({
+        password: 'FullStackT0d0!',
+      });
       return request
         .default(app.getHttpServer())
         .post(`${baseUrl}${userUrl}`)
-        .send({ email: randEmail, password: 'FullStackT0d0!' })
+        .send({ ...user })
         .expect(({ body }) => {
+          console.log(`body`, body);
           const { email, id } = body as IPublicUserData;
-          expect(email).toEqual(randEmail);
+          expect(email).toEqual(user.email);
           expect(typeof id).toBe('string');
           expect(Object.keys(body).includes('password')).toEqual(false);
         })
@@ -287,6 +300,10 @@ describe('ServerFeatureUserController E2E', () => {
 
     it('should prevent duplicate emails', async () => {
       const existingUser = (await userRepo.find({ take: 1 })).pop();
+      const { id, todos, ...newUser } = createMockUser({
+        email: existingUser.email,
+        password: 'FullStackT0d0!',
+      });
       const users = await userRepo.find();
       Logger.debug(
         `All users:\n${JSON.stringify(users, null, 2)}`,
@@ -295,8 +312,9 @@ describe('ServerFeatureUserController E2E', () => {
       return request
         .default(app.getHttpServer())
         .post(`${baseUrl}${userUrl}`)
-        .send({ email: existingUser.email, password: 'FullStackT0d0!' })
+        .send({ ...newUser })
         .expect((resp) => {
+          console.log(`resp`, resp.body);
           const { message } = resp.body;
           // this error does not come back in the form of an array of
           // errors since it's a database error, not a payload

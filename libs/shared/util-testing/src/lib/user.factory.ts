@@ -1,5 +1,11 @@
-import { IUser } from '@fst/shared/domain';
-import { randPassword, randUser } from '@ngneat/falso';
+import { IUser, SocialProviderEnum } from '@fst/shared/domain';
+import {
+  randFirstName,
+  randImg,
+  randLastName,
+  randPassword,
+  randUser,
+} from '@ngneat/falso';
 
 export const createMockUser = (data?: Partial<IUser>): IUser => {
   const { id, email } = randUser();
@@ -9,6 +15,11 @@ export const createMockUser = (data?: Partial<IUser>): IUser => {
     email,
     password,
     todos: [],
+    socialProvider: SocialProviderEnum.email,
+    socialId: null,
+    givenName: randFirstName(),
+    familyName: randLastName(),
+    profilePicture: randImg(),
     ...data,
   };
 };

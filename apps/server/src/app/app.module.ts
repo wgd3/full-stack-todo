@@ -1,20 +1,22 @@
-import { ServerFeatureTodoModule } from '@fst/server/feature-todo';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-import { TypeOrmModule } from '@nestjs/typeorm';
-
 import { ServerFeatureAuthModule } from '@fst/server/feature-auth';
+import { ServerFeatureAuthGoogleModule } from '@fst/server/feature-auth-google';
 import { ServerFeatureHealthModule } from '@fst/server/feature-health';
+import { ServerFeatureTodoModule } from '@fst/server/feature-todo';
+import { ServerFeatureUserModule } from '@fst/server/feature-user';
 import {
   DatabaseExceptionFilter,
   JwtAuthGuard,
   TypeormConfigService,
   appConfig,
   dbConfig,
+  googleConfig,
   validationSchema,
 } from '@fst/server/util';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -22,7 +24,7 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core';
       envFilePath: ['.env'],
       ignoreEnvVars: true,
       validationSchema,
-      load: [appConfig, dbConfig],
+      load: [appConfig, dbConfig, googleConfig],
     }),
     TypeOrmModule.forRootAsync({
       useClass: TypeormConfigService,
@@ -31,6 +33,8 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core';
     ServerFeatureTodoModule,
     ServerFeatureHealthModule,
     ServerFeatureAuthModule,
+    ServerFeatureUserModule,
+    ServerFeatureAuthGoogleModule,
   ],
   controllers: [],
   providers: [

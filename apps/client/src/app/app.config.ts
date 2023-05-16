@@ -1,5 +1,15 @@
+import {
+  GoogleLoginProvider,
+  SocialAuthServiceConfig,
+  SocialLoginModule,
+} from '@abacritt/angularx-social-login';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { APP_INITIALIZER, ApplicationConfig, isDevMode } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  ApplicationConfig,
+  importProvidersFrom,
+  isDevMode,
+} from '@angular/core';
 import {
   provideRouter,
   withEnabledBlockingInitialNavigation,
@@ -19,6 +29,7 @@ import {
 import { provideEffects } from '@ngrx/effects';
 import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+
 import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -48,6 +59,24 @@ export const appConfig: ApplicationConfig = {
       useClass: TodoNgRxFacade,
       // useClass: TodoElfFacade,
       // useClass: TodoRxjsFacade,
+    },
+    importProvidersFrom(SocialLoginModule),
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: true,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '1082517220825-693bq09as195vkni3uvhkaun3qdn79tr.apps.googleusercontent.com',
+              {
+                oneTapEnabled: false,
+              }
+            ),
+          },
+        ],
+      } as SocialAuthServiceConfig,
     },
   ],
 };

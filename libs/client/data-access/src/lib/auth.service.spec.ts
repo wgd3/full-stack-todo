@@ -1,8 +1,9 @@
+import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { TOKEN_STORAGE_KEY } from '@fst/client/util';
-import { ITokenResponse } from '@fst/shared/domain';
+import { ITokenResponse, SocialProviderEnum } from '@fst/shared/domain';
 import { randEmail } from '@ngneat/falso';
 import { of } from 'rxjs';
 
@@ -18,6 +19,12 @@ describe('AuthService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
+      providers: [
+        {
+          provide: SocialAuthService,
+          useValue: {},
+        },
+      ],
     });
     service = TestBed.inject(AuthService);
     http = TestBed.inject(HttpClient);
@@ -28,7 +35,7 @@ describe('AuthService', () => {
   });
 
   it('should update localStorage when setting a token', (done) => {
-    service.setToken('foo');
+    service.setToken(SocialProviderEnum.email, 'foo');
     service.accessToken$.subscribe({
       next: (token) => {
         expect(token).toEqual('foo');
@@ -68,7 +75,7 @@ describe('AuthService', () => {
       access_token: '',
     };
     const spy = jest.spyOn(http, 'post').mockReturnValue(of(resp));
-    service.loginUser({ email: randEmail(), password: '' }).subscribe({
+    service.loginUserByEmail({ email: randEmail(), password: '' }).subscribe({
       next: ({ access_token }) => {
         expect(access_token).toStrictEqual('');
         done();
@@ -80,7 +87,7 @@ describe('AuthService', () => {
   it('should clear storage on log out', (done) => {
     const token =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IndhbGxhY2VAdGhlZnVsbHN0YWNrLmVuZ2luZWVyIiwic3ViIjoiYmQ0ZTNmOTEtMDUxZC00NGU4LTgyMDQtZmY4YjFjYzk1OTU3IiwiaWF0IjoxNjgwMDE0MDQwLCJleHAiOjE2ODAwMTQ2NDB9.LdH-sN9IXD78P9z78a8k__70zS6FFqOenpiNrJ6eifg';
-    service.setToken(token);
+    service.setToken(SocialProviderEnum.email, token);
     expect(localStorage.getItem(TOKEN_STORAGE_KEY)).toStrictEqual(token);
 
     service.logoutUser();
@@ -91,7 +98,7 @@ describe('AuthService', () => {
   it('should detect an expired token', (done) => {
     const token =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IndhbGxhY2VAdGhlZnVsbHN0YWNrLmVuZ2luZWVyIiwic3ViIjoiYmQ0ZTNmOTEtMDUxZC00NGU4LTgyMDQtZmY4YjFjYzk1OTU3IiwiaWF0IjoxNjgwMDE0MDQwLCJleHAiOjE2ODAwMTQ2NDB9.LdH-sN9IXD78P9z78a8k__70zS6FFqOenpiNrJ6eifg';
-    service.setToken(token);
+    service.setToken(SocialProviderEnum.email, token);
     expect(localStorage.getItem(TOKEN_STORAGE_KEY)).toStrictEqual(token);
     service.loadToken();
 

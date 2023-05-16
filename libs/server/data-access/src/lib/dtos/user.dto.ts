@@ -1,3 +1,4 @@
+import { IsNullable } from '@fst/server/util';
 import {
   ICreateUser,
   IPublicUserData,
@@ -8,15 +9,18 @@ import {
   PASSWORD_MIN_NUMBER,
   PASSWORD_MIN_SYMBOL,
   PASSWORD_MIN_UPPERCASE,
+  SocialProviderEnum,
 } from '@fst/shared/domain';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
   IsStrongPassword,
+  IsUrl,
   MaxLength,
 } from 'class-validator';
 import { TodoDto } from './todo.dto';
@@ -48,8 +52,44 @@ export class UserResponseDto implements IPublicUserData {
   })
   @IsArray()
   todos!: ITodo[];
+
+  @ApiProperty({
+    type: String,
+    description: 'Unique identifier from an external OAuth provider',
+  })
+  socialId!: string | null;
+
+  @ApiProperty({
+    type: String,
+    enum: SocialProviderEnum,
+  })
+  socialProvider!: SocialProviderEnum | null;
+
+  @ApiProperty({
+    type: String,
+  })
+  givenName!: string | null;
+
+  @ApiProperty({
+    type: String,
+  })
+  familyName!: string | null;
+
+  @ApiProperty({
+    type: String,
+    description: 'URL to profile picture',
+  })
+  profilePicture!: string | null;
 }
 
+/**
+ * This DTO decorates only the properties needed for email/password registration. This
+ * allows us to expose the expected payload in Swagger docs and enforce payload structure
+ * when registering via a POST call.
+ *
+ * Properties that are not decorated are included so that the DTO can still be used when
+ * a user "registers" via a social login.
+ */
 export class CreateUserDto implements ICreateUser {
   @ApiProperty({
     type: String,
@@ -78,6 +118,36 @@ export class CreateUserDto implements ICreateUser {
   @IsEmail()
   @IsNotEmpty()
   email!: string;
+
+  @ApiProperty({
+    type: String,
+    description: `User's last name`,
+    default: null,
+  })
+  @IsString()
+  @IsNullable()
+  familyName!: string | null;
+
+  @ApiProperty({
+    type: String,
+    description: `User's first name`,
+    default: null,
+  })
+  @IsString()
+  @IsNullable()
+  givenName!: string | null;
+
+  @IsUrl()
+  @IsNullable()
+  profilePicture!: string | null;
+
+  @IsString()
+  @IsNullable()
+  socialId!: string | null;
+
+  @IsEnum(SocialProviderEnum)
+  @IsNullable()
+  socialProvider!: SocialProviderEnum | null;
 }
 
 export class UpdateUserDto implements IUpdateUser {

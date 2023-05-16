@@ -9,7 +9,14 @@
   </div>
   <div class="header__actions">
     <ng-container *ngIf="user$ | async as user; else login">
-      <span class="nav-link">Hello, {{ user.email }}!</span>
+      <span class="nav-link">Hello, {{ user.givenName }}!</span>
+      <img
+        [ngSrc]="user.profilePicture"
+        width="60"
+        height="60"
+        *ngIf="user.profilePicture"
+        alt=""
+      />
       <span class="nav-link" (click)="logout()">Log Out</span>
     </ng-container>
     <ng-template #login>

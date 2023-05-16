@@ -1,11 +1,22 @@
 import { ServerFeatureUserService } from '@fst/server/feature-user';
 import {
   IAccessTokenPayload,
-  IPublicUserData,
+  IApiErrorResponse,
+  ILoginPayload,
+  ISocialUserData,
   ITokenResponse,
+  IUser,
+  SocialProviderEnum,
 } from '@fst/shared/domain';
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+  UnprocessableEntityException,
+  forwardRef,
+} from '@nestjs/common';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -18,28 +29,124 @@ export class ServerFeatureAuthService {
     private jwtService: JwtService
   ) {}
 
-  async validateUser(
-    email: string,
-    password: string
-  ): Promise<IPublicUserData | null> {
-    const user = await this.userService.getOneByEmail(email);
-    // console.dir(user);
-    if (user && (await bcrypt.compare(password, user.password))) {
-      this.logger.debug(`User '${email}' authenticated successfully`);
-      console.log(`User '${email}' authenticated successfully`);
-      const { password, ...publicUserData } = user;
-      return publicUserData;
+  async validateUser({
+    email,
+    password,
+  }: ILoginPayload): Promise<ITokenResponse> {
+    let user: IUser | undefined;
+
+    try {
+      user = await this.userService.getOneByEmailOrFail(email);
+    } catch (err) {
+      throw new BadRequestException({
+        message: `Email or password is incorrect, try again`,
+      } as IApiErrorResponse);
     }
-    return null;
+    // const user = await this.userService.getOneByEmailOrFail(email);
+
+    if (user.socialProvider !== 'email') {
+      throw new BadRequestException({
+        message: `User registered via a social platform, please use that instead`,
+      } as IApiErrorResponse);
+    }
+
+    // we've detected if the user registered via email, which requires a password
+    const validPassword = await bcrypt.compare(
+      password,
+      user.password as string
+      // password
+    );
+    if (!validPassword) {
+      throw new BadRequestException({
+        message: `Email or password is incorrect, try again`,
+      } as IApiErrorResponse);
+    }
+
+    // user was found and has the right password, return a token
+    const { id, todos, ...payload } = user;
+    return await this.generateAccessToken({ ...payload, sub: id });
   }
 
-  async generateAccessToken(user: IPublicUserData): Promise<ITokenResponse> {
-    const payload: IAccessTokenPayload = {
-      email: user.email,
+  async validateSocialUser(
+    provider: SocialProviderEnum,
+    data: ISocialUserData
+  ): Promise<ITokenResponse> {
+    let user: IUser | null;
+    let userByEmail: IUser | null = null;
+
+    /** If an email was provided, see if they're already registered with that email */
+    if (data.email) {
+      userByEmail = await this.userService.getOne({
+        where: { email: data.email },
+      });
+    }
+
+    user = await this.userService.getOne({
+      where: {
+        socialId: data.id,
+        socialProvider: provider,
+      },
+    });
+
+    if (user) {
+      // user has already registered, see if email needs to be updated
+      if (data.email && !userByEmail) {
+        this.logger.debug(
+          `Found existing user with different email - updating email`
+        );
+        user.email = data.email;
+        await this.userService.updateUser(data.id, { email: data.email });
+      }
+    } else if (userByEmail) {
+      // user was not found by socialId, but has registered with
+      // this email already
+      this.logger.debug(
+        `User registered with email previously, assigning that account to current user`
+      );
+      user = userByEmail;
+    } else {
+      // create new user!
+      this.logger.debug(`Creating new user for ${data.email}`);
+      // this.logger.debug(JSON.stringify(data, null, 2));
+      user = await this.userService.create({
+        email: data.email ?? null,
+        familyName: data.familyName ?? null,
+        givenName: data.givenName ?? null,
+        socialId: data.id,
+        socialProvider: provider,
+        password: null,
+        profilePicture: data.profilePicture ?? null,
+      });
+
+      // get the new object from the database after creation
+      user = await this.userService.getOneOrFail(user.id);
+    }
+
+    // if the user hasn't been found/created at this point,
+    // something is very wrong
+    if (!user) {
+      throw new UnprocessableEntityException({
+        message: `Unknown error occurred while handling user`,
+        error: `user not found`,
+      } as IApiErrorResponse);
+    }
+
+    const tokenPayload: IAccessTokenPayload = {
       sub: user.id,
+      email: user.email,
+      givenName: user.givenName,
+      familyName: user.familyName,
+      profilePicture: user.profilePicture,
     };
+    return await this.generateAccessToken(tokenPayload);
+  }
+
+  async generateAccessToken(
+    payload: IAccessTokenPayload,
+    opts?: JwtSignOptions
+  ): Promise<ITokenResponse> {
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.signAsync(payload, opts),
     };
   }
 }

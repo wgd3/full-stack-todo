@@ -31,11 +31,17 @@ describe('JwtStrategy', () => {
     const tokenPayload: IAccessTokenPayload = {
       sub: mockUser.id,
       email: mockUser.email,
+      givenName: null,
+      familyName: null,
+      profilePicture: null,
     };
     const respData = await service.validate(tokenPayload);
     expect(respData).toStrictEqual({
       userId: mockUser.id,
       email: mockUser.email,
+      givenName: null,
+      familyName: null,
+      profilePicture: null,
     });
   });
 });

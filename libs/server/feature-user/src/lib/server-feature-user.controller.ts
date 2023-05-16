@@ -31,21 +31,19 @@ export class ServerFeatureUserController {
     if (reqUserId !== id) {
       throw new NotFoundException();
     }
-    const { password, ...user } = await this.serverFeatureUserService.getOne(
-      id
-    );
+    const { password, ...user } =
+      await this.serverFeatureUserService.getOneOrFail(id);
     return user;
   }
 
   @Post('')
   @SkipAuth()
   async createUser(@Body() userData: CreateUserDto): Promise<IPublicUserData> {
-    const { id, email } = await this.serverFeatureUserService.create(userData);
-    return {
-      id,
-      email,
-      todos: [],
-    };
+    // TODO revisit when considering changes to serialization
+    const { password, ...user } = await this.serverFeatureUserService.create(
+      userData
+    );
+    return user;
   }
 
   @Patch(':id')

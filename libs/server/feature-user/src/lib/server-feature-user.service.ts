@@ -1,13 +1,19 @@
 import { UserEntitySchema } from '@fst/server/data-access';
-import { ICreateUser, IUpdateUser, IUser } from '@fst/shared/domain';
+import {
+  IApiErrorResponse,
+  ICreateUser,
+  IUpdateUser,
+  IUser,
+} from '@fst/shared/domain';
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Repository } from 'typeorm';
+import { FindOneOptions, QueryFailedError, Repository } from 'typeorm';
 
 @Injectable()
 export class ServerFeatureUserService {
@@ -16,7 +22,11 @@ export class ServerFeatureUserService {
     private userRepository: Repository<IUser>
   ) {}
 
-  async getOne(id: string): Promise<IUser> {
+  async getOne(opts: FindOneOptions<IUser>): Promise<IUser | null> {
+    return this.userRepository.findOne(opts);
+  }
+
+  async getOneOrFail(id: string): Promise<IUser> {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException(`User could not be found`);
@@ -24,7 +34,7 @@ export class ServerFeatureUserService {
     return user;
   }
 
-  async getOneByEmail(email: string): Promise<IUser> {
+  async getOneByEmailOrFail(email: string): Promise<IUser> {
     const user = await this.userRepository.findOneBy({ email });
     if (!user) {
       throw new NotFoundException(`User could not be found`);
@@ -32,20 +42,29 @@ export class ServerFeatureUserService {
     return user;
   }
 
+  /**
+   * This method is meant to be the single entry point for all user
+   * creation. It was made more generic to support user creation
+   * from email registration or social platforms.
+   */
   async create(user: ICreateUser): Promise<IUser> {
-    const existing = await this.userRepository.findOne({
-      where: { email: user.email },
-    });
-    if (existing) {
-      throw new BadRequestException(`User '${user.email}' already exists!`);
+    if (user.password) {
+      user.password = await bcrypt.hash(user.password, 10);
     }
-    const { email, password } = user;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await this.userRepository.save({
-      email,
-      password: hashedPassword,
-    });
-    return newUser;
+    try {
+      const newUser = await this.userRepository.save(user);
+      return newUser;
+    } catch (err) {
+      if (err instanceof QueryFailedError) {
+        throw new BadRequestException({
+          message: `User with email ${user.email} already exists!`,
+        } as IApiErrorResponse);
+      }
+      throw new InternalServerErrorException({
+        message: `An unknown error occurred while creating a new user`,
+        error: err,
+      } as IApiErrorResponse);
+    }
   }
 
   async updateUser(id: string, data: IUpdateUser): Promise<IUser> {

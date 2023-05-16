@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -12,7 +12,7 @@ import { map } from 'rxjs';
 @Component({
   selector: 'fst-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, NgOptimizedImage],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

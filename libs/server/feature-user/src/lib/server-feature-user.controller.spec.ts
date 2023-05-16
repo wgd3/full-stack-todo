@@ -36,15 +36,16 @@ describe('ServerFeatureUserController', () => {
 
   it('should create a user', async () => {
     const user = createMockUser();
-    const publicUser: IPublicUserData = {
-      id: user.id,
-      email: user.email,
-      todos: [],
-    };
+    const { password, ...publicUser } = user;
     jest.spyOn(service, 'create').mockReturnValue(Promise.resolve(user));
     const res = await controller.createUser({
-      email: user.email,
-      password: user.password,
+      email: user.email ?? '',
+      password: user.password ?? '',
+      familyName: null,
+      givenName: null,
+      profilePicture: null,
+      socialId: null,
+      socialProvider: null,
     });
     expect(res).toStrictEqual(publicUser);
   });
@@ -55,8 +56,13 @@ describe('ServerFeatureUserController', () => {
       id: user.id,
       email: user.email,
       todos: [],
+      profilePicture: user.profilePicture,
+      familyName: user.familyName,
+      givenName: user.givenName,
+      socialId: user.socialId,
+      socialProvider: user.socialProvider,
     };
-    jest.spyOn(service, 'getOne').mockReturnValue(Promise.resolve(user));
+    jest.spyOn(service, 'getOneOrFail').mockReturnValue(Promise.resolve(user));
     const res = await controller.getUser(user.id, user.id);
     expect(res).toStrictEqual(publicUser);
   });
@@ -77,6 +83,11 @@ describe('ServerFeatureUserController', () => {
       id: user.id,
       email: user.email,
       todos: [],
+      profilePicture: user.profilePicture,
+      familyName: user.familyName,
+      givenName: user.givenName,
+      socialId: user.socialId,
+      socialProvider: user.socialProvider,
     };
     jest.spyOn(service, 'updateUser').mockReturnValue(Promise.resolve(user));
     const res = await controller.updateUser(user.id, user.id, {

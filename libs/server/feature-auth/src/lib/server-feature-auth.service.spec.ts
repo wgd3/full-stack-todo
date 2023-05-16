@@ -1,6 +1,7 @@
 import { ServerFeatureUserService } from '@fst/server/feature-user';
 import { IUser } from '@fst/shared/domain';
 import { createMockUser } from '@fst/shared/util-testing';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
 import { randPassword } from '@ngneat/falso';
@@ -14,8 +15,12 @@ describe('ServerFeatureAuthService', () => {
 
   beforeAll(async () => {
     mockUser = createMockUser();
-    mockUserUnhashedPassword = mockUser.password;
+    mockUserUnhashedPassword = mockUser.password as string;
     mockUser.password = await bcrypt.hash(mockUserUnhashedPassword, 10);
+    console.log(`Using email ${mockUser.email}`);
+    console.log(
+      `Hashed password '${mockUserUnhashedPassword}': ${mockUser.password}`
+    );
   });
 
   beforeEach(async () => {
@@ -30,9 +35,11 @@ describe('ServerFeatureAuthService', () => {
         {
           provide: ServerFeatureUserService,
           useValue: {
-            getOneByEmail: jest.fn(async (email, password) => {
+            getOneByEmailOrFail: jest.fn(async (email) => {
+              console.log(`looking up email ${email}`);
               if (email !== mockUser.email) {
-                return null;
+                console.log(`Throwing not found for email ${email}`);
+                throw new NotFoundException(`User could not be found`);
               }
               return mockUser;
             }),
@@ -49,24 +56,37 @@ describe('ServerFeatureAuthService', () => {
   });
 
   it('should validate a user', async () => {
-    const validUser = await service.validateUser(
-      mockUser.email,
-      mockUserUnhashedPassword
+    console.log(
+      `Testing user ${mockUser.email} / password ${mockUserUnhashedPassword}`
     );
-    expect(validUser).toStrictEqual({
-      id: mockUser.id,
-      email: mockUser.email,
-      todos: [],
+    const tokenResp = await service.validateUser({
+      email: mockUser.email as string,
+      password: mockUserUnhashedPassword,
     });
+    expect(tokenResp.access_token).toBeDefined();
   });
 
   it('should return null for invalid user', async () => {
-    const invalidUser = await service.validateUser('foo', 'bar');
-    expect(invalidUser).toBe(null);
+    try {
+      await service.validateUser({
+        email: 'foo',
+        password: 'bar',
+      });
+    } catch (err) {
+      expect(err instanceof BadRequestException).toBe(true);
+    }
+    // const invalidUser = await service.validateUser({
+    //   email: 'foo',
+    //   password: 'bar',
+    // });
+    // expect(invalidUser).toBe(null);
   });
 
   it('should generate an access token', async () => {
-    const { access_token } = await service.generateAccessToken(mockUser);
+    const { access_token } = await service.generateAccessToken({
+      ...mockUser,
+      sub: mockUser.id,
+    });
     expect(access_token).toBeDefined();
     expect(typeof access_token).toBe('string');
   });

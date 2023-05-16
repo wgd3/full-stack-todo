@@ -1,3 +1,4 @@
+import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import {
@@ -19,8 +20,22 @@ describe('authGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AuthService],
-      imports: [RouterTestingModule, HttpClientTestingModule],
+      providers: [
+        AuthService,
+        {
+          provide: SocialAuthService,
+          useValue: {},
+        },
+      ],
+      imports: [
+        RouterTestingModule.withRoutes([
+          {
+            path: 'login',
+            redirectTo: '',
+          },
+        ]),
+        HttpClientTestingModule,
+      ],
     });
 
     router = TestBed.inject(Router);

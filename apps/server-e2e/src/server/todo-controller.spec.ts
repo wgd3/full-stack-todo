@@ -10,7 +10,7 @@ import {
   ITokenResponse,
   IUser,
 } from '@fst/shared/domain';
-import { createMockTodo } from '@fst/shared/util-testing';
+import { createMockTodo, createMockUser } from '@fst/shared/util-testing';
 import {
   HttpStatus,
   INestApplication,
@@ -21,7 +21,7 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
-import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
 import { randEmail, randPassword, randUuid } from '@ngneat/falso';
 import Joi from 'joi';
 import * as request from 'supertest';
@@ -32,10 +32,11 @@ describe('ServerFeatureTodoController E2E', () => {
   const baseUrl = `/api/v1`;
   const todoUrl = `/todos`;
   const userUrl = `/users`;
-  const authUrl = `/auth`;
+  const authUrl = `/auth/email`;
 
   const USER_EMAIL = randEmail();
   const USER_UNHASHED_PASSWORD = `Password1!`;
+  const MOCK_USER = createMockUser({ email: USER_EMAIL });
 
   let app: INestApplication;
   let todoRepo: Repository<ITodo>;
@@ -127,7 +128,15 @@ describe('ServerFeatureTodoController E2E', () => {
       .default(app.getHttpServer())
       .post(`${baseUrl}${userUrl}`)
       .set('Content-type', 'application/json')
-      .send({ email: USER_EMAIL, password: USER_UNHASHED_PASSWORD })
+      .send({
+        email: USER_EMAIL,
+        password: USER_UNHASHED_PASSWORD,
+        socialProvider: MOCK_USER.socialProvider,
+        socialId: MOCK_USER.socialId,
+        givenName: MOCK_USER.givenName,
+        familyName: MOCK_USER.familyName,
+        profilePicture: MOCK_USER.profilePicture,
+      })
       .expect(201)
       .expect('Content-Type', /json/)
       .then((res) => {
@@ -141,7 +150,10 @@ describe('ServerFeatureTodoController E2E', () => {
     access_token = await request
       .default(app.getHttpServer())
       .post(`${baseUrl}${authUrl}/login`)
-      .send({ email: USER_EMAIL, password: USER_UNHASHED_PASSWORD })
+      .send({
+        email: USER_EMAIL,
+        password: USER_UNHASHED_PASSWORD,
+      })
       .expect(200)
       .expect('Content-Type', /json/)
       .then((resp) => (resp.body as ITokenResponse).access_token);
