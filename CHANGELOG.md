@@ -1,3 +1,17 @@
+## [1.7.1](https://github.com/wgd3/full-stack-todo/compare/v1.7.0...v1.7.1) (2023-08-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @nestjs/config to v2.3.4 ([#59](https://github.com/wgd3/full-stack-todo/issues/59)) ([8eabe75](https://github.com/wgd3/full-stack-todo/commit/8eabe75acec8fa89c90f8e5fea62d473a4ddcbfb))
+
+
+### Other
+
+* **deps:** update dependency @types/node to v18.16.9 ([#50](https://github.com/wgd3/full-stack-todo/issues/50)) ([bac86da](https://github.com/wgd3/full-stack-todo/commit/bac86da74480883a0f3a9a024dee97d198d795cd))
+* **renovate:** Update renovate.json5 ([96ce373](https://github.com/wgd3/full-stack-todo/commit/96ce373d1f023a6fc71ac6fee3a0570e37c76b75))
+* **deps:** update typescript-eslint monorepo to v5.62.0 ([#56](https://github.com/wgd3/full-stack-todo/issues/56)) ([5da6916](https://github.com/wgd3/full-stack-todo/commit/5da6916978c536465b61807db79e3e6c697a413b))
+
 ## [1.7.0](https://github.com/wgd3/full-stack-todo/compare/v1.6.2...v1.7.0) (2023-05-12)
 
 
