@@ -27,6 +27,12 @@
   regexManagers: [],
   "packageRules": [
     {
+      description: 'Automatically merge minor and patch-level updates',
+      matchUpdateTypes: ['minor', 'patch', 'digest'],
+      automerge: true,
+      automergeType: 'branch',
+    }
+    {
       "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
