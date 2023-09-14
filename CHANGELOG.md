@@ -1,3 +1,16 @@
+## [1.7.3](https://github.com/wgd3/full-stack-todo/compare/v1.7.2...v1.7.3) (2023-09-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency pg to v8.11.3 ([#57](https://github.com/wgd3/full-stack-todo/issues/57)) ([f6ad3cc](https://github.com/wgd3/full-stack-todo/commit/f6ad3cc6b9b70a2448946a09807dd6dc38b97fe3))
+* **deps:** update nest monorepo ([#60](https://github.com/wgd3/full-stack-todo/issues/60)) ([393a74d](https://github.com/wgd3/full-stack-todo/commit/393a74d10f5f2d7a6b0885f35b5a2c14cced2e57))
+
+
+### Other
+
+* **deps:** update dependency @types/passport-jwt to v3.0.9 ([#64](https://github.com/wgd3/full-stack-todo/issues/64)) ([c9ed790](https://github.com/wgd3/full-stack-todo/commit/c9ed79028dd06c88e0ebc1f1fcf3bbd48c1dfe5a))
+
 ## [1.7.2](https://github.com/wgd3/full-stack-todo/compare/v1.7.1...v1.7.2) (2023-09-14)
 
 
