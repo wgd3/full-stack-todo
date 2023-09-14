@@ -1,3 +1,18 @@
+## [1.7.2](https://github.com/wgd3/full-stack-todo/compare/v1.7.1...v1.7.2) (2023-09-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @ngneat/elf-requests to v1.9.1 ([#53](https://github.com/wgd3/full-stack-todo/issues/53)) ([e4bdf9d](https://github.com/wgd3/full-stack-todo/commit/e4bdf9d973f16ad18771df9939150b584b3a2937))
+
+
+### Other
+
+* **deps:** update dependency @nx-tools/container-metadata to v4.0.4 ([#62](https://github.com/wgd3/full-stack-todo/issues/62)) ([45aea13](https://github.com/wgd3/full-stack-todo/commit/45aea130f4719fad42700189fea2b2d1bd6b869c))
+* **deps:** update dependency @nx-tools/nx-container to v4.0.4 ([#63](https://github.com/wgd3/full-stack-todo/issues/63)) ([a5c2a28](https://github.com/wgd3/full-stack-todo/commit/a5c2a280ebc40cddb3f2462b3abaeb40b4e3f822))
+* **deps:** update dependency @types/node to v18.17.11 ([#58](https://github.com/wgd3/full-stack-todo/issues/58)) ([5935817](https://github.com/wgd3/full-stack-todo/commit/593581749626ab0d0de7f73725b82129b881a1fd))
+* **deps:** update storybook monorepo to v7.4.1 ([#52](https://github.com/wgd3/full-stack-todo/issues/52)) ([928ab4c](https://github.com/wgd3/full-stack-todo/commit/928ab4c14d6c95339de9871cd39fac68350728a5))
+
 ## [1.7.1](https://github.com/wgd3/full-stack-todo/compare/v1.7.0...v1.7.1) (2023-08-27)
 
 
